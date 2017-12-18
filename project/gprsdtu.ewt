@@ -2240,6 +2240,9 @@
         <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-t830.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-water.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\gprsdtu\senproto\senproto-rst460.c</name>
       </file>
       <file>

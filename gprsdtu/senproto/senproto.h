@@ -9,7 +9,8 @@
     __SENPROTO__(rs3010k) \
     __SENPROTO__(zbm001)  \
     __SENPROTO__(t770)    \
-    __SENPROTO__(t830) 
+    __SENPROTO__(t830)    \
+    __SENPROTO__(water)   
       
 enum {
 #define __SENPROTO__(name)  name,

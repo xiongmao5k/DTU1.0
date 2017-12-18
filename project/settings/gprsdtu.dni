@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-324132773
+Checksum=1172619884
 [CodeCoverage]
 Enabled=_ 0
 [Exceptions]
@@ -100,6 +100,17 @@ ShowTimeLog=1
 SumEnabled=0
 ShowTimeSum=1
 SumSortOrder=0
+[Disassemble mode]
+mode=0
+[Breakpoints2]
+Bp0=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..}.153.1" 0 0 1 "" 0 "" 0
+Bp1=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..}.16.9" 0 0 1 "" 0 "" 0
+Bp2=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-t830.c}.52.5" 0 0 1 "" 0 "" 0
+Bp3=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-t830.c}.47.10" 0 0 1 "" 0 "" 0
+Bp4=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-water.c}.52.5" 0 0 1 "" 0 "" 0
+Bp5=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-water.c}.14.5" 0 0 1 "" 0 "" 0
+Bp6=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-t830.c}.14.5" 0 0 1 "" 0 "" 0
+Count=7
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -107,6 +118,9 @@ Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
+[Aliases]
+Count=0
+SuppressDialog=0
 [DriverProfiling]
 Enabled=0
 Mode=3
@@ -117,15 +131,3 @@ Exclusions=
 Enabled=0
 [CallStackStripe]
 ShowTiming=1
-[Disassemble mode]
-mode=0
-[Breakpoints2]
-Bp0=_ 0 "EMUL_CODE" "{D:\Ruhr\Xiongmao\github\DTU1.0}.153.1" 0 0 1 "" 0 "" 0
-Bp1=_ 0 "EMUL_CODE" "{D:\Ruhr\Xiongmao\github\DTU1.0}.16.9" 0 0 1 "" 0 "" 0
-Bp2=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-rs3010K.c}.14.5" 0 0 1 "" 0 "" 0
-Bp3=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-t830.c}.52.5" 0 0 1 "" 0 "" 0
-Bp4=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-t830.c}.47.10" 0 0 1 "" 0 "" 0
-Count=5
-[Aliases]
-Count=0
-SuppressDialog=0

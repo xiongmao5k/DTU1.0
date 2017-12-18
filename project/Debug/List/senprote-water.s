@@ -1,14 +1,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  14:09:30
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  14:28:01
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
 //    Endian       =  little
 //    Source file  =  
-//        D:\Ruhr\Xiongmao\github\DTU1.0\gprsdtu\senproto\senprote-rs3010K.c
+//        D:\Ruhr\Xiongmao\github\DTU1.0\gprsdtu\senproto\senprote-water.c
 //    Command line =  
-//        D:\Ruhr\Xiongmao\github\DTU1.0\gprsdtu\senproto\senprote-rs3010K.c -D
+//        D:\Ruhr\Xiongmao\github\DTU1.0\gprsdtu\senproto\senprote-water.c -D
 //        STM32F10X_MD -D USE_STDPERIPH_DRIVER -lb
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\ --diag_suppress
 //        Pa050 -o D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\Obj\ --no_cse
@@ -31,13 +31,12 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\senprote-rs3010K.s
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\senprote-water.s
 //
 ///////////////////////////////////////////////////////////////////////////////
 
         #define SHT_PROGBITS 0x1
 
-        EXTERN __aeabi_f2d
         EXTERN framebuff_init
         EXTERN framebuff_length
         EXTERN framebuff_push_u16
@@ -46,15 +45,16 @@
         EXTERN sprintf
         EXTERN strlen
 
-        PUBLIC rs3010k_parse
-        PUBLIC rs3010k_prepare
-        PUBLIC rs3010k_senproto
+        PUBLIC water_parse
+        PUBLIC water_prepare
+        PUBLIC water_senproto
 
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
 ?_0:
         DATA
-        DC8 "%d|%d|%.3f|%.3f"
+        DC8 "%d|%d|%d"
+        DC8 0, 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
 // static __absolute unsigned char const table_crc_hi[256]
@@ -137,7 +137,7 @@ address_backup:
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
-rs3010k_prepare:
+water_prepare:
         PUSH     {R4,LR}
         SUB      SP,SP,#+16
         MOVS     R4,R1
@@ -155,13 +155,13 @@ rs3010k_prepare:
         MOVS     R1,#+0
         ADD      R0,SP,#+0
         BL       framebuff_push_u8
-        MOVS     R1,#+3
+        MOVS     R1,#+2
         ADD      R0,SP,#+0
         BL       framebuff_push_u8
         MOVS     R1,#+0
         ADD      R0,SP,#+0
         BL       framebuff_push_u8
-        MOVS     R1,#+4
+        MOVS     R1,#+2
         ADD      R0,SP,#+0
         BL       framebuff_push_u8
         MOVS     R1,#+6
@@ -180,114 +180,86 @@ rs3010k_prepare:
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
-rs3010k_parse:
-        PUSH     {R0,R4-R11,LR}
-        SUB      SP,SP,#+32
-        MOVS     R4,R1
-        CMP      R3,#+13
-        BCS.N    ??rs3010k_parse_0
+water_parse:
+        PUSH     {R1-R9,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        CMP      R3,#+9
+        BCS.N    ??water_parse_0
         MOVS     R0,#+0
-        B.N      ??rs3010k_parse_1
-??rs3010k_parse_0:
-        LDRB     R11,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R0,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R1,[R2, #+0]
-        ADDS     R2,R2,#+1
-        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        CMP      R1,#+8
-        BNE.N    ??rs3010k_parse_2
-        LDR.N    R3,??DataTable2_2
-        LDRB     R3,[R3, #+0]
-        UXTB     R11,R11          ;; ZeroExt  R11,R11,#+24,#+24
-        CMP      R11,R3
-        BNE.N    ??rs3010k_parse_2
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+3
-        BEQ.N    ??rs3010k_parse_3
-??rs3010k_parse_2:
-        MOVS     R0,#+1
-        B.N      ??rs3010k_parse_1
-??rs3010k_parse_3:
-        LDRB     R3,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R6,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R7,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R12,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     LR,[R2, #+0]
+        B.N      ??water_parse_1
+??water_parse_0:
+        LDRB     R9,[R2, #+0]
         ADDS     R2,R2,#+1
         LDRB     R8,[R2, #+0]
         ADDS     R2,R2,#+1
-        LDRB     R9,[R2, #+0]
+        LDRB     LR,[R2, #+0]
         ADDS     R2,R2,#+1
-        LDRB     R10,[R2, #+0]
-        ADDS     R2,R2,#+1
-        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
-        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
-        LSLS     R5,R6,#+16
-        ORRS     R5,R5,R3, LSL #+24
-        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
-        ORRS     R5,R5,R7, LSL #+8
-        UXTB     R12,R12          ;; ZeroExt  R12,R12,#+24,#+24
-        ORRS     R5,R12,R5
-        STR      R5,[SP, #+28]
         UXTB     LR,LR            ;; ZeroExt  LR,LR,#+24,#+24
-        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
-        LSLS     R5,R8,#+16
-        ORRS     R5,R5,LR, LSL #+24
+        CMP      LR,#+4
+        BNE.N    ??water_parse_2
+        LDR.N    R0,??DataTable2_2
+        LDRB     R0,[R0, #+0]
         UXTB     R9,R9            ;; ZeroExt  R9,R9,#+24,#+24
-        ORRS     R5,R5,R9, LSL #+8
-        UXTB     R10,R10          ;; ZeroExt  R10,R10,#+24,#+24
-        ORRS     R5,R10,R5
-        STRB     R11,[SP, #+16]
-        STRB     R0,[SP, #+17]
-        STRB     R1,[SP, #+18]
-        STRB     R3,[SP, #+19]
-        STRB     R6,[SP, #+20]
-        STRB     R7,[SP, #+21]
-        STRB     R12,[SP, #+22]
-        STRB     LR,[SP, #+23]
-        STRB     R8,[SP, #+24]
-        STRB     R9,[SP, #+25]
-        STRB     R10,[SP, #+26]
+        CMP      R9,R0
+        BNE.N    ??water_parse_2
+        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
+        CMP      R8,#+3
+        BEQ.N    ??water_parse_3
+??water_parse_2:
+        MOVS     R0,#+1
+        B.N      ??water_parse_1
+??water_parse_3:
+        LDRB     R7,[R2, #+0]
+        ADDS     R2,R2,#+1
+        LDRB     R3,[R2, #+0]
+        ADDS     R2,R2,#+1
+        LDRB     R1,[R2, #+0]
+        ADDS     R2,R2,#+1
+        LDRB     R0,[R2, #+0]
+        ADDS     R2,R2,#+1
+        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
+        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+        LSLS     R6,R3,#+16
+        ORRS     R6,R6,R7, LSL #+24
+        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+        ORRS     R6,R6,R1, LSL #+8
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        ORRS     R6,R0,R6
+        STRB     R9,[SP, #+4]
+        STRB     R8,[SP, #+5]
+        STRB     LR,[SP, #+6]
+        STRB     R7,[SP, #+7]
+        STRB     R3,[SP, #+8]
+        STRB     R1,[SP, #+9]
+        STRB     R0,[SP, #+10]
         LDRB     R0,[R2, #+0]
         ADDS     R2,R2,#+1
         LDRB     R1,[R2, #+0]
         ADDS     R2,R2,#+1
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        ORRS     R6,R0,R1, LSL #+8
-        MOVS     R1,#+11
-        ADD      R0,SP,#+16
+        ORRS     R7,R0,R1, LSL #+8
+        MOVS     R1,#+7
+        ADD      R0,SP,#+4
         BL       crc16
-        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
-        CMP      R6,R0
-        BEQ.N    ??rs3010k_parse_4
+        UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
+        CMP      R7,R0
+        BEQ.N    ??water_parse_4
         MOVS     R0,#+1
-        B.N      ??rs3010k_parse_1
-??rs3010k_parse_4:
+        B.N      ??water_parse_1
+??water_parse_4:
         BL       rtc_get_time
-        MOVS     R6,R0
-        MOVS     R0,R5
-        BL       __aeabi_f2d
-        STRD     R0,R1,[SP, #+8]
-        LDR      R0,[SP, #+28]
-        BL       __aeabi_f2d
-        STRD     R0,R1,[SP, #+0]
-        MOVS     R3,R6
-        LDR      R2,[SP, #+32]
+        STR      R6,[SP, #+0]
+        MOVS     R3,R0
+        MOVS     R2,R4
         LDR.N    R1,??DataTable2_3
-        MOVS     R0,R4
+        MOVS     R0,R5
         BL       sprintf
-        MOVS     R0,R4
+        MOVS     R0,R5
         BL       strlen
-??rs3010k_parse_1:
-        ADD      SP,SP,#+36
-        POP      {R4-R11,PC}      ;; return
+??water_parse_1:
+        POP      {R1-R9,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -314,9 +286,9 @@ rs3010k_parse:
         DC32     ?_0
 
         SECTION `.data`:DATA:REORDER:NOROOT(2)
-rs3010k_senproto:
+water_senproto:
         DATA
-        DC32 rs3010k_prepare, rs3010k_parse
+        DC32 water_prepare, water_parse
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -333,11 +305,11 @@ rs3010k_senproto:
 // 
 //   1 byte  in section .bss
 //   8 bytes in section .data
-// 528 bytes in section .rodata
-// 452 bytes in section .text
+// 524 bytes in section .rodata
+// 362 bytes in section .text
 // 
-// 452 bytes of CODE  memory
-// 528 bytes of CONST memory
+// 362 bytes of CODE  memory
+// 524 bytes of CONST memory
 //   9 bytes of DATA  memory
 //
 //Errors: none

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       15/Dec/2017  11:10:22
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  14:09:30
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -41,6 +41,7 @@
         EXTERN rst460_senproto
         EXTERN t770_senproto
         EXTERN t830_senproto
+        EXTERN water_senproto
         EXTERN zbm001_senproto
 
         PUBLIC senproto_lookup
@@ -51,12 +52,12 @@
 sensors_table:
         DATA
         DC32 rst460_senproto, rs3010k_senproto, zbm001_senproto, t770_senproto
-        DC32 t830_senproto, 0H
+        DC32 t830_senproto, water_senproto, 0H
 
         SECTION `.text`:CODE:NOROOT(2)
         THUMB
 senproto_lookup:
-        CMP      R0,#+25
+        CMP      R0,#+29
         BCC.N    ??senproto_lookup_0
         MOVS     R0,#+0
         B.N      ??senproto_lookup_1
@@ -82,11 +83,11 @@ senproto_lookup:
 
         END
 // 
-// 24 bytes in section .data
+// 28 bytes in section .data
 // 20 bytes in section .text
 // 
 // 20 bytes of CODE memory
-// 24 bytes of DATA memory
+// 28 bytes of DATA memory
 //
 //Errors: none
 //Warnings: none

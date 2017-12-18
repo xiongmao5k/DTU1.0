@@ -2071,6 +2071,9 @@
         <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-t830.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-water.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\gprsdtu\senproto\senproto-rst460.c</name>
       </file>
       <file>
@@ -2082,6 +2085,9 @@
     </group>
     <group>
       <name>spiffs</name>
+      <excluded>
+        <configuration>Debug</configuration>
+      </excluded>
       <file>
         <name>$PROJ_DIR$\..\gprsdtu\spiffs\src\spiffs_cache.c</name>
       </file>
