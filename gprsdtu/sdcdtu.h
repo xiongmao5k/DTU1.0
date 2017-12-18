@@ -1,0 +1,17 @@
+#ifndef SOFTWARE_SDCDTU_H_H
+#define SOFTWARE_SDCDTU_H_H
+
+
+
+
+enum {
+    SDCDTU_SUCCESS,
+    SDCDTU_FAIL
+};
+
+
+
+#endif //SOFTWARE_SDCDTU_H_H
+
+
+
