@@ -1,14 +1,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  17:18:25
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  17:18:24
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
 //    Endian       =  little
 //    Source file  =  
-//        D:\Ruhr\Xiongmao\github\DTU1.0\gprsdtu\senproto\senproto-zbm001.c
+//        D:\Ruhr\Xiongmao\github\DTU1.0\gprsdtu\senproto\senprote-t800.c
 //    Command line =  
-//        D:\Ruhr\Xiongmao\github\DTU1.0\gprsdtu\senproto\senproto-zbm001.c -D
+//        D:\Ruhr\Xiongmao\github\DTU1.0\gprsdtu\senproto\senprote-t800.c -D
 //        STM32F10X_MD -D USE_STDPERIPH_DRIVER -lb
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\ --diag_suppress
 //        Pa050 -o D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\Obj\ --no_cse
@@ -31,13 +31,12 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\senproto-zbm001.s
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\senprote-t800.s
 //
 ///////////////////////////////////////////////////////////////////////////////
 
         #define SHT_PROGBITS 0x1
 
-        EXTERN __aeabi_f2d
         EXTERN framebuff_init
         EXTERN framebuff_length
         EXTERN framebuff_push_u16
@@ -46,15 +45,16 @@
         EXTERN sprintf
         EXTERN strlen
 
-        PUBLIC zbm001_parse
-        PUBLIC zbm001_prepare
-        PUBLIC zbm001_senproto
+        PUBLIC t800_parse
+        PUBLIC t800_prepare
+        PUBLIC t800_senproto
 
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
 ?_0:
         DATA
-        DC8 "%d|%d|%.3f|%.3f"
+        DC8 "%d|%d|%d"
+        DC8 0, 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
 // static __absolute unsigned char const table_crc_hi[256]
@@ -100,18 +100,15 @@ table_crc_lo:
         DC8 143, 79, 141, 77, 76, 140, 68, 132, 133, 69, 135, 71, 70, 134, 130
         DC8 66, 67, 131, 65, 129, 128, 64
 
-        SECTION `.bss`:DATA:REORDER:NOROOT(0)
-address_backup:
-        DS8 1
-
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
-zcrc16:
+// static __interwork __softfp uint16_t crc16(uint8_t *, uint16_t)
+crc16:
         PUSH     {R4}
         MOVS     R2,#+255
         MOVS     R3,#+255
-        B.N      ??zcrc16_0
-??zcrc16_1:
+        B.N      ??crc16_0
+??crc16_1:
         UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
         LDRB     R4,[R0, #+0]
         EORS     R4,R4,R2
@@ -121,22 +118,26 @@ zcrc16:
         EORS     R2,R2,R3
         LDR.N    R3,??DataTable2_1
         LDRB     R3,[R4, R3]
-??zcrc16_0:
+??crc16_0:
         MOVS     R4,R1
         SUBS     R1,R4,#+1
         UXTH     R4,R4            ;; ZeroExt  R4,R4,#+16,#+16
         CMP      R4,#+0
-        BNE.N    ??zcrc16_1
-        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+        BNE.N    ??crc16_1
         UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
-        ORRS     R0,R3,R2, LSL #+8
+        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+        ORRS     R0,R2,R3, LSL #+8
         UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
         POP      {R4}
         BX       LR               ;; return
 
+        SECTION `.bss`:DATA:REORDER:NOROOT(0)
+address_backup:
+        DS8 1
+
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
-zbm001_prepare:
+t800_prepare:
         PUSH     {R4,LR}
         SUB      SP,SP,#+16
         MOVS     R4,R1
@@ -144,34 +145,28 @@ zbm001_prepare:
         MOVS     R1,R0
         ADD      R0,SP,#+0
         BL       framebuff_init
-        MOVS     R1,#+165
-        ADD      R0,SP,#+0
-        BL       framebuff_push_u8
-        MOVS     R1,#+165
-        ADD      R0,SP,#+0
-        BL       framebuff_push_u8
-        MOVS     R1,#+153
-        ADD      R0,SP,#+0
-        BL       framebuff_push_u8
-        MOVS     R1,#+0
-        ADD      R0,SP,#+0
-        BL       framebuff_push_u8
         MOVS     R1,R4
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         ADD      R0,SP,#+0
         BL       framebuff_push_u8
-        MOVS     R1,#+1
-        ADD      R0,SP,#+0
-        BL       framebuff_push_u8
-        MOVS     R1,#+1
+        MOVS     R1,#+3
         ADD      R0,SP,#+0
         BL       framebuff_push_u8
         MOVS     R1,#+0
         ADD      R0,SP,#+0
         BL       framebuff_push_u8
-        MOVS     R1,#+8
+        MOVS     R1,#+2
+        ADD      R0,SP,#+0
+        BL       framebuff_push_u8
+        MOVS     R1,#+0
+        ADD      R0,SP,#+0
+        BL       framebuff_push_u8
+        MOVS     R1,#+2
+        ADD      R0,SP,#+0
+        BL       framebuff_push_u8
+        MOVS     R1,#+6
         LDR      R0,[SP, #+0]
-        BL       zcrc16
+        BL       crc16
         MOVS     R1,R0
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         ADD      R0,SP,#+0
@@ -185,144 +180,86 @@ zbm001_prepare:
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
-zbm001_parse:
-        PUSH     {R0,R1,R4-R11,LR}
-        SUB      SP,SP,#+44
-        CMP      R3,#+19
-        BCS.N    ??zbm001_parse_0
+t800_parse:
+        PUSH     {R1-R9,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        CMP      R3,#+9
+        BCS.N    ??t800_parse_0
         MOVS     R0,#+0
-        B.N      ??zbm001_parse_1
-??zbm001_parse_0:
-        LDRB     R11,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R0,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R1,[R2, #+0]
-        STRB     R1,[SP, #+4]
-        ADDS     R2,R2,#+1
-        LDRB     R1,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R3,[R2, #+0]
-        STRB     R3,[SP, #+3]
-        ADDS     R2,R2,#+1
-        LDRB     R3,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R4,[R2, #+0]
-        STRB     R4,[SP, #+2]
-        ADDS     R2,R2,#+1
-        LDRB     R4,[R2, #+0]
-        STRB     R4,[SP, #+1]
-        ADDS     R2,R2,#+1
-        LDRB     R4,[R2, #+0]
-        STRB     R4,[SP, #+0]
-        ADDS     R2,R2,#+1
-        UXTB     R11,R11          ;; ZeroExt  R11,R11,#+24,#+24
-        CMP      R11,#+165
-        BNE.N    ??zbm001_parse_2
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+165
-        BNE.N    ??zbm001_parse_2
-        LDR.N    R4,??DataTable2_2
-        LDRB     R4,[R4, #+0]
-        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        CMP      R1,R4
-        BNE.N    ??zbm001_parse_2
-        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
-        CMP      R3,#+1
-        BEQ.N    ??zbm001_parse_3
-??zbm001_parse_2:
-        MOVS     R0,#+1
-        B.N      ??zbm001_parse_1
-??zbm001_parse_3:
-        LDRB     R5,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R6,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R7,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R12,[R2, #+0]
-        ADDS     R2,R2,#+1
-        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
-        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
-        LSLS     R4,R6,#+16
-        ORRS     R4,R4,R5, LSL #+24
-        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
-        ORRS     R4,R4,R7, LSL #+8
-        UXTB     R12,R12          ;; ZeroExt  R12,R12,#+24,#+24
-        ORRS     LR,R12,R4
-        STR      LR,[SP, #+36]
-        LDRB     LR,[R2, #+0]
+        B.N      ??t800_parse_1
+??t800_parse_0:
+        LDRB     R9,[R2, #+0]
         ADDS     R2,R2,#+1
         LDRB     R8,[R2, #+0]
         ADDS     R2,R2,#+1
-        LDRB     R9,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R10,[R2, #+0]
+        LDRB     LR,[R2, #+0]
         ADDS     R2,R2,#+1
         UXTB     LR,LR            ;; ZeroExt  LR,LR,#+24,#+24
-        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
-        LSLS     R4,R8,#+16
-        ORRS     R4,R4,LR, LSL #+24
+        CMP      LR,#+4
+        BNE.N    ??t800_parse_2
+        LDR.N    R0,??DataTable2_2
+        LDRB     R0,[R0, #+0]
         UXTB     R9,R9            ;; ZeroExt  R9,R9,#+24,#+24
-        ORRS     R4,R4,R9, LSL #+8
-        UXTB     R10,R10          ;; ZeroExt  R10,R10,#+24,#+24
-        ORRS     R4,R10,R4
-        STRB     R11,[SP, #+16]
-        STRB     R0,[SP, #+17]
-        LDRB     R11,[SP, #+4]
-        STRB     R11,[SP, #+18]
-        STRB     R1,[SP, #+19]
-        LDRB     R1,[SP, #+3]
-        STRB     R1,[SP, #+20]
-        STRB     R3,[SP, #+21]
-        LDRB     R1,[SP, #+2]
-        STRB     R1,[SP, #+22]
-        LDRB     R1,[SP, #+1]
-        STRB     R1,[SP, #+23]
-        LDRB     R1,[SP, #+0]
-        STRB     R1,[SP, #+24]
-        STRB     R5,[SP, #+25]
-        STRB     R6,[SP, #+26]
-        STRB     R7,[SP, #+27]
-        STRB     R12,[SP, #+28]
-        STRB     LR,[SP, #+29]
-        STRB     R8,[SP, #+30]
-        STRB     R9,[SP, #+31]
-        STRB     R10,[SP, #+32]
+        CMP      R9,R0
+        BNE.N    ??t800_parse_2
+        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
+        CMP      R8,#+3
+        BEQ.N    ??t800_parse_3
+??t800_parse_2:
+        MOVS     R0,#+1
+        B.N      ??t800_parse_1
+??t800_parse_3:
+        LDRB     R7,[R2, #+0]
+        ADDS     R2,R2,#+1
+        LDRB     R3,[R2, #+0]
+        ADDS     R2,R2,#+1
+        LDRB     R1,[R2, #+0]
+        ADDS     R2,R2,#+1
+        LDRB     R0,[R2, #+0]
+        ADDS     R2,R2,#+1
+        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
+        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+        LSLS     R6,R3,#+16
+        ORRS     R6,R6,R7, LSL #+24
+        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+        ORRS     R6,R6,R1, LSL #+8
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        ORRS     R6,R0,R6
+        STRB     R9,[SP, #+4]
+        STRB     R8,[SP, #+5]
+        STRB     LR,[SP, #+6]
+        STRB     R7,[SP, #+7]
+        STRB     R3,[SP, #+8]
+        STRB     R1,[SP, #+9]
+        STRB     R0,[SP, #+10]
         LDRB     R0,[R2, #+0]
         ADDS     R2,R2,#+1
         LDRB     R1,[R2, #+0]
         ADDS     R2,R2,#+1
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        ORRS     R5,R0,R1, LSL #+8
-        MOVS     R1,#+17
-        ADD      R0,SP,#+16
-        BL       zcrc16
-        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
-        CMP      R5,R0
-        BEQ.N    ??zbm001_parse_4
+        ORRS     R7,R0,R1, LSL #+8
+        MOVS     R1,#+7
+        ADD      R0,SP,#+4
+        BL       crc16
+        UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
+        CMP      R7,R0
+        BEQ.N    ??t800_parse_4
         MOVS     R0,#+1
-        B.N      ??zbm001_parse_1
-??zbm001_parse_4:
+        B.N      ??t800_parse_1
+??t800_parse_4:
         BL       rtc_get_time
-        MOVS     R5,R0
-        MOVS     R0,R4
-        BL       __aeabi_f2d
-        STRD     R0,R1,[SP, #+8]
-        LDR      R0,[SP, #+36]
-        BL       __aeabi_f2d
-        STRD     R0,R1,[SP, #+0]
-        MOVS     R3,R5
-        LDR      R2,[SP, #+44]
+        STR      R6,[SP, #+0]
+        MOVS     R3,R0
+        MOVS     R2,R4
         LDR.N    R1,??DataTable2_3
-        LDR      R0,[SP, #+48]
+        MOVS     R0,R5
         BL       sprintf
-        LDR      R0,[SP, #+48]
+        MOVS     R0,R5
         BL       strlen
-??zbm001_parse_1:
-        ADD      SP,SP,#+52
-        POP      {R4-R11,PC}      ;; return
+??t800_parse_1:
+        POP      {R1-R9,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -349,9 +286,9 @@ zbm001_parse:
         DC32     ?_0
 
         SECTION `.data`:DATA:REORDER:NOROOT(2)
-zbm001_senproto:
+t800_senproto:
         DATA
-        DC32 zbm001_prepare, zbm001_parse
+        DC32 t800_prepare, t800_parse
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -368,11 +305,11 @@ zbm001_senproto:
 // 
 //   1 byte  in section .bss
 //   8 bytes in section .data
-// 528 bytes in section .rodata
-// 564 bytes in section .text
+// 524 bytes in section .rodata
+// 362 bytes in section .text
 // 
-// 564 bytes of CODE  memory
-// 528 bytes of CONST memory
+// 362 bytes of CODE  memory
+// 524 bytes of CONST memory
 //   9 bytes of DATA  memory
 //
 //Errors: none

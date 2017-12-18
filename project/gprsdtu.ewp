@@ -2068,6 +2068,9 @@
         <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-t770.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-t800.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-t830.c</name>
       </file>
       <file>

@@ -2,7 +2,7 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>3707407291</fileChecksum>
+  <fileChecksum>2039924950</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
@@ -441,7 +441,10 @@
       <file>$PROJ_DIR$\gprsdtu.icf</file>
       <file>$PROJ_DIR$\Debug\Obj\senproto-zbm001.__cstat.et</file>
       <file>$PROJ_DIR$\Debug\Obj\senprote-rs3010K.__cstat.et</file>
+      <file>$PROJ_DIR$\Debug\Obj\senprote-t800.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\senprote-t800.o</file>
       <file>$PROJ_DIR$\Debug\List\senprote-water.s</file>
+      <file>$PROJ_DIR$\..\gprsdtu\senproto\senprote-t800.c</file>
       <file>$PROJ_DIR$\Debug\Obj\senprote-water.o</file>
       <file>$PROJ_DIR$\Debug\Obj\senprote-water.pbi</file>
       <file>$PROJ_DIR$\..\gprsdtu\senproto\senprote-water.c</file>
@@ -2203,7 +2206,7 @@
       <inputs>
         <tool>
           <name>ILINK</name>
-          <file> 432 319 52 209 90 350 397 142 223 428 199 361 236 416 159 60 43 311 157 282 168 34 63 210 347 436 386 201 390 362 31 191 353 45 176 66 313 172 421 419 249 328 164 333 283 260 33 410 169 337 407 48 286 233 146 154 356 340 70 184 145 378 226 192</file>
+          <file> 432 319 52 209 90 350 397 142 223 428 199 361 236 416 159 60 43 311 157 282 168 34 63 210 347 439 386 201 390 362 31 191 353 45 176 66 313 172 421 419 249 328 164 333 283 260 33 410 169 337 407 48 286 233 146 154 356 340 70 184 145 378 226 192</file>
         </tool>
       </inputs>
     </file>
@@ -2258,15 +2261,34 @@
       </inputs>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-t800.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 436</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 435</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 39 429 51 227 212 203 415 149 229 384 430 366 231 424 263 300</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-water.c</name>
       <outputs>
         <tool>
           <name>ICCARM</name>
-          <file> 435 436</file>
+          <file> 437 439</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 437</file>
+          <file> 440</file>
         </tool>
       </outputs>
       <inputs>
@@ -2280,6 +2302,10 @@
         </tool>
       </inputs>
     </file>
+    <forcedrebuild>
+      <name>[MULTI_TOOL]</name>
+      <tool>ILINK</tool>
+    </forcedrebuild>
     <forcedrebuild>
       <name>$PROJ_DIR$\..\gprsdtu\spiffs\src\spiffs_hydrogen.c</name>
       <tool>C-STAT</tool>
