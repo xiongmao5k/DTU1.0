@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:26
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:28
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_iwdg.s
@@ -88,18 +88,20 @@ IWDG_Enable:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 IWDG_GetFlagStatus:
-        MOVS     R1,#+0
-        LDR.N    R1,??DataTable5_3  ;; 0x4000300c
-        LDR      R1,[R1, #+0]
-        UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
-        TST      R1,R0
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        LDR.N    R2,??DataTable5_3  ;; 0x4000300c
+        LDR      R2,[R2, #+0]
+        UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
+        TST      R2,R1
         BEQ.N    ??IWDG_GetFlagStatus_0
-        MOVS     R1,#+1
+        MOVS     R2,#+1
+        MOVS     R0,R2
         B.N      ??IWDG_GetFlagStatus_1
 ??IWDG_GetFlagStatus_0:
-        MOVS     R1,#+0
+        MOVS     R2,#+0
+        MOVS     R0,R2
 ??IWDG_GetFlagStatus_1:
-        MOVS     R0,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -140,9 +142,9 @@ IWDG_GetFlagStatus:
 
         END
 // 
-// 84 bytes in section .text
+// 88 bytes in section .text
 // 
-// 84 bytes of CODE memory
+// 88 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

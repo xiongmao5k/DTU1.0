@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:25
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:27
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_dma.s
@@ -68,121 +68,121 @@ DMA_DeInit:
         LDR.N    R1,??DataTable4  ;; 0x40020008
         CMP      R0,R1
         BNE.N    ??DMA_DeInit_0
-        LDR.N    R0,??DataTable4_1  ;; 0x40020004
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0xF
         LDR.N    R1,??DataTable4_1  ;; 0x40020004
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0xF
+        LDR.N    R2,??DataTable4_1  ;; 0x40020004
+        STR      R1,[R2, #+0]
         B.N      ??DMA_DeInit_1
 ??DMA_DeInit_0:
         LDR.N    R1,??DataTable4_2  ;; 0x4002001c
         CMP      R0,R1
         BNE.N    ??DMA_DeInit_2
-        LDR.N    R0,??DataTable4_1  ;; 0x40020004
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0xF0
         LDR.N    R1,??DataTable4_1  ;; 0x40020004
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0xF0
+        LDR.N    R2,??DataTable4_1  ;; 0x40020004
+        STR      R1,[R2, #+0]
         B.N      ??DMA_DeInit_1
 ??DMA_DeInit_2:
         LDR.N    R1,??DataTable4_3  ;; 0x40020030
         CMP      R0,R1
         BNE.N    ??DMA_DeInit_3
-        LDR.N    R0,??DataTable4_1  ;; 0x40020004
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0xF00
         LDR.N    R1,??DataTable4_1  ;; 0x40020004
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0xF00
+        LDR.N    R2,??DataTable4_1  ;; 0x40020004
+        STR      R1,[R2, #+0]
         B.N      ??DMA_DeInit_1
 ??DMA_DeInit_3:
         LDR.N    R1,??DataTable4_4  ;; 0x40020044
         CMP      R0,R1
         BNE.N    ??DMA_DeInit_4
-        LDR.N    R0,??DataTable4_1  ;; 0x40020004
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0xF000
         LDR.N    R1,??DataTable4_1  ;; 0x40020004
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0xF000
+        LDR.N    R2,??DataTable4_1  ;; 0x40020004
+        STR      R1,[R2, #+0]
         B.N      ??DMA_DeInit_1
 ??DMA_DeInit_4:
         LDR.N    R1,??DataTable4_5  ;; 0x40020058
         CMP      R0,R1
         BNE.N    ??DMA_DeInit_5
-        LDR.N    R0,??DataTable4_1  ;; 0x40020004
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0xF0000
         LDR.N    R1,??DataTable4_1  ;; 0x40020004
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0xF0000
+        LDR.N    R2,??DataTable4_1  ;; 0x40020004
+        STR      R1,[R2, #+0]
         B.N      ??DMA_DeInit_1
 ??DMA_DeInit_5:
         LDR.N    R1,??DataTable4_6  ;; 0x4002006c
         CMP      R0,R1
         BNE.N    ??DMA_DeInit_6
-        LDR.N    R0,??DataTable4_1  ;; 0x40020004
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0xF00000
         LDR.N    R1,??DataTable4_1  ;; 0x40020004
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0xF00000
+        LDR.N    R2,??DataTable4_1  ;; 0x40020004
+        STR      R1,[R2, #+0]
         B.N      ??DMA_DeInit_1
 ??DMA_DeInit_6:
         LDR.N    R1,??DataTable4_7  ;; 0x40020080
         CMP      R0,R1
         BNE.N    ??DMA_DeInit_7
-        LDR.N    R0,??DataTable4_1  ;; 0x40020004
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0xF000000
         LDR.N    R1,??DataTable4_1  ;; 0x40020004
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0xF000000
+        LDR.N    R2,??DataTable4_1  ;; 0x40020004
+        STR      R1,[R2, #+0]
         B.N      ??DMA_DeInit_1
 ??DMA_DeInit_7:
         LDR.N    R1,??DataTable4_8  ;; 0x40020408
         CMP      R0,R1
         BNE.N    ??DMA_DeInit_8
-        LDR.N    R0,??DataTable4_9  ;; 0x40020404
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0xF
         LDR.N    R1,??DataTable4_9  ;; 0x40020404
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0xF
+        LDR.N    R2,??DataTable4_9  ;; 0x40020404
+        STR      R1,[R2, #+0]
         B.N      ??DMA_DeInit_1
 ??DMA_DeInit_8:
         LDR.N    R1,??DataTable4_10  ;; 0x4002041c
         CMP      R0,R1
         BNE.N    ??DMA_DeInit_9
-        LDR.N    R0,??DataTable4_9  ;; 0x40020404
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0xF0
         LDR.N    R1,??DataTable4_9  ;; 0x40020404
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0xF0
+        LDR.N    R2,??DataTable4_9  ;; 0x40020404
+        STR      R1,[R2, #+0]
         B.N      ??DMA_DeInit_1
 ??DMA_DeInit_9:
         LDR.N    R1,??DataTable4_11  ;; 0x40020430
         CMP      R0,R1
         BNE.N    ??DMA_DeInit_10
-        LDR.N    R0,??DataTable4_9  ;; 0x40020404
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0xF00
         LDR.N    R1,??DataTable4_9  ;; 0x40020404
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0xF00
+        LDR.N    R2,??DataTable4_9  ;; 0x40020404
+        STR      R1,[R2, #+0]
         B.N      ??DMA_DeInit_1
 ??DMA_DeInit_10:
         LDR.N    R1,??DataTable4_12  ;; 0x40020444
         CMP      R0,R1
         BNE.N    ??DMA_DeInit_11
-        LDR.N    R0,??DataTable4_9  ;; 0x40020404
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0xF000
         LDR.N    R1,??DataTable4_9  ;; 0x40020404
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0xF000
+        LDR.N    R2,??DataTable4_9  ;; 0x40020404
+        STR      R1,[R2, #+0]
         B.N      ??DMA_DeInit_1
 ??DMA_DeInit_11:
         LDR.N    R1,??DataTable4_13  ;; 0x40020458
         CMP      R0,R1
         BNE.N    ??DMA_DeInit_1
-        LDR.N    R0,??DataTable4_9  ;; 0x40020404
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0xF0000
         LDR.N    R1,??DataTable4_9  ;; 0x40020404
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0xF0000
+        LDR.N    R2,??DataTable4_9  ;; 0x40020404
+        STR      R1,[R2, #+0]
 ??DMA_DeInit_1:
         BX       LR               ;; return
 
@@ -191,7 +191,8 @@ DMA_DeInit:
 DMA_Init:
         PUSH     {R4}
         MOVS     R2,#+0
-        LDR      R2,[R0, #+0]
+        LDR      R3,[R0, #+0]
+        MOVS     R2,R3
         BFC      R2,#+4,#+11
         LDR      R3,[R1, #+8]
         LDR      R4,[R1, #+32]
@@ -210,12 +211,12 @@ DMA_Init:
         ORRS     R3,R4,R3
         ORRS     R2,R3,R2
         STR      R2,[R0, #+0]
-        LDR      R2,[R1, #+12]
-        STR      R2,[R0, #+4]
-        LDR      R2,[R1, #+0]
-        STR      R2,[R0, #+8]
-        LDR      R1,[R1, #+4]
-        STR      R1,[R0, #+12]
+        LDR      R3,[R1, #+12]
+        STR      R3,[R0, #+4]
+        LDR      R3,[R1, #+0]
+        STR      R3,[R0, #+8]
+        LDR      R3,[R1, #+4]
+        STR      R3,[R0, #+12]
         POP      {R4}
         BX       LR               ;; return
 
@@ -252,15 +253,15 @@ DMA_Cmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??DMA_Cmd_0
-        LDR      R1,[R0, #+0]
-        ORRS     R1,R1,#0x1
-        STR      R1,[R0, #+0]
+        LDR      R2,[R0, #+0]
+        ORRS     R2,R2,#0x1
+        STR      R2,[R0, #+0]
         B.N      ??DMA_Cmd_1
 ??DMA_Cmd_0:
-        LDR      R1,[R0, #+0]
-        MOVW     R2,#+65534
-        ANDS     R1,R2,R1
-        STR      R1,[R0, #+0]
+        LDR      R2,[R0, #+0]
+        MOVW     R3,#+65534
+        ANDS     R2,R3,R2
+        STR      R2,[R0, #+0]
 ??DMA_Cmd_1:
         BX       LR               ;; return
 
@@ -270,14 +271,14 @@ DMA_ITConfig:
         UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
         CMP      R2,#+0
         BEQ.N    ??DMA_ITConfig_0
-        LDR      R2,[R0, #+0]
-        ORRS     R1,R1,R2
-        STR      R1,[R0, #+0]
+        LDR      R3,[R0, #+0]
+        ORRS     R3,R1,R3
+        STR      R3,[R0, #+0]
         B.N      ??DMA_ITConfig_1
 ??DMA_ITConfig_0:
-        LDR      R2,[R0, #+0]
-        BICS     R1,R2,R1
-        STR      R1,[R0, #+0]
+        LDR      R3,[R0, #+0]
+        BICS     R3,R3,R1
+        STR      R3,[R0, #+0]
 ??DMA_ITConfig_1:
         BX       LR               ;; return
 
@@ -298,25 +299,29 @@ DMA_GetCurrDataCounter:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 DMA_GetFlagStatus:
-        MOVS     R1,#+0
-        MOVS     R1,#+0
-        LSLS     R1,R0,#+3
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        MOVS     R2,#+0
+        LSLS     R3,R1,#+3
         BPL.N    ??DMA_GetFlagStatus_0
-        LDR.N    R1,??DataTable4_14  ;; 0x40020400
-        LDR      R1,[R1, #+0]
+        LDR.N    R3,??DataTable4_14  ;; 0x40020400
+        LDR      R3,[R3, #+0]
+        MOVS     R2,R3
         B.N      ??DMA_GetFlagStatus_1
 ??DMA_GetFlagStatus_0:
-        LDR.N    R1,??DataTable4_15  ;; 0x40020000
-        LDR      R1,[R1, #+0]
+        LDR.N    R3,??DataTable4_15  ;; 0x40020000
+        LDR      R3,[R3, #+0]
+        MOVS     R2,R3
 ??DMA_GetFlagStatus_1:
-        TST      R1,R0
+        TST      R2,R1
         BEQ.N    ??DMA_GetFlagStatus_2
-        MOVS     R1,#+1
+        MOVS     R3,#+1
+        MOVS     R0,R3
         B.N      ??DMA_GetFlagStatus_3
 ??DMA_GetFlagStatus_2:
-        MOVS     R1,#+0
+        MOVS     R3,#+0
+        MOVS     R0,R3
 ??DMA_GetFlagStatus_3:
-        MOVS     R0,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -337,25 +342,29 @@ DMA_ClearFlag:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 DMA_GetITStatus:
-        MOVS     R1,#+0
-        MOVS     R1,#+0
-        LSLS     R1,R0,#+3
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        MOVS     R2,#+0
+        LSLS     R3,R1,#+3
         BPL.N    ??DMA_GetITStatus_0
-        LDR.N    R1,??DataTable4_14  ;; 0x40020400
-        LDR      R1,[R1, #+0]
+        LDR.N    R3,??DataTable4_14  ;; 0x40020400
+        LDR      R3,[R3, #+0]
+        MOVS     R2,R3
         B.N      ??DMA_GetITStatus_1
 ??DMA_GetITStatus_0:
-        LDR.N    R1,??DataTable4_15  ;; 0x40020000
-        LDR      R1,[R1, #+0]
+        LDR.N    R3,??DataTable4_15  ;; 0x40020000
+        LDR      R3,[R3, #+0]
+        MOVS     R2,R3
 ??DMA_GetITStatus_1:
-        TST      R1,R0
+        TST      R2,R1
         BEQ.N    ??DMA_GetITStatus_2
-        MOVS     R1,#+1
+        MOVS     R3,#+1
+        MOVS     R0,R3
         B.N      ??DMA_GetITStatus_3
 ??DMA_GetITStatus_2:
-        MOVS     R1,#+0
+        MOVS     R3,#+0
+        MOVS     R0,R3
 ??DMA_GetITStatus_3:
-        MOVS     R0,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -482,9 +491,9 @@ DMA_ClearITPendingBit:
 
         END
 // 
-// 600 bytes in section .text
+// 616 bytes in section .text
 // 
-// 600 bytes of CODE memory
+// 616 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

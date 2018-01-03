@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:27
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:29
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_usart.s
@@ -75,9 +75,10 @@
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 USART_DeInit:
-        PUSH     {R7,LR}
-        LDR.N    R1,??DataTable1  ;; 0x40013800
-        CMP      R0,R1
+        PUSH     {R4,LR}
+        MOVS     R4,R0
+        LDR.N    R0,??DataTable1  ;; 0x40013800
+        CMP      R4,R0
         BNE.N    ??USART_DeInit_0
         MOVS     R1,#+1
         MOV      R0,#+16384
@@ -87,8 +88,8 @@ USART_DeInit:
         BL       RCC_APB2PeriphResetCmd
         B.N      ??USART_DeInit_1
 ??USART_DeInit_0:
-        LDR.N    R1,??DataTable1_1  ;; 0x40004400
-        CMP      R0,R1
+        LDR.N    R0,??DataTable1_1  ;; 0x40004400
+        CMP      R4,R0
         BNE.N    ??USART_DeInit_2
         MOVS     R1,#+1
         MOVS     R0,#+131072
@@ -98,8 +99,8 @@ USART_DeInit:
         BL       RCC_APB1PeriphResetCmd
         B.N      ??USART_DeInit_1
 ??USART_DeInit_2:
-        LDR.N    R1,??DataTable1_2  ;; 0x40004800
-        CMP      R0,R1
+        LDR.N    R0,??DataTable1_2  ;; 0x40004800
+        CMP      R4,R0
         BNE.N    ??USART_DeInit_3
         MOVS     R1,#+1
         MOVS     R0,#+262144
@@ -109,8 +110,8 @@ USART_DeInit:
         BL       RCC_APB1PeriphResetCmd
         B.N      ??USART_DeInit_1
 ??USART_DeInit_3:
-        LDR.N    R1,??DataTable1_3  ;; 0x40004c00
-        CMP      R0,R1
+        LDR.N    R0,??DataTable1_3  ;; 0x40004c00
+        CMP      R4,R0
         BNE.N    ??USART_DeInit_4
         MOVS     R1,#+1
         MOVS     R0,#+524288
@@ -120,8 +121,8 @@ USART_DeInit:
         BL       RCC_APB1PeriphResetCmd
         B.N      ??USART_DeInit_1
 ??USART_DeInit_4:
-        LDR.N    R1,??DataTable1_4  ;; 0x40005000
-        CMP      R0,R1
+        LDR.N    R0,??DataTable1_4  ;; 0x40005000
+        CMP      R4,R0
         BNE.N    ??USART_DeInit_1
         MOVS     R1,#+1
         MOVS     R0,#+1048576
@@ -130,99 +131,108 @@ USART_DeInit:
         MOVS     R0,#+1048576
         BL       RCC_APB1PeriphResetCmd
 ??USART_DeInit_1:
-        POP      {R0,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 USART_Init:
-        PUSH     {R4-R6,LR}
+        PUSH     {R4-R10,LR}
         SUB      SP,SP,#+24
         MOVS     R4,R0
         MOVS     R5,R1
-        MOVS     R0,#+0
-        MOVS     R0,#+0
-        MOVS     R1,#+0
-        MOVS     R1,#+0
         MOVS     R6,#+0
+        MOVS     R7,#+0
+        MOVS     R8,#+0
+        MOVS     R9,#+0
+        MOVS     R10,#+0
         LDRH     R0,[R5, #+12]
         CMP      R0,#+0
 ??USART_Init_0:
-        MOVS     R6,R4
+        MOV      R10,R4
         LDRH     R0,[R4, #+16]
-        MOVW     R1,#+53247
-        ANDS     R0,R1,R0
-        LDRH     R1,[R5, #+6]
-        ORRS     R0,R1,R0
-        STRH     R0,[R4, #+16]
+        MOVS     R6,R0
+        MOVW     R0,#+53247
+        ANDS     R6,R0,R6
+        LDRH     R0,[R5, #+6]
+        ORRS     R6,R0,R6
+        STRH     R6,[R4, #+16]
         LDRH     R0,[R4, #+12]
-        MOVW     R1,#+59891
-        ANDS     R0,R1,R0
-        LDRH     R1,[R5, #+4]
-        LDRH     R2,[R5, #+8]
-        ORRS     R1,R2,R1
-        LDRH     R2,[R5, #+10]
-        ORRS     R1,R2,R1
+        MOVS     R6,R0
+        MOVW     R0,#+59891
+        ANDS     R6,R0,R6
+        LDRH     R0,[R5, #+4]
+        LDRH     R1,[R5, #+8]
         ORRS     R0,R1,R0
-        STRH     R0,[R4, #+12]
+        LDRH     R1,[R5, #+10]
+        ORRS     R0,R1,R0
+        ORRS     R6,R0,R6
+        STRH     R6,[R4, #+12]
         LDRH     R0,[R4, #+20]
-        MOVW     R1,#+64767
-        ANDS     R0,R1,R0
-        LDRH     R1,[R5, #+12]
-        ORRS     R0,R1,R0
-        STRH     R0,[R4, #+20]
+        MOVS     R6,R0
+        MOVW     R0,#+64767
+        ANDS     R6,R0,R6
+        LDRH     R0,[R5, #+12]
+        ORRS     R6,R0,R6
+        STRH     R6,[R4, #+20]
         ADD      R0,SP,#+0
         BL       RCC_GetClocksFreq
         LDR.N    R0,??DataTable1  ;; 0x40013800
-        CMP      R6,R0
+        CMP      R10,R0
         BNE.N    ??USART_Init_1
         LDR      R0,[SP, #+12]
+        MOVS     R7,R0
         B.N      ??USART_Init_2
 ??USART_Init_1:
         LDR      R0,[SP, #+8]
+        MOVS     R7,R0
 ??USART_Init_2:
-        LDRH     R1,[R4, #+12]
-        LSLS     R1,R1,#+16
+        LDRH     R0,[R4, #+12]
+        LSLS     R0,R0,#+16
         BPL.N    ??USART_Init_3
-        MOVS     R1,#+25
-        MULS     R0,R1,R0
+        MOVS     R0,#+25
+        MUL      R0,R0,R7
         LDR      R1,[R5, #+0]
         LSLS     R1,R1,#+1
-        UDIV     R1,R0,R1
+        UDIV     R0,R0,R1
+        MOV      R8,R0
         B.N      ??USART_Init_4
 ??USART_Init_3:
-        MOVS     R1,#+25
-        MULS     R0,R1,R0
+        MOVS     R0,#+25
+        MUL      R0,R0,R7
         LDR      R1,[R5, #+0]
         LSLS     R1,R1,#+2
-        UDIV     R1,R0,R1
+        UDIV     R0,R0,R1
+        MOV      R8,R0
 ??USART_Init_4:
         MOVS     R0,#+100
-        UDIV     R0,R1,R0
+        UDIV     R0,R8,R0
         LSLS     R0,R0,#+4
-        LSRS     R2,R0,#+4
-        MOVS     R3,#+100
-        MLS      R1,R3,R2,R1
-        LDRH     R2,[R4, #+12]
-        LSLS     R2,R2,#+16
+        MOVS     R6,R0
+        LSRS     R0,R6,#+4
+        MOVS     R1,#+100
+        MLS      R0,R1,R0,R8
+        MOV      R9,R0
+        LDRH     R0,[R4, #+12]
+        LSLS     R0,R0,#+16
         BPL.N    ??USART_Init_5
-        LSLS     R1,R1,#+3
-        ADDS     R1,R1,#+50
-        MOVS     R2,#+100
-        UDIV     R1,R1,R2
-        ANDS     R1,R1,#0x7
-        ORRS     R0,R1,R0
+        LSLS     R0,R9,#+3
+        ADDS     R0,R0,#+50
+        MOVS     R1,#+100
+        UDIV     R0,R0,R1
+        ANDS     R0,R0,#0x7
+        ORRS     R6,R0,R6
         B.N      ??USART_Init_6
 ??USART_Init_5:
-        LSLS     R1,R1,#+4
-        ADDS     R1,R1,#+50
-        MOVS     R2,#+100
-        UDIV     R1,R1,R2
-        ANDS     R1,R1,#0xF
-        ORRS     R0,R1,R0
+        LSLS     R0,R9,#+4
+        ADDS     R0,R0,#+50
+        MOVS     R1,#+100
+        UDIV     R0,R0,R1
+        ANDS     R0,R0,#0xF
+        ORRS     R6,R0,R6
 ??USART_Init_6:
-        STRH     R0,[R4, #+8]
+        STRH     R6,[R4, #+8]
         ADD      SP,SP,#+24
-        POP      {R4-R6,PC}       ;; return
+        POP      {R4-R10,PC}      ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -276,7 +286,8 @@ USART_StructInit:
 USART_ClockInit:
         PUSH     {R4}
         MOVS     R2,#+0
-        LDRH     R2,[R0, #+16]
+        LDRH     R3,[R0, #+16]
+        MOVS     R2,R3
         MOVW     R3,#+61695
         ANDS     R2,R3,R2
         LDRH     R3,[R1, #+0]
@@ -284,9 +295,9 @@ USART_ClockInit:
         ORRS     R3,R4,R3
         LDRH     R4,[R1, #+4]
         ORRS     R3,R4,R3
-        LDRH     R1,[R1, #+6]
-        ORRS     R1,R1,R3
-        ORRS     R2,R1,R2
+        LDRH     R4,[R1, #+6]
+        ORRS     R3,R4,R3
+        ORRS     R2,R3,R2
         STRH     R2,[R0, #+16]
         POP      {R4}
         BX       LR               ;; return
@@ -310,64 +321,67 @@ USART_Cmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??USART_Cmd_0
-        LDRH     R1,[R0, #+12]
-        ORRS     R1,R1,#0x2000
-        STRH     R1,[R0, #+12]
+        LDRH     R2,[R0, #+12]
+        ORRS     R2,R2,#0x2000
+        STRH     R2,[R0, #+12]
         B.N      ??USART_Cmd_1
 ??USART_Cmd_0:
-        LDRH     R1,[R0, #+12]
-        MOVW     R2,#+57343
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+12]
+        LDRH     R2,[R0, #+12]
+        MOVW     R3,#+57343
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+12]
 ??USART_Cmd_1:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 USART_ITConfig:
-        PUSH     {R4,R5}
+        PUSH     {R4-R7}
         MOVS     R3,#+0
         MOVS     R4,#+0
-        MOVS     R4,#+0
         MOVS     R5,#+0
+        MOVS     R6,#+0
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        MOVW     R3,#+2410
-        CMP      R1,R3
+        MOVW     R7,#+2410
+        CMP      R1,R7
 ??USART_ITConfig_0:
-        MOVS     R5,R0
-        MOVS     R0,R1
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        LSRS     R3,R0,#+5
-        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+        MOVS     R6,R0
+        MOVS     R7,R1
+        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
+        LSRS     R7,R7,#+5
+        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
+        MOVS     R3,R7
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        ANDS     R4,R1,#0x1F
-        MOVS     R0,#+1
-        LSLS     R4,R0,R4
+        ANDS     R7,R1,#0x1F
+        MOVS     R4,R7
+        MOVS     R7,#+1
+        LSLS     R7,R7,R4
+        MOVS     R5,R7
         CMP      R3,#+1
         BNE.N    ??USART_ITConfig_1
-        ADDS     R5,R5,#+12
+        ADDS     R6,R6,#+12
         B.N      ??USART_ITConfig_2
 ??USART_ITConfig_1:
         CMP      R3,#+2
         BNE.N    ??USART_ITConfig_3
-        ADDS     R5,R5,#+16
+        ADDS     R6,R6,#+16
         B.N      ??USART_ITConfig_2
 ??USART_ITConfig_3:
-        ADDS     R5,R5,#+20
+        ADDS     R6,R6,#+20
 ??USART_ITConfig_2:
         UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
         CMP      R2,#+0
         BEQ.N    ??USART_ITConfig_4
-        LDR      R0,[R5, #+0]
-        ORRS     R0,R4,R0
-        STR      R0,[R5, #+0]
+        LDR      R7,[R6, #+0]
+        ORRS     R7,R5,R7
+        STR      R7,[R6, #+0]
         B.N      ??USART_ITConfig_5
 ??USART_ITConfig_4:
-        LDR      R0,[R5, #+0]
-        BICS     R0,R0,R4
-        STR      R0,[R5, #+0]
+        LDR      R7,[R6, #+0]
+        BICS     R7,R7,R5
+        STR      R7,[R6, #+0]
 ??USART_ITConfig_5:
-        POP      {R4,R5}
+        POP      {R4-R7}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -376,14 +390,14 @@ USART_DMACmd:
         UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
         CMP      R2,#+0
         BEQ.N    ??USART_DMACmd_0
-        LDRH     R2,[R0, #+20]
-        ORRS     R1,R1,R2
-        STRH     R1,[R0, #+20]
+        LDRH     R3,[R0, #+20]
+        ORRS     R3,R1,R3
+        STRH     R3,[R0, #+20]
         B.N      ??USART_DMACmd_1
 ??USART_DMACmd_0:
-        LDRH     R2,[R0, #+20]
-        BICS     R1,R2,R1
-        STRH     R1,[R0, #+20]
+        LDRH     R3,[R0, #+20]
+        BICS     R3,R3,R1
+        STRH     R3,[R0, #+20]
 ??USART_DMACmd_1:
         BX       LR               ;; return
 
@@ -396,8 +410,8 @@ USART_SetAddress:
         STRH     R2,[R0, #+16]
         LDRH     R2,[R0, #+16]
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        ORRS     R1,R1,R2
-        STRH     R1,[R0, #+16]
+        ORRS     R2,R1,R2
+        STRH     R2,[R0, #+16]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -408,8 +422,8 @@ USART_WakeUpConfig:
         ANDS     R2,R3,R2
         STRH     R2,[R0, #+12]
         LDRH     R2,[R0, #+12]
-        ORRS     R1,R1,R2
-        STRH     R1,[R0, #+12]
+        ORRS     R2,R1,R2
+        STRH     R2,[R0, #+12]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -418,15 +432,15 @@ USART_ReceiverWakeUpCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??USART_ReceiverWakeUpCmd_0
-        LDRH     R1,[R0, #+12]
-        ORRS     R1,R1,#0x2
-        STRH     R1,[R0, #+12]
+        LDRH     R2,[R0, #+12]
+        ORRS     R2,R2,#0x2
+        STRH     R2,[R0, #+12]
         B.N      ??USART_ReceiverWakeUpCmd_1
 ??USART_ReceiverWakeUpCmd_0:
-        LDRH     R1,[R0, #+12]
-        MOVW     R2,#+65533
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+12]
+        LDRH     R2,[R0, #+12]
+        MOVW     R3,#+65533
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+12]
 ??USART_ReceiverWakeUpCmd_1:
         BX       LR               ;; return
 
@@ -438,8 +452,8 @@ USART_LINBreakDetectLengthConfig:
         ANDS     R2,R3,R2
         STRH     R2,[R0, #+16]
         LDRH     R2,[R0, #+16]
-        ORRS     R1,R1,R2
-        STRH     R1,[R0, #+16]
+        ORRS     R2,R1,R2
+        STRH     R2,[R0, #+16]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -448,24 +462,24 @@ USART_LINCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??USART_LINCmd_0
-        LDRH     R1,[R0, #+16]
-        ORRS     R1,R1,#0x4000
-        STRH     R1,[R0, #+16]
+        LDRH     R2,[R0, #+16]
+        ORRS     R2,R2,#0x4000
+        STRH     R2,[R0, #+16]
         B.N      ??USART_LINCmd_1
 ??USART_LINCmd_0:
-        LDRH     R1,[R0, #+16]
-        MOVW     R2,#+49151
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+16]
+        LDRH     R2,[R0, #+16]
+        MOVW     R3,#+49151
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+16]
 ??USART_LINCmd_1:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 USART_SendData:
-        LSLS     R1,R1,#+23       ;; ZeroExtS R1,R1,#+23,#+23
-        LSRS     R1,R1,#+23
-        STRH     R1,[R0, #+4]
+        LSLS     R2,R1,#+23       ;; ZeroExtS R2,R1,#+23,#+23
+        LSRS     R2,R2,#+23
+        STRH     R2,[R0, #+4]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -492,8 +506,8 @@ USART_SetGuardTime:
         STRH     R2,[R0, #+24]
         LDRH     R2,[R0, #+24]
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        ORRS     R1,R2,R1, LSL #+8
-        STRH     R1,[R0, #+24]
+        ORRS     R2,R2,R1, LSL #+8
+        STRH     R2,[R0, #+24]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -504,8 +518,8 @@ USART_SetPrescaler:
         STRH     R2,[R0, #+24]
         LDRH     R2,[R0, #+24]
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        ORRS     R1,R1,R2
-        STRH     R1,[R0, #+24]
+        ORRS     R2,R1,R2
+        STRH     R2,[R0, #+24]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -514,15 +528,15 @@ USART_SmartCardCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??USART_SmartCardCmd_0
-        LDRH     R1,[R0, #+20]
-        ORRS     R1,R1,#0x20
-        STRH     R1,[R0, #+20]
+        LDRH     R2,[R0, #+20]
+        ORRS     R2,R2,#0x20
+        STRH     R2,[R0, #+20]
         B.N      ??USART_SmartCardCmd_1
 ??USART_SmartCardCmd_0:
-        LDRH     R1,[R0, #+20]
-        MOVW     R2,#+65503
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+20]
+        LDRH     R2,[R0, #+20]
+        MOVW     R3,#+65503
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+20]
 ??USART_SmartCardCmd_1:
         BX       LR               ;; return
 
@@ -532,15 +546,15 @@ USART_SmartCardNACKCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??USART_SmartCardNACKCmd_0
-        LDRH     R1,[R0, #+20]
-        ORRS     R1,R1,#0x10
-        STRH     R1,[R0, #+20]
+        LDRH     R2,[R0, #+20]
+        ORRS     R2,R2,#0x10
+        STRH     R2,[R0, #+20]
         B.N      ??USART_SmartCardNACKCmd_1
 ??USART_SmartCardNACKCmd_0:
-        LDRH     R1,[R0, #+20]
-        MOVW     R2,#+65519
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+20]
+        LDRH     R2,[R0, #+20]
+        MOVW     R3,#+65519
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+20]
 ??USART_SmartCardNACKCmd_1:
         BX       LR               ;; return
 
@@ -550,15 +564,15 @@ USART_HalfDuplexCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??USART_HalfDuplexCmd_0
-        LDRH     R1,[R0, #+20]
-        ORRS     R1,R1,#0x8
-        STRH     R1,[R0, #+20]
+        LDRH     R2,[R0, #+20]
+        ORRS     R2,R2,#0x8
+        STRH     R2,[R0, #+20]
         B.N      ??USART_HalfDuplexCmd_1
 ??USART_HalfDuplexCmd_0:
-        LDRH     R1,[R0, #+20]
-        MOVW     R2,#+65527
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+20]
+        LDRH     R2,[R0, #+20]
+        MOVW     R3,#+65527
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+20]
 ??USART_HalfDuplexCmd_1:
         BX       LR               ;; return
 
@@ -568,15 +582,15 @@ USART_OverSampling8Cmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??USART_OverSampling8Cmd_0
-        LDRH     R1,[R0, #+12]
-        ORRS     R1,R1,#0x8000
-        STRH     R1,[R0, #+12]
+        LDRH     R2,[R0, #+12]
+        ORRS     R2,R2,#0x8000
+        STRH     R2,[R0, #+12]
         B.N      ??USART_OverSampling8Cmd_1
 ??USART_OverSampling8Cmd_0:
-        LDRH     R1,[R0, #+12]
-        LSLS     R1,R1,#+17       ;; ZeroExtS R1,R1,#+17,#+17
-        LSRS     R1,R1,#+17
-        STRH     R1,[R0, #+12]
+        LDRH     R2,[R0, #+12]
+        LSLS     R2,R2,#+17       ;; ZeroExtS R2,R2,#+17,#+17
+        LSRS     R2,R2,#+17
+        STRH     R2,[R0, #+12]
 ??USART_OverSampling8Cmd_1:
         BX       LR               ;; return
 
@@ -586,15 +600,15 @@ USART_OneBitMethodCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??USART_OneBitMethodCmd_0
-        LDRH     R1,[R0, #+20]
-        ORRS     R1,R1,#0x800
-        STRH     R1,[R0, #+20]
+        LDRH     R2,[R0, #+20]
+        ORRS     R2,R2,#0x800
+        STRH     R2,[R0, #+20]
         B.N      ??USART_OneBitMethodCmd_1
 ??USART_OneBitMethodCmd_0:
-        LDRH     R1,[R0, #+20]
-        MOVW     R2,#+63487
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+20]
+        LDRH     R2,[R0, #+20]
+        MOVW     R3,#+63487
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+20]
 ??USART_OneBitMethodCmd_1:
         BX       LR               ;; return
 
@@ -606,8 +620,8 @@ USART_IrDAConfig:
         ANDS     R2,R3,R2
         STRH     R2,[R0, #+20]
         LDRH     R2,[R0, #+20]
-        ORRS     R1,R1,R2
-        STRH     R1,[R0, #+20]
+        ORRS     R2,R1,R2
+        STRH     R2,[R0, #+20]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -616,34 +630,36 @@ USART_IrDACmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??USART_IrDACmd_0
-        LDRH     R1,[R0, #+20]
-        ORRS     R1,R1,#0x2
-        STRH     R1,[R0, #+20]
+        LDRH     R2,[R0, #+20]
+        ORRS     R2,R2,#0x2
+        STRH     R2,[R0, #+20]
         B.N      ??USART_IrDACmd_1
 ??USART_IrDACmd_0:
-        LDRH     R1,[R0, #+20]
-        MOVW     R2,#+65533
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+20]
+        LDRH     R2,[R0, #+20]
+        MOVW     R3,#+65533
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+20]
 ??USART_IrDACmd_1:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 USART_GetFlagStatus:
-        MOVS     R2,#+0
+        MOVS     R2,R0
+        MOVS     R0,#+0
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         CMP      R1,#+512
 ??USART_GetFlagStatus_0:
-        LDRH     R0,[R0, #+0]
-        TST      R0,R1
+        LDRH     R3,[R2, #+0]
+        TST      R3,R1
         BEQ.N    ??USART_GetFlagStatus_1
-        MOVS     R2,#+1
+        MOVS     R3,#+1
+        MOVS     R0,R3
         B.N      ??USART_GetFlagStatus_2
 ??USART_GetFlagStatus_1:
-        MOVS     R2,#+0
+        MOVS     R3,#+0
+        MOVS     R0,R3
 ??USART_GetFlagStatus_2:
-        MOVS     R0,R2
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -654,82 +670,91 @@ USART_ClearFlag:
         LSLS     R2,R1,#+22
 ??USART_ClearFlag_0:
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        MVNS     R1,R1
-        STRH     R1,[R0, #+0]
+        MVNS     R2,R1
+        STRH     R2,[R0, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 USART_GetITStatus:
-        PUSH     {R4}
-        MOVS     R2,#+0
+        PUSH     {R4-R6}
+        MOVS     R2,R0
         MOVS     R3,#+0
-        MOVS     R2,#+0
-        MOVS     R2,#+0
+        MOVS     R5,#+0
+        MOVS     R4,#+0
+        MOVS     R0,#+0
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        MOVW     R2,#+2410
-        CMP      R1,R2
+        MOVW     R6,#+2410
+        CMP      R1,R6
 ??USART_GetITStatus_0:
-        MOVS     R2,R1
-        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
-        LSRS     R2,R2,#+5
-        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+        MOVS     R6,R1
+        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        LSRS     R6,R6,#+5
+        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        MOVS     R4,R6
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        ANDS     R3,R1,#0x1F
-        MOVS     R4,#+1
-        LSLS     R3,R4,R3
-        CMP      R2,#+1
+        ANDS     R6,R1,#0x1F
+        MOVS     R5,R6
+        MOVS     R6,#+1
+        LSLS     R5,R6,R5
+        CMP      R4,#+1
         BNE.N    ??USART_GetITStatus_1
-        LDRH     R2,[R0, #+12]
-        ANDS     R3,R2,R3
+        LDRH     R6,[R2, #+12]
+        ANDS     R5,R6,R5
         B.N      ??USART_GetITStatus_2
 ??USART_GetITStatus_1:
-        CMP      R2,#+2
+        CMP      R4,#+2
         BNE.N    ??USART_GetITStatus_3
-        LDRH     R2,[R0, #+16]
-        ANDS     R3,R2,R3
+        LDRH     R6,[R2, #+16]
+        ANDS     R5,R6,R5
         B.N      ??USART_GetITStatus_2
 ??USART_GetITStatus_3:
-        LDRH     R2,[R0, #+20]
-        ANDS     R3,R2,R3
+        LDRH     R6,[R2, #+20]
+        ANDS     R5,R6,R5
 ??USART_GetITStatus_2:
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        LSRS     R2,R1,#+8
-        UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
-        MOVS     R1,#+1
-        LSLS     R2,R1,R2
-        LDRH     R0,[R0, #+0]
-        ANDS     R2,R0,R2
+        LSRS     R6,R1,#+8
+        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
+        MOVS     R3,R6
+        MOVS     R6,#+1
+        LSLS     R3,R6,R3
+        LDRH     R6,[R2, #+0]
+        ANDS     R3,R6,R3
+        CMP      R5,#+0
+        BEQ.N    ??USART_GetITStatus_4
         CMP      R3,#+0
         BEQ.N    ??USART_GetITStatus_4
-        CMP      R2,#+0
-        BEQ.N    ??USART_GetITStatus_4
-        MOVS     R2,#+1
+        MOVS     R6,#+1
+        MOVS     R0,R6
         B.N      ??USART_GetITStatus_5
 ??USART_GetITStatus_4:
-        MOVS     R2,#+0
+        MOVS     R6,#+0
+        MOVS     R0,R6
 ??USART_GetITStatus_5:
-        MOVS     R0,R2
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R4}
+        POP      {R4-R6}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 USART_ClearITPendingBit:
+        PUSH     {R4}
         MOVS     R2,#+0
-        MOVS     R2,#+0
+        MOVS     R3,#+0
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        MOVW     R2,#+2410
-        CMP      R1,R2
+        MOVW     R4,#+2410
+        CMP      R1,R4
 ??USART_ClearITPendingBit_0:
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        LSRS     R2,R1,#+8
-        MOVS     R1,#+1
-        LSLS     R2,R1,R2
-        UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
-        MVNS     R1,R2
-        STRH     R1,[R0, #+0]
+        LSRS     R4,R1,#+8
+        MOVS     R2,R4
+        MOVS     R4,#+1
+        LSLS     R4,R4,R2
+        MOVS     R3,R4
+        UXTH     R3,R3            ;; ZeroExt  R3,R3,#+16,#+16
+        MVNS     R4,R3
+        STRH     R4,[R0, #+0]
+        POP      {R4}
         BX       LR               ;; return
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
@@ -745,9 +770,9 @@ USART_ClearITPendingBit:
 
         END
 // 
-// 1 088 bytes in section .text
+// 1 150 bytes in section .text
 // 
-// 1 088 bytes of CODE memory
+// 1 150 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

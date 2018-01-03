@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:26
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:29
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_rtc.s
@@ -59,18 +59,18 @@ RTC_ITConfig:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??RTC_ITConfig_0
-        LDR.N    R1,??DataTable13  ;; 0x40002800
-        LDRH     R1,[R1, #+0]
-        ORRS     R0,R0,R1
-        LDR.N    R1,??DataTable13  ;; 0x40002800
-        STRH     R0,[R1, #+0]
+        LDR.N    R2,??DataTable13  ;; 0x40002800
+        LDRH     R2,[R2, #+0]
+        ORRS     R2,R0,R2
+        LDR.N    R3,??DataTable13  ;; 0x40002800
+        STRH     R2,[R3, #+0]
         B.N      ??RTC_ITConfig_1
 ??RTC_ITConfig_0:
-        LDR.N    R1,??DataTable13  ;; 0x40002800
-        LDRH     R1,[R1, #+0]
-        BICS     R0,R1,R0
-        LDR.N    R1,??DataTable13  ;; 0x40002800
-        STRH     R0,[R1, #+0]
+        LDR.N    R2,??DataTable13  ;; 0x40002800
+        LDRH     R2,[R2, #+0]
+        BICS     R2,R2,R0
+        LDR.N    R3,??DataTable13  ;; 0x40002800
+        STRH     R2,[R3, #+0]
 ??RTC_ITConfig_1:
         BX       LR               ;; return
 
@@ -99,8 +99,9 @@ RTC_ExitConfigMode:
         THUMB
 RTC_GetCounter:
         MOVS     R0,#+0
-        LDR.N    R0,??DataTable13_2  ;; 0x4000281c
-        LDRH     R0,[R0, #+0]
+        LDR.N    R1,??DataTable13_2  ;; 0x4000281c
+        LDRH     R1,[R1, #+0]
+        MOVS     R0,R1
         LDR.N    R1,??DataTable13_3  ;; 0x40002818
         LDRH     R1,[R1, #+0]
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
@@ -155,11 +156,12 @@ RTC_SetAlarm:
         THUMB
 RTC_GetDivider:
         MOVS     R0,#+0
-        LDR.N    R0,??DataTable13_8  ;; 0x40002810
-        LDRH     R0,[R0, #+0]
-        UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
-        ANDS     R0,R0,#0xF
-        LSLS     R0,R0,#+16
+        LDR.N    R1,??DataTable13_8  ;; 0x40002810
+        LDRH     R1,[R1, #+0]
+        UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
+        ANDS     R1,R1,#0xF
+        LSLS     R1,R1,#+16
+        MOVS     R0,R1
         LDR.N    R1,??DataTable13_9  ;; 0x40002814
         LDRH     R1,[R1, #+0]
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
@@ -195,18 +197,20 @@ RTC_WaitForSynchro:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 RTC_GetFlagStatus:
-        MOVS     R1,#+0
-        LDR.N    R1,??DataTable13_1  ;; 0x40002804
-        LDRH     R1,[R1, #+0]
-        UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        TST      R1,R0
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        LDR.N    R2,??DataTable13_1  ;; 0x40002804
+        LDRH     R2,[R2, #+0]
+        UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
+        TST      R2,R1
         BEQ.N    ??RTC_GetFlagStatus_0
-        MOVS     R1,#+1
+        MOVS     R2,#+1
+        MOVS     R0,R2
         B.N      ??RTC_GetFlagStatus_1
 ??RTC_GetFlagStatus_0:
-        MOVS     R1,#+0
+        MOVS     R2,#+0
+        MOVS     R0,R2
 ??RTC_GetFlagStatus_1:
-        MOVS     R0,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -215,32 +219,35 @@ RTC_GetFlagStatus:
 RTC_ClearFlag:
         LDR.N    R1,??DataTable13_1  ;; 0x40002804
         LDRH     R1,[R1, #+0]
-        BICS     R0,R1,R0
-        LDR.N    R1,??DataTable13_1  ;; 0x40002804
-        STRH     R0,[R1, #+0]
+        BICS     R1,R1,R0
+        LDR.N    R2,??DataTable13_1  ;; 0x40002804
+        STRH     R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 RTC_GetITStatus:
-        MOVS     R1,#+0
-        LDR.N    R1,??DataTable13_1  ;; 0x40002804
-        LDRH     R1,[R1, #+0]
-        ANDS     R1,R0,R1
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        LDR.N    R2,??DataTable13_1  ;; 0x40002804
+        LDRH     R2,[R2, #+0]
+        ANDS     R2,R1,R2
+        MOVS     R0,R2
         LDR.N    R2,??DataTable13  ;; 0x40002800
         LDRH     R2,[R2, #+0]
         UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
-        TST      R2,R0
+        TST      R2,R1
         BEQ.N    ??RTC_GetITStatus_0
-        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        CMP      R1,#+0
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        CMP      R0,#+0
         BEQ.N    ??RTC_GetITStatus_0
-        MOVS     R1,#+1
+        MOVS     R2,#+1
+        MOVS     R0,R2
         B.N      ??RTC_GetITStatus_1
 ??RTC_GetITStatus_0:
-        MOVS     R1,#+0
+        MOVS     R2,#+0
+        MOVS     R0,R2
 ??RTC_GetITStatus_1:
-        MOVS     R0,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -249,9 +256,9 @@ RTC_GetITStatus:
 RTC_ClearITPendingBit:
         LDR.N    R1,??DataTable13_1  ;; 0x40002804
         LDRH     R1,[R1, #+0]
-        BICS     R0,R1,R0
-        LDR.N    R1,??DataTable13_1  ;; 0x40002804
-        STRH     R0,[R1, #+0]
+        BICS     R1,R1,R0
+        LDR.N    R2,??DataTable13_1  ;; 0x40002804
+        STRH     R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
@@ -327,9 +334,9 @@ RTC_ClearITPendingBit:
 
         END
 // 
-// 344 bytes in section .text
+// 352 bytes in section .text
 // 
-// 344 bytes of CODE memory
+// 352 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

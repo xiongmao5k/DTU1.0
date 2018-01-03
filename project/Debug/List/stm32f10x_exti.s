@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:25
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:27
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_exti.s
@@ -71,7 +71,8 @@ EXTI_DeInit:
         THUMB
 EXTI_Init:
         MOVS     R1,#+0
-        LDR.N    R1,??DataTable6  ;; 0x40010400
+        LDR.N    R2,??DataTable6  ;; 0x40010400
+        MOVS     R1,R2
         LDRB     R2,[R0, #+6]
         CMP      R2,#+0
         BEQ.N    ??EXTI_Init_0
@@ -93,50 +94,51 @@ EXTI_Init:
         LDR      R3,[R0, #+0]
         ORRS     R2,R3,R2
         STR      R2,[R1, #+0]
-        LDR.N    R1,??DataTable6_2  ;; 0x40010408
-        LDR      R1,[R1, #+0]
-        LDR      R2,[R0, #+0]
-        BICS     R1,R1,R2
         LDR.N    R2,??DataTable6_2  ;; 0x40010408
-        STR      R1,[R2, #+0]
-        LDR.N    R1,??DataTable6_3  ;; 0x4001040c
-        LDR      R1,[R1, #+0]
-        LDR      R2,[R0, #+0]
-        BICS     R1,R1,R2
+        LDR      R2,[R2, #+0]
+        LDR      R3,[R0, #+0]
+        BICS     R2,R2,R3
+        LDR.N    R3,??DataTable6_2  ;; 0x40010408
+        STR      R2,[R3, #+0]
         LDR.N    R2,??DataTable6_3  ;; 0x4001040c
-        STR      R1,[R2, #+0]
-        LDRB     R1,[R0, #+5]
-        CMP      R1,#+16
+        LDR      R2,[R2, #+0]
+        LDR      R3,[R0, #+0]
+        BICS     R2,R2,R3
+        LDR.N    R3,??DataTable6_3  ;; 0x4001040c
+        STR      R2,[R3, #+0]
+        LDRB     R2,[R0, #+5]
+        CMP      R2,#+16
         BNE.N    ??EXTI_Init_1
-        LDR.N    R1,??DataTable6_2  ;; 0x40010408
-        LDR      R1,[R1, #+0]
-        LDR      R2,[R0, #+0]
-        ORRS     R1,R2,R1
         LDR.N    R2,??DataTable6_2  ;; 0x40010408
-        STR      R1,[R2, #+0]
-        LDR.N    R1,??DataTable6_3  ;; 0x4001040c
-        LDR      R1,[R1, #+0]
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,R1
-        LDR.N    R1,??DataTable6_3  ;; 0x4001040c
-        STR      R0,[R1, #+0]
+        LDR      R2,[R2, #+0]
+        LDR      R3,[R0, #+0]
+        ORRS     R2,R3,R2
+        LDR.N    R3,??DataTable6_2  ;; 0x40010408
+        STR      R2,[R3, #+0]
+        LDR.N    R2,??DataTable6_3  ;; 0x4001040c
+        LDR      R2,[R2, #+0]
+        LDR      R3,[R0, #+0]
+        ORRS     R2,R3,R2
+        LDR.N    R3,??DataTable6_3  ;; 0x4001040c
+        STR      R2,[R3, #+0]
         B.N      ??EXTI_Init_2
 ??EXTI_Init_1:
-        LDR.N    R1,??DataTable6  ;; 0x40010400
+        LDR.N    R2,??DataTable6  ;; 0x40010400
+        MOVS     R1,R2
         LDRB     R2,[R0, #+5]
         ADDS     R1,R2,R1
         LDR      R2,[R1, #+0]
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,R2
-        STR      R0,[R1, #+0]
+        LDR      R3,[R0, #+0]
+        ORRS     R2,R3,R2
+        STR      R2,[R1, #+0]
         B.N      ??EXTI_Init_2
 ??EXTI_Init_0:
         LDRB     R2,[R0, #+4]
         ADDS     R1,R2,R1
         LDR      R2,[R1, #+0]
-        LDR      R0,[R0, #+0]
-        BICS     R0,R2,R0
-        STR      R0,[R1, #+0]
+        LDR      R3,[R0, #+0]
+        BICS     R2,R2,R3
+        STR      R2,[R1, #+0]
 ??EXTI_Init_2:
         BX       LR               ;; return
 
@@ -158,25 +160,27 @@ EXTI_StructInit:
 EXTI_GenerateSWInterrupt:
         LDR.N    R1,??DataTable6_6  ;; 0x40010410
         LDR      R1,[R1, #+0]
-        ORRS     R0,R0,R1
-        LDR.N    R1,??DataTable6_6  ;; 0x40010410
-        STR      R0,[R1, #+0]
+        ORRS     R1,R0,R1
+        LDR.N    R2,??DataTable6_6  ;; 0x40010410
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 EXTI_GetFlagStatus:
-        MOVS     R1,#+0
-        LDR.N    R1,??DataTable6_5  ;; 0x40010414
-        LDR      R1,[R1, #+0]
-        TST      R1,R0
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        LDR.N    R2,??DataTable6_5  ;; 0x40010414
+        LDR      R2,[R2, #+0]
+        TST      R2,R1
         BEQ.N    ??EXTI_GetFlagStatus_0
-        MOVS     R1,#+1
+        MOVS     R2,#+1
+        MOVS     R0,R2
         B.N      ??EXTI_GetFlagStatus_1
 ??EXTI_GetFlagStatus_0:
-        MOVS     R1,#+0
+        MOVS     R2,#+0
+        MOVS     R0,R2
 ??EXTI_GetFlagStatus_1:
-        MOVS     R0,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -190,23 +194,26 @@ EXTI_ClearFlag:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 EXTI_GetITStatus:
-        MOVS     R1,#+0
-        MOVS     R1,#+0
-        LDR.N    R1,??DataTable6  ;; 0x40010400
-        LDR      R1,[R1, #+0]
-        ANDS     R1,R0,R1
-        LDR.N    R2,??DataTable6_5  ;; 0x40010414
-        LDR      R2,[R2, #+0]
-        TST      R2,R0
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        MOVS     R2,#+0
+        LDR.N    R3,??DataTable6  ;; 0x40010400
+        LDR      R3,[R3, #+0]
+        ANDS     R3,R1,R3
+        MOVS     R2,R3
+        LDR.N    R3,??DataTable6_5  ;; 0x40010414
+        LDR      R3,[R3, #+0]
+        TST      R3,R1
         BEQ.N    ??EXTI_GetITStatus_0
-        CMP      R1,#+0
+        CMP      R2,#+0
         BEQ.N    ??EXTI_GetITStatus_0
-        MOVS     R1,#+1
+        MOVS     R3,#+1
+        MOVS     R0,R3
         B.N      ??EXTI_GetITStatus_1
 ??EXTI_GetITStatus_0:
-        MOVS     R1,#+0
+        MOVS     R3,#+0
+        MOVS     R0,R3
 ??EXTI_GetITStatus_1:
-        MOVS     R0,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -272,9 +279,9 @@ EXTI_ClearITPendingBit:
 
         END
 // 
-// 292 bytes in section .text
+// 304 bytes in section .text
 // 
-// 292 bytes of CODE memory
+// 304 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

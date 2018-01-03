@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:20
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:22
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\frameware.s
@@ -78,7 +78,8 @@ frameware_update_push:
         BL       cfs_write
         CMP      R0,R5
         BEQ.N    ??frameware_update_push_2
-        MOVS     R7,#+1
+        MOVS     R0,#+1
+        MOVS     R7,R0
 ??frameware_update_push_2:
         MOVS     R0,R6
         BL       cfs_close
@@ -101,6 +102,7 @@ frameware_update_check:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 frameware_update_apply:
+        MOVS     R1,R0
         MOVS     R0,#+0
         BX       LR               ;; return
 
@@ -124,9 +126,9 @@ frameware_update_apply:
         END
 // 
 // 16 bytes in section .rodata
-// 76 bytes in section .text
+// 80 bytes in section .text
 // 
-// 76 bytes of CODE  memory
+// 80 bytes of CODE  memory
 // 16 bytes of CONST memory
 //
 //Errors: none

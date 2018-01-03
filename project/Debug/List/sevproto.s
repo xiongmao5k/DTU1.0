@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:22
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:24
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\sevproto.s
@@ -74,12 +74,17 @@ sevproto_init:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 sevproto_check:
-        PUSH     {R3-R5,LR}
-        MOVS     R5,R0
-        LDRB     R1,[R5, #+0]
-        ADDS     R5,R5,#+1
-        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        CMP      R1,#+126
+        PUSH     {R4-R11,LR}
+        SUB      SP,SP,#+12
+        MOVS     R4,R0
+        MOVS     R5,R1
+        STR      R4,[SP, #+4]
+        MOV      R10,R4
+        LDRB     R0,[R10, #+0]
+        STRB     R0,[SP, #+1]
+        ADDS     R10,R10,#+1
+        LDRB     R0,[SP, #+1]
+        CMP      R0,#+126
         BEQ.N    ??sevproto_check_0
         MOVS     R0,#+2
         LDR.N    R1,??DataTable3
@@ -87,12 +92,13 @@ sevproto_check:
         MOVS     R0,#+0
         B.N      ??sevproto_check_1
 ??sevproto_check_0:
-        LDRB     R1,[R5, #+0]
-        ADDS     R5,R5,#+1
-        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        LDR.N    R2,??DataTable3_1
-        LDR      R2,[R2, #+0]
-        CMP      R1,R2
+        LDRB     R0,[R10, #+0]
+        STRB     R0,[SP, #+0]
+        ADDS     R10,R10,#+1
+        LDRB     R0,[SP, #+0]
+        LDR.N    R1,??DataTable3_1
+        LDR      R1,[R1, #+0]
+        CMP      R0,R1
         BEQ.N    ??sevproto_check_2
         MOVS     R0,#+1
         LDR.N    R1,??DataTable3
@@ -100,17 +106,20 @@ sevproto_check:
         MOVS     R0,#+0
         B.N      ??sevproto_check_1
 ??sevproto_check_2:
-        LDRH     R2,[R5, #+0]
-        ADDS     R5,R5,#+2
-        MOVS     R4,R5
-        UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
-        ADDS     R5,R2,R5
-        LDR      R3,[R5, #+0]
-        ADDS     R5,R5,#+4
-        LDRB     R1,[R5, #+0]
-        ADDS     R5,R5,#+1
-        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        CMP      R1,#+10
+        LDRH     R0,[R10, #+0]
+        MOVS     R7,R0
+        ADDS     R10,R10,#+2
+        MOV      R9,R10
+        UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
+        ADDS     R10,R7,R10
+        LDR      R0,[R10, #+0]
+        MOV      R8,R0
+        ADDS     R10,R10,#+4
+        LDRB     R0,[R10, #+0]
+        MOVS     R6,R0
+        ADDS     R10,R10,#+1
+        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        CMP      R6,#+10
         BEQ.N    ??sevproto_check_3
         MOVS     R0,#+4
         LDR.N    R1,??DataTable3
@@ -118,18 +127,19 @@ sevproto_check:
         MOVS     R0,#+0
         B.N      ??sevproto_check_1
 ??sevproto_check_3:
-        LSRS     R1,R3,#+8
-        ANDS     R1,R1,#0xFF00
-        ORRS     R1,R1,R3, LSR #+24
-        LSLS     R5,R3,#+8
-        ANDS     R5,R5,#0xFF0000
-        ORRS     R1,R5,R1
-        ORRS     R5,R1,R3, LSL #+24
-        UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
-        ADDS     R1,R2,#+3
+        LSRS     R0,R8,#+8
+        ANDS     R0,R0,#0xFF00
+        ORRS     R0,R0,R8, LSR #+24
+        LSLS     R1,R8,#+8
+        ANDS     R1,R1,#0xFF0000
+        ORRS     R0,R1,R0
+        ORRS     R11,R0,R8, LSL #+24
+        UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
+        ADDS     R1,R7,#+3
+        LDR      R0,[SP, #+4]
         ADDS     R0,R0,#+1
         BL       crc32_calc
-        CMP      R5,R0
+        CMP      R11,R0
         BEQ.N    ??sevproto_check_4
         MOVS     R0,#+3
         LDR.N    R1,??DataTable3
@@ -140,9 +150,9 @@ sevproto_check:
         MOVS     R0,#+0
         LDR.N    R1,??DataTable3
         STR      R0,[R1, #+0]
-        MOVS     R0,R4
+        MOV      R0,R9
 ??sevproto_check_1:
-        POP      {R1,R4,R5,PC}    ;; return
+        POP      {R1-R11,PC}      ;; return
 
         SECTION `.bss`:DATA:REORDER:NOROOT(2)
 framebuffer_sevproto_prepare_buff_data_buffer:
@@ -159,16 +169,16 @@ sevproto_prepare_buff:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 sevproto_prepare:
-        PUSH     {R3-R7,LR}
+        PUSH     {R4-R8,LR}
         MOVS     R4,R0
         MOVS     R5,R1
         MOVS     R6,R2
-        MOVS     R7,#+0
+        MOVS     R8,#+0
         LDR.N    R0,??DataTable3_2
         BL       framebuff_clean
         LDR.N    R0,??DataTable3_2
         BL       framebuff_datptr
-        MOVS     R7,R0
+        MOV      R8,R0
         MOVS     R1,#+126
         LDR.N    R0,??DataTable3_2
         BL       framebuff_push_u8
@@ -191,9 +201,10 @@ sevproto_prepare:
         LDR.N    R0,??DataTable3_2
         BL       framebuff_push
         ADDS     R1,R5,#+3
-        ADDS     R0,R7,#+1
+        ADDS     R0,R8,#+1
         BL       crc32_calc
-        MOVS     R1,R0
+        MOVS     R7,R0
+        MOVS     R1,R7
         LDR.N    R0,??DataTable3_2
         BL       framebuff_push_u32
         MOVS     R1,#+10
@@ -202,8 +213,8 @@ sevproto_prepare:
         LDR.N    R0,??DataTable3_2
         BL       framebuff_length
         STR      R0,[R6, #+0]
-        MOVS     R0,R7
-        POP      {R1,R4-R7,PC}    ;; return
+        MOV      R0,R8
+        POP      {R4-R8,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -245,9 +256,9 @@ sevproto_error:
 // 
 // 520 bytes in section .bss
 //  12 bytes in section .data
-// 282 bytes in section .text
+// 350 bytes in section .text
 // 
-// 282 bytes of CODE memory
+// 350 bytes of CODE memory
 // 532 bytes of DATA memory
 //
 //Errors: none

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:20
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:20
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\configure.s
@@ -67,16 +67,8 @@ configure_read:
         MOVS     R5,R0
         SXTH     R5,R5            ;; SignExt  R5,R5,#+16,#+16
         CMP      R5,#+0
-        BPL.N    ??configure_read_0
+        BMI.N    ??configure_read_0
 ??configure_read_1:
-        SXTH     R5,R5            ;; SignExt  R5,R5,#+16,#+16
-        MOVS     R1,R5
-        LDR.N    R0,??DataTable3_1
-        BL       dl_SPIFFS_close
-        MOVS     R0,#+0
-??configure_read_2:
-        POP      {R4-R6,PC}       ;; return
-??configure_read_0:
         MOVS     R3,#+63
         MOVS     R2,R4
         SXTH     R5,R5            ;; SignExt  R5,R5,#+16,#+16
@@ -84,11 +76,12 @@ configure_read:
         LDR.N    R0,??DataTable3_1
         BL       dl_SPIFFS_read
         CMP      R0,#+63
-        BNE.N    ??configure_read_1
-??configure_read_3:
+        BNE.N    ??configure_read_0
+??configure_read_2:
         LDRB     R0,[R4, #+62]
         MOVS     R1,#+13
-        MUL      R6,R1,R0
+        MULS     R0,R1,R0
+        MOVS     R6,R0
         MOVS     R3,R6
         ADDS     R2,R4,#+63
         SXTH     R5,R5            ;; SignExt  R5,R5,#+16,#+16
@@ -96,20 +89,30 @@ configure_read:
         LDR.N    R0,??DataTable3_1
         BL       dl_SPIFFS_read
         CMP      R0,R6
-        BNE.N    ??configure_read_1
-??configure_read_4:
+        BNE.N    ??configure_read_0
+??configure_read_3:
         SXTH     R5,R5            ;; SignExt  R5,R5,#+16,#+16
         MOVS     R1,R5
         LDR.N    R0,??DataTable3_1
         BL       dl_SPIFFS_close
         MOVS     R0,#+1
-        B.N      ??configure_read_2
+        B.N      ??configure_read_4
+??configure_read_0:
+        SXTH     R5,R5            ;; SignExt  R5,R5,#+16,#+16
+        MOVS     R1,R5
+        LDR.N    R0,??DataTable3_1
+        BL       dl_SPIFFS_close
+        MOVS     R0,#+0
+??configure_read_4:
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 configure_update_init:
-        PUSH     {R7,LR}
-        MOVS     R0,#+0
+        PUSH     {R4-R6,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        MOVS     R6,#+0
         LDR.N    R1,??DataTable3_2
         LDR.N    R0,??DataTable3_1
         BL       dl_SPIFFS_remove
@@ -124,7 +127,7 @@ configure_update_init:
 ??configure_update_init_0:
         MOVS     R0,#+1
 ??configure_update_init_1:
-        POP      {R1,PC}          ;; return
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -226,9 +229,9 @@ configure_update_apply:
         END
 // 
 //  36 bytes in section .rodata
-// 246 bytes in section .text
+// 250 bytes in section .text
 // 
-// 246 bytes of CODE  memory
+// 250 bytes of CODE  memory
 //  36 bytes of CONST memory
 //
 //Errors: none

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  17:18:24
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:23
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\senprote-t770.s
@@ -105,31 +105,35 @@ table_crc_lo:
         THUMB
 // static __interwork __softfp uint16_t crc16(uint8_t *, uint16_t)
 crc16:
-        PUSH     {R4}
-        MOVS     R2,#+255
+        PUSH     {R4,R5}
+        MOVS     R2,R0
+        MOVS     R0,#+255
         MOVS     R3,#+255
+??crc16_0:
+        MOVS     R5,R1
+        SUBS     R1,R5,#+1
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
+        CMP      R5,#+0
+        BEQ.N    ??crc16_1
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        LDRB     R5,[R2, #+0]
+        EORS     R5,R5,R0
+        MOVS     R4,R5
+        ADDS     R2,R2,#+1
+        LDR.N    R5,??DataTable2
+        LDRB     R5,[R4, R5]
+        EORS     R5,R5,R3
+        MOVS     R0,R5
+        LDR.N    R5,??DataTable2_1
+        LDRB     R5,[R4, R5]
+        MOVS     R3,R5
         B.N      ??crc16_0
 ??crc16_1:
-        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
-        LDRB     R4,[R0, #+0]
-        EORS     R4,R4,R2
-        ADDS     R0,R0,#+1
-        LDR.N    R2,??DataTable2
-        LDRB     R2,[R4, R2]
-        EORS     R2,R2,R3
-        LDR.N    R3,??DataTable2_1
-        LDRB     R3,[R4, R3]
-??crc16_0:
-        MOVS     R4,R1
-        SUBS     R1,R4,#+1
-        UXTH     R4,R4            ;; ZeroExt  R4,R4,#+16,#+16
-        CMP      R4,#+0
-        BNE.N    ??crc16_1
         UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
-        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
-        ORRS     R0,R2,R3, LSL #+8
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        ORRS     R0,R0,R3, LSL #+8
         UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
-        POP      {R4}
+        POP      {R4,R5}
         BX       LR               ;; return
 
         SECTION `.bss`:DATA:REORDER:NOROOT(0)
@@ -139,14 +143,14 @@ address_backup:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 t770_prepare:
-        PUSH     {R4,LR}
-        SUB      SP,SP,#+16
-        MOVS     R4,R1
+        PUSH     {R1-R5,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
         MOV      R2,#+512
-        MOVS     R1,R0
+        MOVS     R1,R4
         ADD      R0,SP,#+0
         BL       framebuff_init
-        MOVS     R1,R4
+        MOVS     R1,R5
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         ADD      R0,SP,#+0
         BL       framebuff_push_u8
@@ -173,90 +177,110 @@ t770_prepare:
         ADD      R0,SP,#+0
         BL       framebuff_push_u16
         LDR.N    R0,??DataTable2_2
-        STRB     R4,[R0, #+0]
+        STRB     R5,[R0, #+0]
         ADD      R0,SP,#+0
         BL       framebuff_length
-        ADD      SP,SP,#+16
-        POP      {R4,PC}          ;; return
+        POP      {R1-R5,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 t770_parse:
-        PUSH     {R4-R9,LR}
-        SUB      SP,SP,#+20
+        PUSH     {R4-R11,LR}
+        SUB      SP,SP,#+36
         MOVS     R4,R0
         MOVS     R5,R1
-        CMP      R3,#+9
+        MOVS     R6,R2
+        MOVS     R7,R3
+        CMP      R7,#+9
         BCS.N    ??t770_parse_0
         MOVS     R0,#+0
         B.N      ??t770_parse_1
 ??t770_parse_0:
-        LDRB     R9,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R8,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     LR,[R2, #+0]
-        ADDS     R2,R2,#+1
-        UXTB     LR,LR            ;; ZeroExt  LR,LR,#+24,#+24
-        CMP      LR,#+4
+        MOV      R9,R6
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+12]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+11]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+10]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[SP, #+10]
+        CMP      R0,#+4
         BNE.N    ??t770_parse_2
-        LDR.N    R0,??DataTable2_2
-        LDRB     R0,[R0, #+0]
-        UXTB     R9,R9            ;; ZeroExt  R9,R9,#+24,#+24
-        CMP      R9,R0
+        LDRB     R0,[SP, #+12]
+        LDR.N    R1,??DataTable2_2
+        LDRB     R1,[R1, #+0]
+        CMP      R0,R1
         BNE.N    ??t770_parse_2
-        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
-        CMP      R8,#+3
+        LDRB     R0,[SP, #+11]
+        CMP      R0,#+3
         BEQ.N    ??t770_parse_3
 ??t770_parse_2:
         MOVS     R0,#+1
         B.N      ??t770_parse_1
 ??t770_parse_3:
-        LDRB     R7,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R3,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R1,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R0,[R2, #+0]
-        ADDS     R2,R2,#+1
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        LSLS     R6,R1,#+16
-        ORRS     R6,R6,R0, LSL #+24
-        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
-        ORRS     R6,R6,R3, LSL #+8
-        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
-        ORRS     R6,R7,R6
-        STRB     R9,[SP, #+8]
-        STRB     R8,[SP, #+9]
-        STRB     LR,[SP, #+10]
-        STRB     R7,[SP, #+11]
-        STRB     R3,[SP, #+12]
-        STRB     R1,[SP, #+13]
+        LDRB     R0,[R9, #+0]
+        MOV      R8,R0
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        MOV      R11,R0
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+8]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+9]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[SP, #+9]
+        LDRB     R1,[SP, #+8]
+        LSLS     R1,R1,#+16
+        ORRS     R0,R1,R0, LSL #+24
+        UXTB     R11,R11          ;; ZeroExt  R11,R11,#+24,#+24
+        ORRS     R0,R0,R11, LSL #+8
+        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
+        ORRS     R0,R8,R0
+        STR      R0,[SP, #+32]
+        LDR      R0,[SP, #+32]
+        STR      R0,[SP, #+28]
+        LDRB     R0,[SP, #+12]
+        STRB     R0,[SP, #+20]
+        LDRB     R0,[SP, #+11]
+        STRB     R0,[SP, #+21]
+        LDRB     R0,[SP, #+10]
+        STRB     R0,[SP, #+22]
+        STRB     R8,[SP, #+23]
+        STRB     R11,[SP, #+24]
+        LDRB     R0,[SP, #+8]
+        STRB     R0,[SP, #+25]
+        LDRB     R0,[SP, #+9]
+        STRB     R0,[SP, #+26]
+        LDRB     R0,[R9, #+0]
         STRB     R0,[SP, #+14]
-        LDRB     R0,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R1,[R2, #+0]
-        ADDS     R2,R2,#+1
-        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        ORRS     R7,R0,R1, LSL #+8
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+13]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[SP, #+13]
+        LDRB     R1,[SP, #+14]
+        ORRS     R0,R1,R0, LSL #+8
+        STRH     R0,[SP, #+16]
+        LDRH     R10,[SP, #+16]
         MOVS     R1,#+7
-        ADD      R0,SP,#+8
+        ADD      R0,SP,#+20
         BL       crc16
-        UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
-        CMP      R7,R0
+        CMP      R10,R0
         BEQ.N    ??t770_parse_4
         MOVS     R0,#+1
         B.N      ??t770_parse_1
 ??t770_parse_4:
         BL       rtc_get_time
-        MOVS     R7,R0
-        MOVS     R0,R6
+        MOV      R10,R0
+        LDR      R0,[SP, #+28]
         BL       __aeabi_f2d
         STRD     R0,R1,[SP, #+0]
-        MOVS     R3,R7
+        MOV      R3,R10
         MOVS     R2,R4
         LDR.N    R1,??DataTable2_3
         MOVS     R0,R5
@@ -264,8 +288,8 @@ t770_parse:
         MOVS     R0,R5
         BL       strlen
 ??t770_parse_1:
-        ADD      SP,SP,#+20
-        POP      {R4-R9,PC}       ;; return
+        ADD      SP,SP,#+36
+        POP      {R4-R11,PC}      ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -312,9 +336,9 @@ t770_senproto:
 //   1 byte  in section .bss
 //   8 bytes in section .data
 // 524 bytes in section .rodata
-// 376 bytes in section .text
+// 492 bytes in section .text
 // 
-// 376 bytes of CODE  memory
+// 492 bytes of CODE  memory
 // 524 bytes of CONST memory
 //   9 bytes of DATA  memory
 //

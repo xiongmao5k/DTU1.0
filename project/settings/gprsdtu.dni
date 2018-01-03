@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=1172619884
+Checksum=-772755782
 [CodeCoverage]
 Enabled=_ 0
 [Exceptions]
@@ -34,7 +34,7 @@ ShowSource=1
 Freq=10000000
 MultiCoreRunAll=1
 [stlink]
-stlinkserialNo=2798FD0D
+stlinkserialNo=EE5626A6
 stlinkfoundProbes=
 [SWOTraceHWSettings]
 OverrideDefaultClocks=0
@@ -74,7 +74,8 @@ Fmt16={W}1:sendat_collect_list	4	0
 Fmt17={W}1:start1	4	0
 Fmt18={W}1:start2	4	0
 Fmt19={W}1:tmpreg	4	0
-Fmt20={W}1:x	0	9
+Fmt20={W}1:ucBuffer	5	1
+Fmt21={W}1:x	0	9
 [Trace2]
 Enabled=0
 ShowSource=0
@@ -103,14 +104,12 @@ SumSortOrder=0
 [Disassemble mode]
 mode=0
 [Breakpoints2]
-Bp0=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..}.153.1" 0 0 1 "" 0 "" 0
-Bp1=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..}.16.9" 0 0 1 "" 0 "" 0
-Bp2=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-t830.c}.52.5" 0 0 1 "" 0 "" 0
-Bp3=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-t830.c}.47.10" 0 0 1 "" 0 "" 0
-Bp4=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-water.c}.52.5" 0 0 1 "" 0 "" 0
-Bp5=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-water.c}.14.5" 0 0 1 "" 0 "" 0
-Bp6=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-t830.c}.14.5" 0 0 1 "" 0 "" 0
-Count=7
+Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\sdcdtu.c}.628.25" 0 0 1 "" 0 "" 0
+Bp1=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\sdcdtu.c}.562.13" 0 0 1 "" 0 "" 0
+Bp2=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\sdcdtu.c}.518.13" 0 0 1 "" 0 "" 0
+Bp3=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\sdcdtu.c}.580.21" 0 0 1 "" 0 "" 0
+Bp4=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\sdcdtu.c}.679.13" 0 0 1 "" 0 "" 0
+Count=5
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:20
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:20
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\battery.s
@@ -220,41 +220,42 @@ battery_read:
         PUSH     {R4-R11,LR}
         SUB      SP,SP,#+44
         MOVS     R4,R0
+        MOVS     R5,R1
         MOVS     R0,#+0
+        BL       senif_power_open
+        BL       simple_delay
+        BL       adc_read
+        STR      R0,[SP, #+40]
+        BL       charg_state
+        MOV      R10,R0
+        MOVS     R0,#+0
+        BL       senif_power_close
+        MOVS     R0,#+2
         BL       senif_power_open
         BL       simple_delay
         BL       adc_read
         STR      R0,[SP, #+36]
         BL       charg_state
         MOV      R9,R0
-        MOVS     R0,#+0
-        BL       senif_power_close
-        MOVS     R0,#+2
-        BL       senif_power_open
-        BL       simple_delay
-        BL       adc_read
-        MOVS     R5,R0
-        BL       charg_state
-        MOV      R10,R0
         MOVS     R0,#+2
         BL       senif_power_close
         MOVS     R0,#+4
         BL       senif_power_open
         BL       simple_delay
         BL       adc_read
-        MOV      R8,R0
-        BL       charg_state
         MOV      R11,R0
+        BL       charg_state
+        MOV      R8,R0
         MOVS     R0,#+4
         BL       senif_power_close
         BL       rtc_get_time
         MOVS     R6,R0
         BL       deviceid_read
         MOVS     R7,R0
-        STR      R11,[SP, #+32]
-        STR      R10,[SP, #+28]
-        STR      R9,[SP, #+24]
-        MOV      R0,R8
+        STR      R8,[SP, #+32]
+        STR      R9,[SP, #+28]
+        STR      R10,[SP, #+24]
+        MOV      R0,R11
         BL       __aeabi_ui2d
         MOVS     R2,#+1717986918
         LDR.N    R3,??DataTable4_3  ;; 0x40166666
@@ -263,7 +264,7 @@ battery_read:
         LDR.N    R3,??DataTable4_4  ;; 0x40b00000
         BL       __aeabi_ddiv
         STRD     R0,R1,[SP, #+16]
-        MOVS     R0,R5
+        LDR      R0,[SP, #+36]
         BL       __aeabi_ui2d
         MOVS     R2,#+1717986918
         LDR.N    R3,??DataTable4_3  ;; 0x40166666
@@ -272,7 +273,7 @@ battery_read:
         LDR.N    R3,??DataTable4_4  ;; 0x40b00000
         BL       __aeabi_ddiv
         STRD     R0,R1,[SP, #+8]
-        LDR      R0,[SP, #+36]
+        LDR      R0,[SP, #+40]
         BL       __aeabi_ui2d
         MOVS     R2,#+1717986918
         LDR.N    R3,??DataTable4_3  ;; 0x40166666
@@ -369,9 +370,9 @@ battery_init:
         END
 // 
 //  36 bytes in section .rodata
-// 606 bytes in section .text
+// 608 bytes in section .text
 // 
-// 606 bytes of CODE  memory
+// 608 bytes of CODE  memory
 //  36 bytes of CONST memory
 //
 //Errors: none

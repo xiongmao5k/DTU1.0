@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  17:18:25
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:24
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\senproto.s
@@ -58,15 +58,17 @@ sensors_table:
         SECTION `.text`:CODE:NOROOT(2)
         THUMB
 senproto_lookup:
-        CMP      R0,#+33
+        MOVS     R1,R0
+        CMP      R1,#+33
         BCC.N    ??senproto_lookup_0
         MOVS     R0,#+0
         B.N      ??senproto_lookup_1
 ??senproto_lookup_0:
-        LDR.N    R1,??senproto_lookup_2
-        LDR      R0,[R1, R0, LSL #+2]
+        LDR.N    R0,??senproto_lookup_2
+        LDR      R0,[R0, R1, LSL #+2]
 ??senproto_lookup_1:
         BX       LR               ;; return
+        Nop      
         DATA
 ??senproto_lookup_2:
         DC32     sensors_table
@@ -85,9 +87,9 @@ senproto_lookup:
         END
 // 
 // 32 bytes in section .data
-// 20 bytes in section .text
+// 24 bytes in section .text
 // 
-// 20 bytes of CODE memory
+// 24 bytes of CODE memory
 // 32 bytes of DATA memory
 //
 //Errors: none

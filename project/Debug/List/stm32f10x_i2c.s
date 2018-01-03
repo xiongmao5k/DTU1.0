@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:26
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:28
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_i2c.s
@@ -78,9 +78,10 @@
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 I2C_DeInit:
-        PUSH     {R7,LR}
-        LDR.N    R1,??DataTable1  ;; 0x40005400
-        CMP      R0,R1
+        PUSH     {R4,LR}
+        MOVS     R4,R0
+        LDR.N    R0,??DataTable1  ;; 0x40005400
+        CMP      R4,R0
         BNE.N    ??I2C_DeInit_0
         MOVS     R1,#+1
         MOVS     R0,#+2097152
@@ -97,99 +98,108 @@ I2C_DeInit:
         MOVS     R0,#+4194304
         BL       RCC_APB1PeriphResetCmd
 ??I2C_DeInit_1:
-        POP      {R0,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 I2C_Init:
-        PUSH     {R4-R6,LR}
-        SUB      SP,SP,#+24
+        PUSH     {R4-R9,LR}
+        SUB      SP,SP,#+20
         MOVS     R4,R0
         MOVS     R5,R1
+        MOVS     R9,#+0
         MOVS     R6,#+0
-        MOVS     R0,#+0
-        MOVS     R1,#+4
-        LDR.N    R1,??DataTable1_1  ;; 0x7a1200
-        LDRH     R6,[R4, #+4]
+        MOVS     R7,#+4
+        LDR.W    R8,??DataTable1_1  ;; 0x7a1200
+        LDRH     R0,[R4, #+4]
+        MOV      R9,R0
         MOVW     R0,#+65472
-        ANDS     R6,R0,R6
+        ANDS     R9,R0,R9
         ADD      R0,SP,#+0
         BL       RCC_GetClocksFreq
-        LDR      R1,[SP, #+8]
+        LDR      R0,[SP, #+8]
+        MOV      R8,R0
         LDR.N    R0,??DataTable1_2  ;; 0xf4240
-        UDIV     R0,R1,R0
-        ORRS     R6,R0,R6
-        STRH     R6,[R4, #+4]
-        LDRH     R2,[R4, #+0]
-        MOVW     R3,#+65534
-        ANDS     R2,R3,R2
-        STRH     R2,[R4, #+0]
-        MOVS     R6,#+0
-        LDR      R2,[R5, #+0]
-        LDR.N    R3,??DataTable1_3  ;; 0x186a1
-        CMP      R2,R3
+        UDIV     R0,R8,R0
+        MOVS     R6,R0
+        ORRS     R9,R6,R9
+        STRH     R9,[R4, #+4]
+        LDRH     R0,[R4, #+0]
+        MOVW     R1,#+65534
+        ANDS     R0,R1,R0
+        STRH     R0,[R4, #+0]
+        MOVS     R0,#+0
+        MOV      R9,R0
+        LDR      R0,[R5, #+0]
+        LDR.N    R1,??DataTable1_3  ;; 0x186a1
+        CMP      R0,R1
         BCS.N    ??I2C_Init_0
-        LDR      R2,[R5, #+0]
-        LSLS     R2,R2,#+1
-        UDIV     R1,R1,R2
-        UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        CMP      R1,#+4
+        LDR      R0,[R5, #+0]
+        LSLS     R0,R0,#+1
+        UDIV     R0,R8,R0
+        MOVS     R7,R0
+        UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
+        CMP      R7,#+4
         BGE.N    ??I2C_Init_1
-        MOVS     R1,#+4
+        MOVS     R0,#+4
+        MOVS     R7,R0
 ??I2C_Init_1:
-        ORRS     R6,R1,R6
-        ADDS     R0,R0,#+1
+        ORRS     R9,R7,R9
+        ADDS     R0,R6,#+1
         STRH     R0,[R4, #+32]
         B.N      ??I2C_Init_2
 ??I2C_Init_0:
-        LDRH     R2,[R5, #+6]
-        MOVW     R3,#+49151
-        CMP      R2,R3
+        LDRH     R0,[R5, #+6]
+        MOVW     R1,#+49151
+        CMP      R0,R1
         BNE.N    ??I2C_Init_3
-        LDR      R2,[R5, #+0]
-        MOVS     R3,#+3
-        MULS     R2,R3,R2
-        UDIV     R1,R1,R2
+        LDR      R0,[R5, #+0]
+        MOVS     R1,#+3
+        MULS     R0,R1,R0
+        UDIV     R0,R8,R0
+        MOVS     R7,R0
         B.N      ??I2C_Init_4
 ??I2C_Init_3:
-        LDR      R2,[R5, #+0]
-        MOVS     R3,#+25
-        MULS     R2,R3,R2
-        UDIV     R1,R1,R2
-        ORRS     R1,R1,#0x4000
-??I2C_Init_4:
-        LSLS     R2,R1,#+20
-        BNE.N    ??I2C_Init_5
-        ORRS     R1,R1,#0x1
-??I2C_Init_5:
-        ORRS     R1,R1,#0x8000
-        ORRS     R6,R1,R6
-        UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
-        MOV      R1,#+300
+        LDR      R0,[R5, #+0]
+        MOVS     R1,#+25
         MULS     R0,R1,R0
+        UDIV     R0,R8,R0
+        MOVS     R7,R0
+        ORRS     R7,R7,#0x4000
+??I2C_Init_4:
+        LSLS     R0,R7,#+20
+        BNE.N    ??I2C_Init_5
+        ORRS     R7,R7,#0x1
+??I2C_Init_5:
+        ORRS     R0,R7,#0x8000
+        ORRS     R9,R0,R9
+        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
+        MOV      R0,#+300
+        MUL      R0,R0,R6
         MOV      R1,#+1000
         SDIV     R0,R0,R1
         ADDS     R0,R0,#+1
         STRH     R0,[R4, #+32]
 ??I2C_Init_2:
-        STRH     R6,[R4, #+28]
+        STRH     R9,[R4, #+28]
         LDRH     R0,[R4, #+0]
         ORRS     R0,R0,#0x1
         STRH     R0,[R4, #+0]
-        LDRH     R6,[R4, #+0]
+        LDRH     R0,[R4, #+0]
+        MOV      R9,R0
         MOVW     R0,#+64501
-        ANDS     R6,R0,R6
+        ANDS     R9,R0,R9
         LDRH     R0,[R5, #+4]
         LDRH     R1,[R5, #+10]
         ORRS     R0,R1,R0
-        ORRS     R6,R0,R6
-        STRH     R6,[R4, #+0]
+        ORRS     R9,R0,R9
+        STRH     R9,[R4, #+0]
         LDRH     R0,[R5, #+12]
         LDRH     R1,[R5, #+8]
         ORRS     R0,R1,R0
         STRH     R0,[R4, #+8]
-        ADD      SP,SP,#+24
-        POP      {R4-R6,PC}       ;; return
+        ADD      SP,SP,#+20
+        POP      {R4-R9,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -238,15 +248,15 @@ I2C_Cmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??I2C_Cmd_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x1
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_Cmd_1
 ??I2C_Cmd_0:
-        LDRH     R1,[R0, #+0]
-        MOVW     R2,#+65534
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        MOVW     R3,#+65534
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+0]
 ??I2C_Cmd_1:
         BX       LR               ;; return
 
@@ -256,15 +266,15 @@ I2C_DMACmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??I2C_DMACmd_0
-        LDRH     R1,[R0, #+4]
-        ORRS     R1,R1,#0x800
-        STRH     R1,[R0, #+4]
+        LDRH     R2,[R0, #+4]
+        ORRS     R2,R2,#0x800
+        STRH     R2,[R0, #+4]
         B.N      ??I2C_DMACmd_1
 ??I2C_DMACmd_0:
-        LDRH     R1,[R0, #+4]
-        MOVW     R2,#+63487
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+4]
+        LDRH     R2,[R0, #+4]
+        MOVW     R3,#+63487
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+4]
 ??I2C_DMACmd_1:
         BX       LR               ;; return
 
@@ -274,15 +284,15 @@ I2C_DMALastTransferCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??I2C_DMALastTransferCmd_0
-        LDRH     R1,[R0, #+4]
-        ORRS     R1,R1,#0x1000
-        STRH     R1,[R0, #+4]
+        LDRH     R2,[R0, #+4]
+        ORRS     R2,R2,#0x1000
+        STRH     R2,[R0, #+4]
         B.N      ??I2C_DMALastTransferCmd_1
 ??I2C_DMALastTransferCmd_0:
-        LDRH     R1,[R0, #+4]
-        MOVW     R2,#+61439
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+4]
+        LDRH     R2,[R0, #+4]
+        MOVW     R3,#+61439
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+4]
 ??I2C_DMALastTransferCmd_1:
         BX       LR               ;; return
 
@@ -292,15 +302,15 @@ I2C_GenerateSTART:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??I2C_GenerateSTART_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x100
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x100
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_GenerateSTART_1
 ??I2C_GenerateSTART_0:
-        LDRH     R1,[R0, #+0]
-        MOVW     R2,#+65279
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        MOVW     R3,#+65279
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+0]
 ??I2C_GenerateSTART_1:
         BX       LR               ;; return
 
@@ -310,15 +320,15 @@ I2C_GenerateSTOP:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??I2C_GenerateSTOP_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x200
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x200
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_GenerateSTOP_1
 ??I2C_GenerateSTOP_0:
-        LDRH     R1,[R0, #+0]
-        MOVW     R2,#+65023
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        MOVW     R3,#+65023
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+0]
 ??I2C_GenerateSTOP_1:
         BX       LR               ;; return
 
@@ -328,15 +338,15 @@ I2C_AcknowledgeConfig:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??I2C_AcknowledgeConfig_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x400
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x400
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_AcknowledgeConfig_1
 ??I2C_AcknowledgeConfig_0:
-        LDRH     R1,[R0, #+0]
-        MOVW     R2,#+64511
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        MOVW     R3,#+64511
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+0]
 ??I2C_AcknowledgeConfig_1:
         BX       LR               ;; return
 
@@ -344,12 +354,13 @@ I2C_AcknowledgeConfig:
         THUMB
 I2C_OwnAddress2Config:
         MOVS     R2,#+0
-        LDRH     R2,[R0, #+12]
+        LDRH     R3,[R0, #+12]
+        MOVS     R2,R3
         MOVW     R3,#+65281
         ANDS     R2,R3,R2
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        ANDS     R1,R1,#0xFE
-        ORRS     R2,R1,R2
+        ANDS     R3,R1,#0xFE
+        ORRS     R2,R3,R2
         STRH     R2,[R0, #+12]
         BX       LR               ;; return
 
@@ -359,15 +370,15 @@ I2C_DualAddressCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??I2C_DualAddressCmd_0
-        LDRH     R1,[R0, #+12]
-        ORRS     R1,R1,#0x1
-        STRH     R1,[R0, #+12]
+        LDRH     R2,[R0, #+12]
+        ORRS     R2,R2,#0x1
+        STRH     R2,[R0, #+12]
         B.N      ??I2C_DualAddressCmd_1
 ??I2C_DualAddressCmd_0:
-        LDRH     R1,[R0, #+12]
-        MOVW     R2,#+65534
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+12]
+        LDRH     R2,[R0, #+12]
+        MOVW     R3,#+65534
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+12]
 ??I2C_DualAddressCmd_1:
         BX       LR               ;; return
 
@@ -377,15 +388,15 @@ I2C_GeneralCallCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??I2C_GeneralCallCmd_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x40
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x40
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_GeneralCallCmd_1
 ??I2C_GeneralCallCmd_0:
-        LDRH     R1,[R0, #+0]
-        MOVW     R2,#+65471
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        MOVW     R3,#+65471
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+0]
 ??I2C_GeneralCallCmd_1:
         BX       LR               ;; return
 
@@ -395,14 +406,14 @@ I2C_ITConfig:
         UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
         CMP      R2,#+0
         BEQ.N    ??I2C_ITConfig_0
-        LDRH     R2,[R0, #+4]
-        ORRS     R1,R1,R2
-        STRH     R1,[R0, #+4]
+        LDRH     R3,[R0, #+4]
+        ORRS     R3,R1,R3
+        STRH     R3,[R0, #+4]
         B.N      ??I2C_ITConfig_1
 ??I2C_ITConfig_0:
-        LDRH     R2,[R0, #+4]
-        BICS     R1,R2,R1
-        STRH     R1,[R0, #+4]
+        LDRH     R3,[R0, #+4]
+        BICS     R3,R3,R1
+        STRH     R3,[R0, #+4]
 ??I2C_ITConfig_1:
         BX       LR               ;; return
 
@@ -439,9 +450,10 @@ I2C_Send7bitAddress:
         THUMB
 I2C_ReadRegister:
         SUB      SP,SP,#+4
-        MOVS     R2,#+0
-        STR      R2,[SP, #+0]
+        MOVS     R2,R0
+        MOVS     R0,#+0
         STR      R0,[SP, #+0]
+        STR      R2,[SP, #+0]
         LDR      R0,[SP, #+0]
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         ADDS     R0,R1,R0
@@ -457,15 +469,15 @@ I2C_SoftwareResetCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??I2C_SoftwareResetCmd_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x8000
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x8000
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_SoftwareResetCmd_1
 ??I2C_SoftwareResetCmd_0:
-        LDRH     R1,[R0, #+0]
-        LSLS     R1,R1,#+17       ;; ZeroExtS R1,R1,#+17,#+17
-        LSRS     R1,R1,#+17
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        LSLS     R2,R2,#+17       ;; ZeroExtS R2,R2,#+17,#+17
+        LSRS     R2,R2,#+17
+        STRH     R2,[R0, #+0]
 ??I2C_SoftwareResetCmd_1:
         BX       LR               ;; return
 
@@ -475,15 +487,15 @@ I2C_NACKPositionConfig:
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         CMP      R1,#+2048
         BNE.N    ??I2C_NACKPositionConfig_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x800
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x800
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_NACKPositionConfig_1
 ??I2C_NACKPositionConfig_0:
-        LDRH     R1,[R0, #+0]
-        MOVW     R2,#+63487
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        MOVW     R3,#+63487
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+0]
 ??I2C_NACKPositionConfig_1:
         BX       LR               ;; return
 
@@ -493,15 +505,15 @@ I2C_SMBusAlertConfig:
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         CMP      R1,#+8192
         BNE.N    ??I2C_SMBusAlertConfig_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x2000
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x2000
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_SMBusAlertConfig_1
 ??I2C_SMBusAlertConfig_0:
-        LDRH     R1,[R0, #+0]
-        MOVW     R2,#+57343
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        MOVW     R3,#+57343
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+0]
 ??I2C_SMBusAlertConfig_1:
         BX       LR               ;; return
 
@@ -511,15 +523,15 @@ I2C_TransmitPEC:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??I2C_TransmitPEC_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x1000
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x1000
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_TransmitPEC_1
 ??I2C_TransmitPEC_0:
-        LDRH     R1,[R0, #+0]
-        MOVW     R2,#+61439
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        MOVW     R3,#+61439
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+0]
 ??I2C_TransmitPEC_1:
         BX       LR               ;; return
 
@@ -529,15 +541,15 @@ I2C_PECPositionConfig:
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         CMP      R1,#+2048
         BNE.N    ??I2C_PECPositionConfig_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x800
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x800
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_PECPositionConfig_1
 ??I2C_PECPositionConfig_0:
-        LDRH     R1,[R0, #+0]
-        MOVW     R2,#+63487
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        MOVW     R3,#+63487
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+0]
 ??I2C_PECPositionConfig_1:
         BX       LR               ;; return
 
@@ -547,15 +559,15 @@ I2C_CalculatePEC:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??I2C_CalculatePEC_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x20
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x20
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_CalculatePEC_1
 ??I2C_CalculatePEC_0:
-        LDRH     R1,[R0, #+0]
-        MOVW     R2,#+65503
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        MOVW     R3,#+65503
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+0]
 ??I2C_CalculatePEC_1:
         BX       LR               ;; return
 
@@ -574,15 +586,15 @@ I2C_ARPCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??I2C_ARPCmd_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x10
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x10
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_ARPCmd_1
 ??I2C_ARPCmd_0:
-        LDRH     R1,[R0, #+0]
-        MOVW     R2,#+65519
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        MOVW     R3,#+65519
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+0]
 ??I2C_ARPCmd_1:
         BX       LR               ;; return
 
@@ -592,15 +604,15 @@ I2C_StretchClockCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BNE.N    ??I2C_StretchClockCmd_0
-        LDRH     R1,[R0, #+0]
-        ORRS     R1,R1,#0x80
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        ORRS     R2,R2,#0x80
+        STRH     R2,[R0, #+0]
         B.N      ??I2C_StretchClockCmd_1
 ??I2C_StretchClockCmd_0:
-        LDRH     R1,[R0, #+0]
-        MOVW     R2,#+65407
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+0]
+        LDRH     R2,[R0, #+0]
+        MOVW     R3,#+65407
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+0]
 ??I2C_StretchClockCmd_1:
         BX       LR               ;; return
 
@@ -610,56 +622,68 @@ I2C_FastModeDutyCycleConfig:
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         CMP      R1,#+16384
         BEQ.N    ??I2C_FastModeDutyCycleConfig_0
-        LDRH     R1,[R0, #+28]
-        MOVW     R2,#+49151
-        ANDS     R1,R2,R1
-        STRH     R1,[R0, #+28]
+        LDRH     R2,[R0, #+28]
+        MOVW     R3,#+49151
+        ANDS     R2,R3,R2
+        STRH     R2,[R0, #+28]
         B.N      ??I2C_FastModeDutyCycleConfig_1
 ??I2C_FastModeDutyCycleConfig_0:
-        LDRH     R1,[R0, #+28]
-        ORRS     R1,R1,#0x4000
-        STRH     R1,[R0, #+28]
+        LDRH     R2,[R0, #+28]
+        ORRS     R2,R2,#0x4000
+        STRH     R2,[R0, #+28]
 ??I2C_FastModeDutyCycleConfig_1:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 I2C_CheckEvent:
-        MOVS     R2,#+0
-        MOVS     R2,#+0
+        PUSH     {R4-R6}
+        MOVS     R2,R0
         MOVS     R3,#+0
-        MOVS     R2,#+0
-        LDRH     R2,[R0, #+20]
-        LDRH     R3,[R0, #+24]
-        LSLS     R3,R3,#+16
-        ORRS     R0,R3,R2
-        LSLS     R2,R0,#+8        ;; ZeroExtS R2,R0,#+8,#+8
-        LSRS     R2,R2,#+8
-        ANDS     R0,R1,R2
-        CMP      R0,R1
+        MOVS     R4,#+0
+        MOVS     R5,#+0
+        MOVS     R0,#+0
+        LDRH     R6,[R2, #+20]
+        MOVS     R4,R6
+        LDRH     R6,[R2, #+24]
+        MOVS     R5,R6
+        LSLS     R5,R5,#+16
+        ORRS     R6,R5,R4
+        LSLS     R6,R6,#+8        ;; ZeroExtS R6,R6,#+8,#+8
+        LSRS     R6,R6,#+8
+        MOVS     R3,R6
+        ANDS     R6,R1,R3
+        CMP      R6,R1
         BNE.N    ??I2C_CheckEvent_0
-        MOVS     R2,#+1
+        MOVS     R6,#+1
+        MOVS     R0,R6
         B.N      ??I2C_CheckEvent_1
 ??I2C_CheckEvent_0:
-        MOVS     R2,#+0
+        MOVS     R6,#+0
+        MOVS     R0,R6
 ??I2C_CheckEvent_1:
-        MOVS     R0,R2
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        POP      {R4-R6}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 I2C_GetLastEvent:
-        MOVS     R1,#+0
-        MOVS     R1,#+0
+        PUSH     {R4}
+        MOVS     R1,R0
+        MOVS     R0,#+0
         MOVS     R2,#+0
-        LDRH     R1,[R0, #+20]
-        LDRH     R2,[R0, #+24]
-        LSLS     R2,R2,#+16
-        ORRS     R0,R2,R1
-        LSLS     R1,R0,#+8        ;; ZeroExtS R1,R0,#+8,#+8
-        LSRS     R1,R1,#+8
-        MOVS     R0,R1
+        MOVS     R3,#+0
+        LDRH     R4,[R1, #+20]
+        MOVS     R2,R4
+        LDRH     R4,[R1, #+24]
+        MOVS     R3,R4
+        LSLS     R3,R3,#+16
+        ORRS     R4,R3,R2
+        LSLS     R4,R4,#+8        ;; ZeroExtS R4,R4,#+8,#+8
+        LSRS     R4,R4,#+8
+        MOVS     R0,R4
+        POP      {R4}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -668,36 +692,38 @@ I2C_GetFlagStatus:
         SUB      SP,SP,#+8
         MOVS     R2,R0
         MOVS     R0,#+0
-        MOVS     R0,#+0
-        STR      R0,[SP, #+4]
-        MOVS     R0,#+0
-        STR      R0,[SP, #+0]
+        MOVS     R3,#+0
+        STR      R3,[SP, #+4]
+        MOVS     R3,#+0
+        STR      R3,[SP, #+0]
         STR      R2,[SP, #+0]
-        LSRS     R0,R1,#+28
-        STR      R0,[SP, #+4]
+        LSRS     R3,R1,#+28
+        STR      R3,[SP, #+4]
         LSLS     R1,R1,#+8        ;; ZeroExtS R1,R1,#+8,#+8
         LSRS     R1,R1,#+8
-        LDR      R0,[SP, #+4]
-        CMP      R0,#+0
+        LDR      R3,[SP, #+4]
+        CMP      R3,#+0
         BEQ.N    ??I2C_GetFlagStatus_0
-        LDR      R0,[SP, #+0]
-        ADDS     R0,R0,#+20
-        STR      R0,[SP, #+0]
+        LDR      R3,[SP, #+0]
+        ADDS     R3,R3,#+20
+        STR      R3,[SP, #+0]
         B.N      ??I2C_GetFlagStatus_1
 ??I2C_GetFlagStatus_0:
         LSRS     R1,R1,#+16
-        LDR      R0,[SP, #+0]
-        ADDS     R0,R0,#+24
-        STR      R0,[SP, #+0]
+        LDR      R3,[SP, #+0]
+        ADDS     R3,R3,#+24
+        STR      R3,[SP, #+0]
 ??I2C_GetFlagStatus_1:
-        LDR      R0,[SP, #+0]
-        LDR      R0,[R0, #+0]
-        TST      R0,R1
+        LDR      R3,[SP, #+0]
+        LDR      R3,[R3, #+0]
+        TST      R3,R1
         BEQ.N    ??I2C_GetFlagStatus_2
-        MOVS     R0,#+1
+        MOVS     R3,#+1
+        MOVS     R0,R3
         B.N      ??I2C_GetFlagStatus_3
 ??I2C_GetFlagStatus_2:
-        MOVS     R0,#+0
+        MOVS     R3,#+0
+        MOVS     R0,R3
 ??I2C_GetFlagStatus_3:
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         ADD      SP,SP,#+8
@@ -707,44 +733,51 @@ I2C_GetFlagStatus:
         THUMB
 I2C_ClearFlag:
         MOVS     R2,#+0
-        LSLS     R2,R1,#+8        ;; ZeroExtS R2,R1,#+8,#+8
-        LSRS     R2,R2,#+8
-        MVNS     R1,R2
-        STRH     R1,[R0, #+20]
+        LSLS     R3,R1,#+8        ;; ZeroExtS R3,R1,#+8,#+8
+        LSRS     R3,R3,#+8
+        MOVS     R2,R3
+        MVNS     R3,R2
+        STRH     R3,[R0, #+20]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 I2C_GetITStatus:
-        MOVS     R2,#+0
-        MOVS     R2,#+0
-        LDRH     R2,[R0, #+4]
-        ANDS     R2,R2,R1, LSR #+16
-        ANDS     R2,R2,#0x700
+        PUSH     {R4}
+        MOVS     R2,R0
+        MOVS     R0,#+0
+        MOVS     R3,#+0
+        LDRH     R4,[R2, #+4]
+        ANDS     R4,R4,R1, LSR #+16
+        ANDS     R4,R4,#0x700
+        MOVS     R3,R4
         LSLS     R1,R1,#+8        ;; ZeroExtS R1,R1,#+8,#+8
         LSRS     R1,R1,#+8
-        LDRH     R0,[R0, #+20]
-        TST      R0,R1
+        LDRH     R4,[R2, #+20]
+        TST      R4,R1
         BEQ.N    ??I2C_GetITStatus_0
-        CMP      R2,#+0
+        CMP      R3,#+0
         BEQ.N    ??I2C_GetITStatus_0
-        MOVS     R2,#+1
+        MOVS     R4,#+1
+        MOVS     R0,R4
         B.N      ??I2C_GetITStatus_1
 ??I2C_GetITStatus_0:
-        MOVS     R2,#+0
+        MOVS     R4,#+0
+        MOVS     R0,R4
 ??I2C_GetITStatus_1:
-        MOVS     R0,R2
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        POP      {R4}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 I2C_ClearITPendingBit:
         MOVS     R2,#+0
-        LSLS     R2,R1,#+8        ;; ZeroExtS R2,R1,#+8,#+8
-        LSRS     R2,R2,#+8
-        MVNS     R1,R2
-        STRH     R1,[R0, #+20]
+        LSLS     R3,R1,#+8        ;; ZeroExtS R3,R1,#+8,#+8
+        LSRS     R3,R3,#+8
+        MOVS     R2,R3
+        MVNS     R3,R2
+        STRH     R3,[R0, #+20]
         BX       LR               ;; return
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
@@ -760,9 +793,9 @@ I2C_ClearITPendingBit:
 
         END
 // 
-// 1 088 bytes in section .text
+// 1 180 bytes in section .text
 // 
-// 1 088 bytes of CODE memory
+// 1 180 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

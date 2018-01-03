@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:25
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:27
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_dbgmcu.s
@@ -65,18 +65,18 @@ DBGMCU_Config:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??DBGMCU_Config_0
-        LDR.N    R1,??DataTable2_1  ;; 0xe0042004
-        LDR      R1,[R1, #+0]
-        ORRS     R0,R0,R1
-        LDR.N    R1,??DataTable2_1  ;; 0xe0042004
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable2_1  ;; 0xe0042004
+        LDR      R2,[R2, #+0]
+        ORRS     R2,R0,R2
+        LDR.N    R3,??DataTable2_1  ;; 0xe0042004
+        STR      R2,[R3, #+0]
         B.N      ??DBGMCU_Config_1
 ??DBGMCU_Config_0:
-        LDR.N    R1,??DataTable2_1  ;; 0xe0042004
-        LDR      R1,[R1, #+0]
-        BICS     R0,R1,R0
-        LDR.N    R1,??DataTable2_1  ;; 0xe0042004
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable2_1  ;; 0xe0042004
+        LDR      R2,[R2, #+0]
+        BICS     R2,R2,R0
+        LDR.N    R3,??DataTable2_1  ;; 0xe0042004
+        STR      R2,[R3, #+0]
 ??DBGMCU_Config_1:
         BX       LR               ;; return
 
@@ -105,9 +105,9 @@ DBGMCU_Config:
 
         END
 // 
-// 58 bytes in section .text
+// 56 bytes in section .text
 // 
-// 58 bytes of CODE memory
+// 56 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

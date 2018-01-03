@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:20
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:21
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\fifo.s
 //
@@ -51,12 +51,13 @@
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 fifo_init:
-        STR      R1,[R0, #+0]
-        STR      R2,[R0, #+12]
-        MOVS     R1,#+0
-        STR      R1,[R0, #+8]
-        LDR      R1,[R0, #+8]
-        STR      R1,[R0, #+4]
+        MOVS     R3,R0
+        STR      R1,[R3, #+0]
+        STR      R2,[R3, #+12]
+        MOVS     R0,#+0
+        STR      R0,[R3, #+8]
+        LDR      R0,[R3, #+8]
+        STR      R0,[R3, #+4]
         MOVS     R0,#+0
         BX       LR               ;; return
 
@@ -141,153 +142,167 @@ fifo_pop_byte:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 fifo_push:
-        PUSH     {R4-R8,LR}
+        PUSH     {R4-R10,LR}
         MOVS     R4,R0
-        MOVS     R6,R1
-        MOVS     R5,R2
+        MOVS     R5,R1
+        MOVS     R7,R2
         MOVS     R0,R4
         BL       fifo_get_length
-        MOVS     R7,R0
-        CMP      R5,R7
+        MOVS     R6,R0
+        CMP      R7,R6
         BCC.N    ??fifo_push_0
 ??fifo_push_1:
-        MOVS     R5,R7
+        MOVS     R7,R6
 ??fifo_push_0:
         LDR      R0,[R4, #+12]
         LDR      R1,[R4, #+4]
-        SUBS     R7,R0,R1
-        CMP      R7,R5
+        SUBS     R0,R0,R1
+        MOVS     R6,R0
+        CMP      R6,R7
         BCS.N    ??fifo_push_2
         LDR      R0,[R4, #+0]
         LDR      R1,[R4, #+4]
         ADDS     R8,R1,R0
-        MOVS     R2,R7
-        MOVS     R1,R6
+        MOVS     R2,R6
+        MOVS     R1,R5
         MOV      R0,R8
         BL       __aeabi_memcpy
-        SUBS     R2,R5,R7
-        ADDS     R1,R7,R6
-        LDR      R6,[R4, #+0]
-        MOVS     R0,R6
+        SUBS     R8,R7,R6
+        ADDS     R9,R6,R5
+        LDR      R10,[R4, #+0]
+        MOV      R2,R8
+        MOV      R1,R9
+        MOV      R0,R10
         BL       __aeabi_memcpy
         B.N      ??fifo_push_3
 ??fifo_push_2:
         LDR      R0,[R4, #+0]
         LDR      R1,[R4, #+4]
-        ADDS     R7,R1,R0
-        MOVS     R2,R5
-        MOVS     R1,R6
-        MOVS     R0,R7
+        ADDS     R8,R1,R0
+        MOVS     R2,R7
+        MOVS     R1,R5
+        MOV      R0,R8
         BL       __aeabi_memcpy
 ??fifo_push_3:
         LDR      R0,[R4, #+4]
-        ADDS     R0,R5,R0
+        ADDS     R0,R7,R0
         LDR      R1,[R4, #+12]
         UDIV     R2,R0,R1
         MLS      R0,R1,R2,R0
         STR      R0,[R4, #+4]
-        MOVS     R0,R5
-        POP      {R4-R8,PC}       ;; return
+        MOVS     R0,R7
+        POP      {R4-R10,PC}      ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 fifo_pop:
-        PUSH     {R3-R7,LR}
+        PUSH     {R3-R11,LR}
         MOVS     R4,R0
-        MOVS     R6,R1
-        MOVS     R5,R2
+        MOVS     R7,R1
+        MOVS     R6,R2
         MOVS     R0,R4
         BL       fifo_get_length
-        MOVS     R7,R0
-        CMP      R5,R7
+        MOVS     R5,R0
+        CMP      R6,R5
         BCC.N    ??fifo_pop_0
 ??fifo_pop_1:
-        MOVS     R5,R7
+        MOVS     R6,R5
 ??fifo_pop_0:
         LDR      R0,[R4, #+12]
         LDR      R1,[R4, #+8]
-        SUBS     R7,R0,R1
-        CMP      R7,R5
+        SUBS     R0,R0,R1
+        MOVS     R5,R0
+        CMP      R5,R6
         BCS.N    ??fifo_pop_2
         LDR      R0,[R4, #+0]
         LDR      R1,[R4, #+8]
-        ADDS     R1,R1,R0
-        MOVS     R2,R7
-        MOVS     R0,R6
+        ADDS     R8,R1,R0
+        MOVS     R2,R5
+        MOV      R1,R8
+        MOVS     R0,R7
         BL       __aeabi_memcpy
-        SUBS     R2,R5,R7
-        LDR      R1,[R4, #+0]
-        ADDS     R6,R7,R6
-        MOVS     R0,R6
+        SUBS     R9,R6,R5
+        LDR      R10,[R4, #+0]
+        ADDS     R11,R5,R7
+        MOV      R2,R9
+        MOV      R1,R10
+        MOV      R0,R11
         BL       __aeabi_memcpy
         B.N      ??fifo_pop_3
 ??fifo_pop_2:
         LDR      R0,[R4, #+0]
         LDR      R1,[R4, #+8]
-        ADDS     R1,R1,R0
-        MOVS     R2,R5
-        MOVS     R0,R6
+        ADDS     R8,R1,R0
+        MOVS     R2,R6
+        MOV      R1,R8
+        MOVS     R0,R7
         BL       __aeabi_memcpy
 ??fifo_pop_3:
         LDR      R0,[R4, #+8]
-        ADDS     R0,R5,R0
+        ADDS     R0,R6,R0
         LDR      R1,[R4, #+12]
         UDIV     R2,R0,R1
         MLS      R0,R1,R2,R0
         STR      R0,[R4, #+8]
-        MOVS     R0,R5
-        POP      {R1,R4-R7,PC}    ;; return
+        MOVS     R0,R6
+        POP      {R1,R4-R11,PC}   ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 fifo_peek:
-        PUSH     {R3-R7,LR}
-        MOVS     R6,R0
-        MOVS     R5,R1
-        MOVS     R4,R2
-        MOVS     R0,R6
+        PUSH     {R3-R11,LR}
+        MOVS     R4,R0
+        MOVS     R7,R1
+        MOVS     R6,R2
+        MOVS     R0,R4
         BL       fifo_get_length
-        MOVS     R7,R0
-        CMP      R4,R7
+        MOVS     R5,R0
+        CMP      R6,R5
         BCC.N    ??fifo_peek_0
 ??fifo_peek_1:
-        MOVS     R4,R7
+        MOVS     R6,R5
 ??fifo_peek_0:
-        LDR      R0,[R6, #+12]
-        LDR      R1,[R6, #+8]
-        SUBS     R7,R0,R1
-        CMP      R7,R4
+        LDR      R0,[R4, #+12]
+        LDR      R1,[R4, #+8]
+        SUBS     R0,R0,R1
+        MOVS     R5,R0
+        CMP      R5,R6
         BCS.N    ??fifo_peek_2
-        LDR      R0,[R6, #+0]
-        LDR      R1,[R6, #+8]
-        ADDS     R1,R1,R0
-        MOVS     R2,R7
-        MOVS     R0,R5
+        LDR      R0,[R4, #+0]
+        LDR      R1,[R4, #+8]
+        ADDS     R8,R1,R0
+        MOVS     R2,R5
+        MOV      R1,R8
+        MOVS     R0,R7
         BL       __aeabi_memcpy
-        SUBS     R2,R4,R7
-        LDR      R1,[R6, #+0]
-        ADDS     R5,R7,R5
-        MOVS     R0,R5
+        SUBS     R9,R6,R5
+        LDR      R10,[R4, #+0]
+        ADDS     R11,R5,R7
+        MOV      R2,R9
+        MOV      R1,R10
+        MOV      R0,R11
         BL       __aeabi_memcpy
         B.N      ??fifo_peek_3
 ??fifo_peek_2:
-        LDR      R0,[R6, #+0]
-        LDR      R1,[R6, #+8]
-        ADDS     R1,R1,R0
-        MOVS     R2,R4
-        MOVS     R0,R5
+        LDR      R0,[R4, #+0]
+        LDR      R1,[R4, #+8]
+        ADDS     R8,R1,R0
+        MOVS     R2,R6
+        MOV      R1,R8
+        MOVS     R0,R7
         BL       __aeabi_memcpy
 ??fifo_peek_3:
-        MOVS     R0,R4
-        POP      {R1,R4-R7,PC}    ;; return
+        MOVS     R0,R6
+        POP      {R1,R4-R11,PC}   ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 fifo_clean:
-        MOVS     R1,#+0
-        STR      R1,[R0, #+8]
-        LDR      R1,[R0, #+8]
-        STR      R1,[R0, #+4]
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        STR      R0,[R1, #+8]
+        LDR      R0,[R1, #+8]
+        STR      R0,[R1, #+4]
         MOVS     R0,#+0
         BX       LR               ;; return
 
@@ -304,9 +319,9 @@ fifo_clean:
 
         END
 // 
-// 438 bytes in section .text
+// 504 bytes in section .text
 // 
-// 438 bytes of CODE memory
+// 504 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

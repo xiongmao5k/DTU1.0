@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:27
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:30
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\system_status.s
@@ -65,16 +65,17 @@ system_status_process:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 process_thread_system_status_process:
-        PUSH     {R3-R5,LR}
+        PUSH     {R4-R6,LR}
         MOVS     R4,R0
         MOVS     R5,R1
-        MOVS     R0,#+1
-        LDRH     R1,[R4, #+0]
-        CMP      R1,#+0
+        MOVS     R6,R2
+        MOVS     R1,#+1
+        LDRH     R0,[R4, #+0]
+        CMP      R0,#+0
         BEQ.N    ??process_thread_system_status_process_0
-        CMP      R1,#+24
+        CMP      R0,#+24
         BEQ.N    ??process_thread_system_status_process_1
-        CMP      R1,#+27
+        CMP      R0,#+27
         BEQ.N    ??process_thread_system_status_process_2
         B.N      ??process_thread_system_status_process_3
 ??process_thread_system_status_process_0:
@@ -90,12 +91,12 @@ process_thread_system_status_process:
         MOVS     R1,#+100
         LDR.N    R0,??DataTable2
         BL       etimer_set
-        MOVS     R0,#+0
-        MOVS     R1,#+24
-        STRH     R1,[R4, #+0]
+        MOVS     R1,#+0
+        MOVS     R0,#+24
+        STRH     R0,[R4, #+0]
 ??process_thread_system_status_process_1:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+0
+        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+        CMP      R1,#+0
         BEQ.N    ??process_thread_system_status_process_5
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+136
@@ -110,12 +111,12 @@ process_thread_system_status_process:
         MOV      R1,#+800
         LDR.N    R0,??DataTable2
         BL       etimer_set
-        MOVS     R0,#+0
-        MOVS     R1,#+27
-        STRH     R1,[R4, #+0]
+        MOVS     R1,#+0
+        MOVS     R0,#+27
+        STRH     R0,[R4, #+0]
 ??process_thread_system_status_process_2:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+0
+        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+        CMP      R1,#+0
         BEQ.N    ??process_thread_system_status_process_8
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+136
@@ -127,11 +128,12 @@ process_thread_system_status_process:
         B.N      ??process_thread_system_status_process_4
 ??process_thread_system_status_process_3:
         MOVS     R0,#+0
+        MOVS     R1,R0
         MOVS     R0,#+0
         STRH     R0,[R4, #+0]
         MOVS     R0,#+3
 ??process_thread_system_status_process_7:
-        POP      {R1,R4,R5,PC}    ;; return
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.bss`:DATA:REORDER:NOROOT(2)
 ??et:
@@ -146,14 +148,15 @@ system_monit_process:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 process_thread_system_monit_process:
-        PUSH     {R3-R5,LR}
+        PUSH     {R4-R6,LR}
         MOVS     R4,R0
         MOVS     R5,R1
-        MOVS     R0,#+1
-        LDRH     R1,[R4, #+0]
-        CMP      R1,#+0
+        MOVS     R6,R2
+        MOVS     R1,#+1
+        LDRH     R0,[R4, #+0]
+        CMP      R0,#+0
         BEQ.N    ??process_thread_system_monit_process_0
-        CMP      R1,#+48
+        CMP      R0,#+48
         BEQ.N    ??process_thread_system_monit_process_1
         B.N      ??process_thread_system_monit_process_2
 ??process_thread_system_monit_process_0:
@@ -178,12 +181,12 @@ process_thread_system_monit_process:
         LDR.N    R0,??DataTable2_3
         LDR      R0,[R0, #+0]
         BL       process_post
-        MOVS     R0,#+0
-        MOVS     R1,#+48
-        STRH     R1,[R4, #+0]
+        MOVS     R1,#+0
+        MOVS     R0,#+48
+        STRH     R0,[R4, #+0]
 ??process_thread_system_monit_process_1:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+0
+        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+        CMP      R1,#+0
         BEQ.N    ??process_thread_system_monit_process_5
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+133
@@ -202,11 +205,12 @@ process_thread_system_monit_process:
         B.N      ??process_thread_system_monit_process_4
 ??process_thread_system_monit_process_2:
         MOVS     R0,#+0
+        MOVS     R1,R0
         MOVS     R0,#+0
         STRH     R0,[R4, #+0]
         MOVS     R0,#+3
 ??process_thread_system_monit_process_7:
-        POP      {R1,R4,R5,PC}    ;; return
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.bss`:DATA:REORDER:NOROOT(2)
 ??tm:
@@ -288,9 +292,9 @@ system_status_init:
 //  24 bytes in section .bss
 //  32 bytes in section .data
 //  48 bytes in section .rodata
-// 300 bytes in section .text
+// 308 bytes in section .text
 // 
-// 300 bytes of CODE  memory
+// 308 bytes of CODE  memory
 //  48 bytes of CONST memory
 //  56 bytes of DATA  memory
 //

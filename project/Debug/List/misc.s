@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:21
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:22
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\misc.s
 //
@@ -47,18 +47,18 @@
         THUMB
 NVIC_PriorityGroupConfig:
         LDR.N    R1,??DataTable4  ;; 0x5fa0000
-        ORRS     R0,R1,R0
-        LDR.N    R1,??DataTable4_1  ;; 0xe000ed0c
-        STR      R0,[R1, #+0]
+        ORRS     R1,R1,R0
+        LDR.N    R2,??DataTable4_1  ;; 0xe000ed0c
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 NVIC_Init:
-        PUSH     {R4}
+        PUSH     {R4-R6}
+        MOVS     R4,#+0
         MOVS     R2,#+0
-        MOVS     R3,#+0
-        MOVS     R4,#+15
+        MOVS     R3,#+15
         LDRB     R1,[R0, #+3]
         CMP      R1,#+0
         BEQ.N    ??NVIC_Init_0
@@ -66,50 +66,53 @@ NVIC_Init:
         LDR      R1,[R1, #+0]
         ANDS     R1,R1,#0x700
         RSBS     R1,R1,#+1792
-        LSRS     R2,R1,#+8
-        RSBS     R3,R2,#+4
-        MOVS     R1,R4
+        LSRS     R1,R1,#+8
         MOVS     R4,R1
-        LSRS     R4,R4,R2
+        RSBS     R1,R4,#+4
+        MOVS     R2,R1
+        MOVS     R1,R3
+        MOVS     R3,R1
+        LSRS     R3,R3,R4
         LDRB     R1,[R0, #+1]
-        LSLS     R2,R1,R3
-        LDRB     R1,[R0, #+2]
-        ANDS     R1,R4,R1
-        ORRS     R2,R1,R2
-        LSLS     R2,R2,#+4
-        LDR.N    R1,??DataTable4_2  ;; 0xe000e400
-        LDRB     R3,[R0, #+0]
-        STRB     R2,[R3, R1]
-        MOVS     R1,#+1
-        LDRB     R2,[R0, #+0]
-        ANDS     R2,R2,#0x1F
         LSLS     R1,R1,R2
-        LDR.N    R2,??DataTable4_3  ;; 0xe000e100
-        LDRB     R0,[R0, #+0]
-        ASRS     R0,R0,#+5
-        STR      R1,[R2, R0, LSL #+2]
+        MOVS     R4,R1
+        LDRB     R1,[R0, #+2]
+        ANDS     R1,R3,R1
+        ORRS     R4,R1,R4
+        LSLS     R4,R4,#+4
+        LDR.N    R1,??DataTable4_2  ;; 0xe000e400
+        LDRB     R5,[R0, #+0]
+        STRB     R4,[R5, R1]
+        MOVS     R1,#+1
+        LDRB     R5,[R0, #+0]
+        ANDS     R5,R5,#0x1F
+        LSLS     R1,R1,R5
+        LDR.N    R5,??DataTable4_3  ;; 0xe000e100
+        LDRB     R6,[R0, #+0]
+        ASRS     R6,R6,#+5
+        STR      R1,[R5, R6, LSL #+2]
         B.N      ??NVIC_Init_1
 ??NVIC_Init_0:
         MOVS     R1,#+1
-        LDRB     R2,[R0, #+0]
-        ANDS     R2,R2,#0x1F
-        LSLS     R1,R1,R2
-        LDR.N    R2,??DataTable4_4  ;; 0xe000e180
-        LDRB     R0,[R0, #+0]
-        ASRS     R0,R0,#+5
-        STR      R1,[R2, R0, LSL #+2]
+        LDRB     R5,[R0, #+0]
+        ANDS     R5,R5,#0x1F
+        LSLS     R1,R1,R5
+        LDR.N    R5,??DataTable4_4  ;; 0xe000e180
+        LDRB     R6,[R0, #+0]
+        ASRS     R6,R6,#+5
+        STR      R1,[R5, R6, LSL #+2]
 ??NVIC_Init_1:
-        POP      {R4}
+        POP      {R4-R6}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 NVIC_SetVectorTable:
         LDR.N    R2,??DataTable4_5  ;; 0x1fffff80
-        ANDS     R1,R2,R1
-        ORRS     R0,R1,R0
-        LDR.N    R1,??DataTable4_6  ;; 0xe000ed08
-        STR      R0,[R1, #+0]
+        ANDS     R2,R2,R1
+        ORRS     R2,R2,R0
+        LDR.N    R3,??DataTable4_6  ;; 0xe000ed08
+        STR      R2,[R3, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -118,20 +121,20 @@ NVIC_SystemLPConfig:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??NVIC_SystemLPConfig_0
-        LDR.N    R1,??DataTable4_7  ;; 0xe000ed10
-        LDR      R1,[R1, #+0]
+        LDR.N    R2,??DataTable4_7  ;; 0xe000ed10
+        LDR      R2,[R2, #+0]
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        ORRS     R0,R0,R1
-        LDR.N    R1,??DataTable4_7  ;; 0xe000ed10
-        STR      R0,[R1, #+0]
+        ORRS     R2,R0,R2
+        LDR.N    R3,??DataTable4_7  ;; 0xe000ed10
+        STR      R2,[R3, #+0]
         B.N      ??NVIC_SystemLPConfig_1
 ??NVIC_SystemLPConfig_0:
-        LDR.N    R1,??DataTable4_7  ;; 0xe000ed10
-        LDR      R1,[R1, #+0]
+        LDR.N    R2,??DataTable4_7  ;; 0xe000ed10
+        LDR      R2,[R2, #+0]
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        BICS     R0,R1,R0
-        LDR.N    R1,??DataTable4_7  ;; 0xe000ed10
-        STR      R0,[R1, #+0]
+        BICS     R2,R2,R0
+        LDR.N    R3,??DataTable4_7  ;; 0xe000ed10
+        STR      R2,[R3, #+0]
 ??NVIC_SystemLPConfig_1:
         BX       LR               ;; return
 
@@ -140,18 +143,18 @@ NVIC_SystemLPConfig:
 SysTick_CLKSourceConfig:
         CMP      R0,#+4
         BNE.N    ??SysTick_CLKSourceConfig_0
-        LDR.N    R0,??DataTable4_8  ;; 0xe000e010
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0x4
         LDR.N    R1,??DataTable4_8  ;; 0xe000e010
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0x4
+        LDR.N    R2,??DataTable4_8  ;; 0xe000e010
+        STR      R1,[R2, #+0]
         B.N      ??SysTick_CLKSourceConfig_1
 ??SysTick_CLKSourceConfig_0:
-        LDR.N    R0,??DataTable4_8  ;; 0xe000e010
-        LDR      R0,[R0, #+0]
-        BICS     R0,R0,#0x4
         LDR.N    R1,??DataTable4_8  ;; 0xe000e010
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        BICS     R1,R1,#0x4
+        LDR.N    R2,??DataTable4_8  ;; 0xe000e010
+        STR      R1,[R2, #+0]
 ??SysTick_CLKSourceConfig_1:
         BX       LR               ;; return
 
@@ -222,9 +225,9 @@ SysTick_CLKSourceConfig:
 
         END
 // 
-// 230 bytes in section .text
+// 232 bytes in section .text
 // 
-// 230 bytes of CODE memory
+// 232 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

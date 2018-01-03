@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:24
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:26
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_bkp.s
@@ -91,27 +91,29 @@ BKP_ITConfig:
         THUMB
 BKP_RTCOutputConfig:
         MOVS     R1,#+0
-        LDR.N    R1,??DataTable10_3  ;; 0x40006c2c
-        LDRH     R1,[R1, #+0]
+        LDR.N    R2,??DataTable10_3  ;; 0x40006c2c
+        LDRH     R2,[R2, #+0]
+        MOVS     R1,R2
         MOVW     R2,#+64639
         ANDS     R1,R2,R1
         ORRS     R1,R0,R1
-        LDR.N    R0,??DataTable10_3  ;; 0x40006c2c
-        STRH     R1,[R0, #+0]
+        LDR.N    R2,??DataTable10_3  ;; 0x40006c2c
+        STRH     R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 BKP_SetRTCCalibrationValue:
         MOVS     R1,#+0
-        LDR.N    R1,??DataTable10_3  ;; 0x40006c2c
-        LDRH     R1,[R1, #+0]
+        LDR.N    R2,??DataTable10_3  ;; 0x40006c2c
+        LDRH     R2,[R2, #+0]
+        MOVS     R1,R2
         MOVW     R2,#+65408
         ANDS     R1,R2,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         ORRS     R1,R0,R1
-        LDR.N    R0,??DataTable10_3  ;; 0x40006c2c
-        STRH     R1,[R0, #+0]
+        LDR.N    R2,??DataTable10_3  ;; 0x40006c2c
+        STRH     R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -124,11 +126,11 @@ BKP_WriteBackupRegister:
         STR      R2,[SP, #+0]
         LDR      R2,[SP, #+0]
         UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
-        ADDS     R0,R0,R2
-        STR      R0,[SP, #+0]
+        ADDS     R2,R0,R2
+        STR      R2,[SP, #+0]
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        LDR      R0,[SP, #+0]
-        STR      R1,[R0, #+0]
+        LDR      R2,[SP, #+0]
+        STR      R1,[R2, #+0]
         ADD      SP,SP,#+4
         BX       LR               ;; return
 
@@ -136,13 +138,14 @@ BKP_WriteBackupRegister:
         THUMB
 BKP_ReadBackupRegister:
         SUB      SP,SP,#+4
-        MOVS     R1,#+0
-        STR      R1,[SP, #+0]
-        LDR.N    R1,??DataTable10_4  ;; 0x40006c00
-        STR      R1,[SP, #+0]
-        LDR      R1,[SP, #+0]
-        UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
-        ADDS     R0,R0,R1
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        STR      R0,[SP, #+0]
+        LDR.N    R0,??DataTable10_4  ;; 0x40006c00
+        STR      R0,[SP, #+0]
+        LDR      R0,[SP, #+0]
+        UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
+        ADDS     R0,R1,R0
         STR      R0,[SP, #+0]
         LDR      R0,[SP, #+0]
         LDRH     R0,[R0, #+0]
@@ -246,9 +249,9 @@ BKP_ClearITPendingBit:
 
         END
 // 
-// 212 bytes in section .text
+// 218 bytes in section .text
 // 
-// 212 bytes of CODE memory
+// 218 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

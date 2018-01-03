@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:20
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:21
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\deviceid.s
@@ -45,11 +45,13 @@
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 deviceid_read:
-        PUSH     {R4,LR}
+        PUSH     {R4-R6,LR}
         SUB      SP,SP,#+256
         ADD      R4,SP,#+0
-        MOV      R1,#+256
-        MOVS     R2,#+0
+        MOV      R5,#+256
+        MOVS     R6,#+0
+        MOVS     R2,R6
+        MOVS     R1,R5
         MOVS     R0,R4
         BL       __aeabi_memset
         MOVS     R0,R4
@@ -62,7 +64,7 @@ deviceid_read:
         MOVS     R0,#+0
 ??deviceid_read_1:
         ADD      SP,SP,#+256
-        POP      {R4,PC}          ;; return
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -77,9 +79,9 @@ deviceid_read:
 
         END
 // 
-// 40 bytes in section .text
+// 44 bytes in section .text
 // 
-// 40 bytes of CODE memory
+// 44 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

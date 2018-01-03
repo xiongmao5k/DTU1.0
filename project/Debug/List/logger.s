@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:21
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       25/Dec/2017  17:13:04
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\logger.s
@@ -60,63 +60,66 @@
         THUMB
 log_out:
         PUSH     {R1-R3}
-        PUSH     {R3-R6,LR}
+        PUSH     {R3-R8,LR}
         MOVS     R4,R0
         MOVS     R0,R4
         BL       strlen
         ADDS     R0,R0,#+64
         BL       __iar_vla_alloc2
+        MOVS     R6,R0
+        MOVS     R0,#+0
+        MOVS     R7,R0
+        ADD      R0,SP,#+28
         MOVS     R5,R0
-        MOVS     R6,#+0
-        ADD      R2,SP,#+20
+        MOVS     R2,R5
         MOVS     R1,R4
-        MOVS     R0,R5
+        MOVS     R0,R6
         BL       sprintf
-        MOVS     R4,R0
+        MOV      R8,R0
         MOVS     R3,#+0
         MOVS     R2,#+20
         LDR.N    R1,??DataTable1
         LDR.N    R0,??DataTable1_1
         BL       dl_SPIFFS_open
-        MOVS     R6,R0
-        SXTH     R6,R6            ;; SignExt  R6,R6,#+16,#+16
-        CMP      R6,#+0
+        MOVS     R7,R0
+        SXTH     R7,R7            ;; SignExt  R7,R7,#+16,#+16
+        CMP      R7,#+0
         BPL.N    ??log_out_0
-        MOVS     R0,R5
+        MOVS     R0,R6
         BL       __iar_vla_dealloc2
         B.N      ??log_out_1
 ??log_out_0:
         MOVS     R3,#+2
         MOVS     R2,#+0
-        SXTH     R6,R6            ;; SignExt  R6,R6,#+16,#+16
-        MOVS     R1,R6
+        SXTH     R7,R7            ;; SignExt  R7,R7,#+16,#+16
+        MOVS     R1,R7
         LDR.N    R0,??DataTable1_1
         BL       dl_SPIFFS_lseek
-        MOVS     R3,R4
-        MOVS     R2,R5
-        SXTH     R6,R6            ;; SignExt  R6,R6,#+16,#+16
-        MOVS     R1,R6
+        MOV      R3,R8
+        MOVS     R2,R6
+        SXTH     R7,R7            ;; SignExt  R7,R7,#+16,#+16
+        MOVS     R1,R7
         LDR.N    R0,??DataTable1_1
         BL       dl_SPIFFS_write
-        CMP      R0,R4
+        CMP      R0,R8
         BEQ.N    ??log_out_2
-        SXTH     R6,R6            ;; SignExt  R6,R6,#+16,#+16
-        MOVS     R1,R6
+        SXTH     R7,R7            ;; SignExt  R7,R7,#+16,#+16
+        MOVS     R1,R7
         LDR.N    R0,??DataTable1_1
         BL       dl_SPIFFS_close
-        MOVS     R0,R5
+        MOVS     R0,R6
         BL       __iar_vla_dealloc2
         B.N      ??log_out_1
 ??log_out_2:
-        SXTH     R6,R6            ;; SignExt  R6,R6,#+16,#+16
-        MOVS     R1,R6
+        SXTH     R7,R7            ;; SignExt  R7,R7,#+16,#+16
+        MOVS     R1,R7
         LDR.N    R0,??DataTable1_1
         BL       dl_SPIFFS_close
         BL       log_print
-        MOVS     R0,R5
+        MOVS     R0,R6
         BL       __iar_vla_dealloc2
 ??log_out_1:
-        POP      {R0,R4-R6}
+        POP      {R0,R4-R8}
         LDR      PC,[SP], #+16    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -145,7 +148,7 @@ log_print:
         LDR.N    R0,??DataTable1_1
         BL       dl_SPIFFS_read
         MOVS     R5,R0
-        CMP      R5,#+1
+        CMP      R0,#+1
         BLT.N    ??log_print_2
         MOVS     R2,R5
         ADD      R1,SP,#+0
@@ -197,9 +200,9 @@ log_print:
         END
 // 
 //  12 bytes in section .rodata
-// 242 bytes in section .text
+// 252 bytes in section .text
 // 
-// 242 bytes of CODE  memory
+// 252 bytes of CODE  memory
 //  12 bytes of CONST memory
 //
 //Errors: none

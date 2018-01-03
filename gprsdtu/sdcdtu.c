@@ -25,7 +25,7 @@
 #define PRINTF(...)
 #endif
 
-#define SDCDTU_LOG_ENABLE 1
+#define SDCDTU_LOG_ENABLE 0
 
 FRAMEBUFF(gprs_send_buffer, 512);
 

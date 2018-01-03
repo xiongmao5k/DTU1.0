@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:27
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:30
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\usart.s
 //
@@ -78,15 +78,16 @@ usart2_rx_data_buffer:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 usart_init:
-        PUSH     {R4,R5,LR}
-        SUB      SP,SP,#+28
+        PUSH     {R4-R6,LR}
+        SUB      SP,SP,#+24
         MOVS     R4,R0
         MOVS     R5,R1
         MOV      R0,#+1792
         BL       NVIC_PriorityGroupConfig
-        CMP      R4,#+1
+        MOVS     R0,R4
+        CMP      R0,#+1
         BEQ.N    ??usart_init_0
-        CMP      R4,#+2
+        CMP      R0,#+2
         BEQ.N    ??usart_init_1
         B.N      ??usart_init_2
 ??usart_init_0:
@@ -113,7 +114,8 @@ usart_init:
         BL       GPIO_Init
         MOVS     R0,#+37
         STRB     R0,[SP, #+4]
-        LDR.N    R4,??DataTable5_2  ;; 0x40013800
+        LDR.N    R0,??DataTable5_2  ;; 0x40013800
+        MOVS     R6,R0
         B.N      ??usart_init_3
 ??usart_init_1:
         LDR.N    R0,??DataTable5_3
@@ -139,10 +141,12 @@ usart_init:
         BL       GPIO_Init
         MOVS     R0,#+38
         STRB     R0,[SP, #+4]
-        LDR.N    R4,??DataTable5_4  ;; 0x40004400
+        LDR.N    R0,??DataTable5_4  ;; 0x40004400
+        MOVS     R6,R0
         B.N      ??usart_init_3
 ??usart_init_2:
-        LDR.N    R4,??DataTable5_2  ;; 0x40013800
+        LDR.N    R0,??DataTable5_2  ;; 0x40013800
+        MOVS     R6,R0
 ??usart_init_3:
         MOVS     R0,#+0
         STRB     R0,[SP, #+5]
@@ -153,30 +157,34 @@ usart_init:
         ADD      R0,SP,#+8
         BL       USART_StructInit
         ADD      R1,SP,#+8
-        MOVS     R0,R4
+        MOVS     R0,R6
         BL       USART_Init
         MOVS     R2,#+1
         MOVW     R1,#+1317
-        MOVS     R0,R4
+        MOVS     R0,R6
         BL       USART_ITConfig
         MOVS     R1,#+1
-        MOVS     R0,R4
+        MOVS     R0,R6
         BL       USART_Cmd
-        ADD      SP,SP,#+28
-        POP      {R4,R5,PC}       ;; return
+        ADD      SP,SP,#+24
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 usart_configure:
-        PUSH     {R4-R7,LR}
+        PUSH     {R4-R11,LR}
         SUB      SP,SP,#+20
         MOVS     R4,R0
         MOVS     R5,R1
         MOVS     R6,R2
         MOVS     R7,R3
+        MOV      R8,R4
+        MOV      R9,R5
+        MOV      R10,R6
+        MOV      R11,R7
         ADD      R0,SP,#+0
         BL       USART_StructInit
-        CMP      R6,#+8
+        CMP      R10,#+8
         BNE.N    ??usart_configure_0
         MOVS     R0,#+0
         STRH     R0,[SP, #+4]
@@ -185,7 +193,7 @@ usart_configure:
         MOV      R0,#+4096
         STRH     R0,[SP, #+4]
 ??usart_configure_1:
-        CMP      R7,#+1
+        CMP      R11,#+1
         BNE.N    ??usart_configure_2
         MOVS     R0,#+0
         STRH     R0,[SP, #+6]
@@ -194,8 +202,8 @@ usart_configure:
         MOV      R0,#+8192
         STRH     R0,[SP, #+6]
 ??usart_configure_3:
-        STR      R5,[SP, #+0]
-        CMP      R4,#+1
+        STR      R9,[SP, #+0]
+        CMP      R8,#+1
         BNE.N    ??usart_configure_4
         ADD      R1,SP,#+0
         LDR.N    R0,??DataTable5_2  ;; 0x40013800
@@ -213,96 +221,107 @@ usart_configure:
         BL       USART_Cmd
 ??usart_configure_5:
         ADD      SP,SP,#+20
-        POP      {R4-R7,PC}       ;; return
+        POP      {R4-R11,PC}      ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 usart_write8:
-        PUSH     {R3-R5,LR}
-        MOVS     R4,R1
-        MOVS     R5,#+0
+        PUSH     {R4-R6,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        MOVS     R6,#+0
+        MOVS     R0,R4
         CMP      R0,#+1
         BEQ.N    ??usart_write8_0
         CMP      R0,#+2
         BEQ.N    ??usart_write8_1
         B.N      ??usart_write8_2
 ??usart_write8_0:
-        LDR.N    R5,??DataTable5_2  ;; 0x40013800
+        LDR.N    R0,??DataTable5_2  ;; 0x40013800
+        MOVS     R6,R0
         B.N      ??usart_write8_3
 ??usart_write8_1:
-        LDR.N    R5,??DataTable5_4  ;; 0x40004400
+        LDR.N    R0,??DataTable5_4  ;; 0x40004400
+        MOVS     R6,R0
         B.N      ??usart_write8_3
 ??usart_write8_2:
-        LDR.N    R5,??DataTable5_2  ;; 0x40013800
+        LDR.N    R0,??DataTable5_2  ;; 0x40013800
+        MOVS     R6,R0
 ??usart_write8_3:
         MOVS     R1,#+128
-        MOVS     R0,R5
+        MOVS     R0,R6
         BL       USART_GetFlagStatus
         CMP      R0,#+0
         BEQ.N    ??usart_write8_3
-        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
-        MOVS     R1,R4
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        MOVS     R1,R5
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        MOVS     R0,R5
+        MOVS     R0,R6
         BL       USART_SendData
 ??usart_write8_4:
         MOVS     R1,#+64
-        MOVS     R0,R5
+        MOVS     R0,R6
         BL       USART_GetFlagStatus
         CMP      R0,#+0
         BEQ.N    ??usart_write8_4
-        POP      {R0,R4,R5,PC}    ;; return
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 usart_write:
-        PUSH     {R3-R7,LR}
-        MOVS     R4,R1
-        MOVS     R5,R2
-        MOVS     R6,R5
+        PUSH     {R3-R9,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        MOVS     R6,R2
+        MOVS     R7,R5
+        MOV      R8,R6
+        MOVS     R0,R4
         CMP      R0,#+1
         BEQ.N    ??usart_write_0
         CMP      R0,#+2
         BEQ.N    ??usart_write_1
         B.N      ??usart_write_2
 ??usart_write_0:
-        LDR.N    R7,??DataTable5_2  ;; 0x40013800
+        LDR.N    R0,??DataTable5_2  ;; 0x40013800
+        MOV      R9,R0
         B.N      ??usart_write_3
 ??usart_write_1:
-        LDR.N    R7,??DataTable5_4  ;; 0x40004400
+        LDR.N    R0,??DataTable5_4  ;; 0x40004400
+        MOV      R9,R0
         B.N      ??usart_write_3
 ??usart_write_2:
-        LDR.N    R7,??DataTable5_2  ;; 0x40013800
+        LDR.N    R0,??DataTable5_2  ;; 0x40013800
+        MOV      R9,R0
 ??usart_write_3:
-        MOVS     R0,R6
-        SUBS     R6,R0,#+1
+        MOV      R0,R8
+        SUBS     R8,R0,#+1
         CMP      R0,#+0
         BEQ.N    ??usart_write_4
-        LDRB     R1,[R4, #+0]
+        LDRB     R1,[R7, #+0]
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        MOVS     R0,R7
+        MOV      R0,R9
         BL       USART_SendData
-        ADDS     R4,R4,#+1
+        ADDS     R7,R7,#+1
 ??usart_write_5:
         MOVS     R1,#+128
-        MOVS     R0,R7
+        MOV      R0,R9
         BL       USART_GetFlagStatus
         CMP      R0,#+0
         BNE.N    ??usart_write_3
         B.N      ??usart_write_5
 ??usart_write_4:
         MOVS     R1,#+64
-        MOVS     R0,R7
+        MOV      R0,R9
         BL       USART_GetFlagStatus
         CMP      R0,#+0
         BEQ.N    ??usart_write_4
-        MOVS     R0,R5
-        POP      {R1,R4-R7,PC}    ;; return
+        MOVS     R0,R6
+        POP      {R1,R4-R9,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 USART1_IRQHandler:
-        PUSH     {R7,LR}
+        PUSH     {R4,LR}
         MOVS     R1,#+32
         LDR.N    R0,??DataTable5_2  ;; 0x40013800
         BL       USART_GetFlagStatus
@@ -310,10 +329,12 @@ USART1_IRQHandler:
         BNE.N    ??USART1_IRQHandler_0
         LDR.N    R0,??DataTable5_2  ;; 0x40013800
         BL       USART_ReceiveData
-        LDR.N    R1,??DataTable5
-        LDR      R1,[R1, #+0]
-        CMP      R1,#+0
+        MOVS     R4,R0
+        LDR.N    R0,??DataTable5
+        LDR      R0,[R0, #+0]
+        CMP      R0,#+0
         BEQ.N    ??USART1_IRQHandler_0
+        MOVS     R0,R4
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         LDR.N    R1,??DataTable5
         LDR      R1,[R1, #+0]
@@ -327,12 +348,12 @@ USART1_IRQHandler:
         LDR.N    R0,??DataTable5_5
         BL       printf
 ??USART1_IRQHandler_1:
-        POP      {R0,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 USART2_IRQHandler:
-        PUSH     {R7,LR}
+        PUSH     {R4,LR}
         LDR.N    R0,??DataTable5_4  ;; 0x40004400
         LDRH     R0,[R0, #+0]
         LSLS     R0,R0,#+26
@@ -340,16 +361,18 @@ USART2_IRQHandler:
         LDR.N    R0,??DataTable5_6  ;; 0x40004404
         LDRH     R0,[R0, #+0]
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        LDR.N    R1,??DataTable5_3
-        LDR      R1,[R1, #+0]
-        CMP      R1,#+0
+        MOVS     R4,R0
+        LDR.N    R0,??DataTable5_3
+        LDR      R0,[R0, #+0]
+        CMP      R0,#+0
         BEQ.N    ??USART2_IRQHandler_0
+        MOVS     R0,R4
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         LDR.N    R1,??DataTable5_3
         LDR      R1,[R1, #+0]
         BLX      R1
 ??USART2_IRQHandler_0:
-        POP      {R0,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -414,9 +437,9 @@ USART2_IRQHandler:
 // 
 // 528 bytes in section .bss
 //  12 bytes in section .rodata
-// 590 bytes in section .text
+// 654 bytes in section .text
 // 
-// 590 bytes of CODE  memory
+// 654 bytes of CODE  memory
 //  12 bytes of CONST memory
 // 528 bytes of DATA  memory
 //

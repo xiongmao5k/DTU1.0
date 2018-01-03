@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:24
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:25
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\spiflash.s
@@ -57,9 +57,10 @@
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 SPI_FLASH_ChipSelect:
-        PUSH     {R7,LR}
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+0
+        PUSH     {R4,LR}
+        MOVS     R4,R0
+        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+        CMP      R4,#+0
         BNE.N    ??SPI_FLASH_ChipSelect_0
         MOV      R1,#+256
         LDR.N    R0,??DataTable2  ;; 0x40010800
@@ -70,7 +71,7 @@ SPI_FLASH_ChipSelect:
         LDR.N    R0,??DataTable2  ;; 0x40010800
         BL       GPIO_SetBits
 ??SPI_FLASH_ChipSelect_1:
-        POP      {R0,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -161,25 +162,27 @@ SPI_FLASH_WriteDisable:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 SPI_FLASH_SendCommandAndAddress:
-        PUSH     {R3-R5,LR}
-        MOVS     R4,R1
-        MOVS     R5,#+3
+        PUSH     {R4-R6,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        MOVS     R6,#+3
+        MOVS     R0,R4
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        BL       SPI_FLASH_SwapByte
+??SPI_FLASH_SendCommandAndAddress_0:
+        MOVS     R0,R6
+        SUBS     R6,R0,#+1
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        CMP      R0,#+0
+        BEQ.N    ??SPI_FLASH_SendCommandAndAddress_1
+        LSLS     R1,R6,#+3
+        MOVS     R0,R5
+        LSRS     R0,R0,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BL       SPI_FLASH_SwapByte
         B.N      ??SPI_FLASH_SendCommandAndAddress_0
 ??SPI_FLASH_SendCommandAndAddress_1:
-        LSLS     R1,R5,#+3
-        MOVS     R0,R4
-        LSRS     R0,R0,R1
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        BL       SPI_FLASH_SwapByte
-??SPI_FLASH_SendCommandAndAddress_0:
-        MOVS     R0,R5
-        SUBS     R5,R0,#+1
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+0
-        BNE.N    ??SPI_FLASH_SendCommandAndAddress_1
-        POP      {R0,R4,R5,PC}    ;; return
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -257,10 +260,11 @@ SPI_FLASH_SectorErase:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 SPI_FLASH_Write:
-        PUSH     {R4-R6,LR}
+        PUSH     {R3-R7,LR}
         MOVS     R4,R0
         MOVS     R5,R1
         MOVS     R6,R2
+        MOVS     R7,R5
         BL       SPI_FLASH_WriteEnable
         BL       SPI_FLASH_WaitForBusy
         MOVS     R0,#+0
@@ -270,17 +274,21 @@ SPI_FLASH_Write:
         BL       SPI_FLASH_SendCommandAndAddress
         CMP      R6,#+1
         BNE.N    ??SPI_FLASH_Write_0
-        LDRB     R0,[R5, #+0]
+        LDRB     R0,[R7, #+0]
         BL       SPI_FLASH_SwapByte
-        ADDS     R5,R5,#+1
+        ADDS     R7,R7,#+1
         MOVS     R0,#+1
         BL       SPI_FLASH_ChipSelect
         BL       SPI_FLASH_WaitForBusy
         B.N      ??SPI_FLASH_Write_1
-??SPI_FLASH_Write_2:
-        LDRB     R0,[R5, #+0]
+??SPI_FLASH_Write_0:
+        MOVS     R0,R6
+        SUBS     R6,R0,#+1
+        CMP      R0,#+0
+        BEQ.N    ??SPI_FLASH_Write_1
+        LDRB     R0,[R7, #+0]
         BL       SPI_FLASH_SwapByte
-        ADDS     R5,R5,#+1
+        ADDS     R7,R7,#+1
         MOVS     R0,#+1
         BL       SPI_FLASH_ChipSelect
         BL       SPI_FLASH_WaitForBusy
@@ -290,41 +298,38 @@ SPI_FLASH_Write:
         BL       SPI_FLASH_ChipSelect
         MOVS     R0,#+175
         BL       SPI_FLASH_SwapByte
-??SPI_FLASH_Write_0:
-        MOVS     R0,R6
-        SUBS     R6,R0,#+1
-        CMP      R0,#+0
-        BNE.N    ??SPI_FLASH_Write_2
+        B.N      ??SPI_FLASH_Write_0
 ??SPI_FLASH_Write_1:
         BL       SPI_FLASH_WriteDisable
-        POP      {R4-R6,PC}       ;; return
+        POP      {R0,R4-R7,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 SPI_FLASH_Read:
-        PUSH     {R4-R6,LR}
+        PUSH     {R3-R7,LR}
         MOVS     R4,R0
         MOVS     R5,R1
         MOVS     R6,R2
+        MOVS     R7,R5
         MOVS     R0,#+0
         BL       SPI_FLASH_ChipSelect
         MOVS     R1,R4
         MOVS     R0,#+3
         BL       SPI_FLASH_SendCommandAndAddress
-        B.N      ??SPI_FLASH_Read_0
-??SPI_FLASH_Read_1:
-        MOVS     R0,#+0
-        BL       SPI_FLASH_SwapByte
-        STRB     R0,[R5, #+0]
-        ADDS     R5,R5,#+1
 ??SPI_FLASH_Read_0:
         MOVS     R0,R6
         SUBS     R6,R0,#+1
         CMP      R0,#+0
-        BNE.N    ??SPI_FLASH_Read_1
+        BEQ.N    ??SPI_FLASH_Read_1
+        MOVS     R0,#+0
+        BL       SPI_FLASH_SwapByte
+        STRB     R0,[R7, #+0]
+        ADDS     R7,R7,#+1
+        B.N      ??SPI_FLASH_Read_0
+??SPI_FLASH_Read_1:
         MOVS     R0,#+1
         BL       SPI_FLASH_ChipSelect
-        POP      {R4-R6,PC}       ;; return
+        POP      {R0,R4-R7,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -418,9 +423,9 @@ SPI_FLASH_Init:
 
         END
 // 
-// 754 bytes in section .text
+// 766 bytes in section .text
 // 
-// 754 bytes of CODE memory
+// 766 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

@@ -23,6 +23,8 @@
 #include "configure.h"
 #include "logger.h"
 
+static void spiffs_test(void);
+
 static void senifs_init(void)
 {
     senif_init(SENIF1);
@@ -40,6 +42,7 @@ int main()
     gpio_init();    
     crc_init();
     SPI_FLASH_Init();
+    //SPI_FLASH_ChipErase();
     dl_fs_init();
     senifs_init();
 	rtc_init();
@@ -67,4 +70,16 @@ size_t __write(int handle, const unsigned char *buffer, size_t size)
 {
     // usart_write(1, (void *)buffer, size);
     return size;
+}
+
+
+static void spiffs_test(void) {
+    spiffs_file fd;
+    static uint8_t ucBigBuffer[5 * 1024];
+    uint32_t ulCnt = sizeof(ucBigBuffer);
+    
+    uint8_t ucBuffer[32];
+    memset(ucBuffer, 0x00, sizeof(ucBuffer));
+    backup_push("helloworlddddd", 20);
+    backup_pop(ucBuffer, 20);
 }

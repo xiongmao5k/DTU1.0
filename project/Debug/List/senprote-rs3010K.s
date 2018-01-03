@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  17:18:24
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:23
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\senprote-rs3010K.s
@@ -104,31 +104,35 @@ table_crc_lo:
         THUMB
 // static __interwork __softfp uint16_t crc16(uint8_t *, uint16_t)
 crc16:
-        PUSH     {R4}
-        MOVS     R2,#+255
+        PUSH     {R4,R5}
+        MOVS     R2,R0
+        MOVS     R0,#+255
         MOVS     R3,#+255
+??crc16_0:
+        MOVS     R5,R1
+        SUBS     R1,R5,#+1
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
+        CMP      R5,#+0
+        BEQ.N    ??crc16_1
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        LDRB     R5,[R2, #+0]
+        EORS     R5,R5,R0
+        MOVS     R4,R5
+        ADDS     R2,R2,#+1
+        LDR.N    R5,??DataTable2
+        LDRB     R5,[R4, R5]
+        EORS     R5,R5,R3
+        MOVS     R0,R5
+        LDR.N    R5,??DataTable2_1
+        LDRB     R5,[R4, R5]
+        MOVS     R3,R5
         B.N      ??crc16_0
 ??crc16_1:
-        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
-        LDRB     R4,[R0, #+0]
-        EORS     R4,R4,R2
-        ADDS     R0,R0,#+1
-        LDR.N    R2,??DataTable2
-        LDRB     R2,[R4, R2]
-        EORS     R2,R2,R3
-        LDR.N    R3,??DataTable2_1
-        LDRB     R3,[R4, R3]
-??crc16_0:
-        MOVS     R4,R1
-        SUBS     R1,R4,#+1
-        UXTH     R4,R4            ;; ZeroExt  R4,R4,#+16,#+16
-        CMP      R4,#+0
-        BNE.N    ??crc16_1
         UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
-        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
-        ORRS     R0,R2,R3, LSL #+8
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        ORRS     R0,R0,R3, LSL #+8
         UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
-        POP      {R4}
+        POP      {R4,R5}
         BX       LR               ;; return
 
         SECTION `.bss`:DATA:REORDER:NOROOT(0)
@@ -138,14 +142,14 @@ address_backup:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 rs3010k_prepare:
-        PUSH     {R4,LR}
-        SUB      SP,SP,#+16
-        MOVS     R4,R1
+        PUSH     {R1-R5,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
         MOV      R2,#+512
-        MOVS     R1,R0
+        MOVS     R1,R4
         ADD      R0,SP,#+0
         BL       framebuff_init
-        MOVS     R1,R4
+        MOVS     R1,R5
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         ADD      R0,SP,#+0
         BL       framebuff_push_u8
@@ -172,121 +176,151 @@ rs3010k_prepare:
         ADD      R0,SP,#+0
         BL       framebuff_push_u16
         LDR.N    R0,??DataTable2_2
-        STRB     R4,[R0, #+0]
+        STRB     R5,[R0, #+0]
         ADD      R0,SP,#+0
         BL       framebuff_length
-        ADD      SP,SP,#+16
-        POP      {R4,PC}          ;; return
+        POP      {R1-R5,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 rs3010k_parse:
-        PUSH     {R0,R4-R11,LR}
-        SUB      SP,SP,#+32
-        MOVS     R4,R1
-        CMP      R3,#+13
+        PUSH     {R4-R11,LR}
+        SUB      SP,SP,#+52
+        MOVS     R4,R0
+        MOVS     R5,R1
+        MOVS     R6,R2
+        MOVS     R7,R3
+        CMP      R7,#+13
         BCS.N    ??rs3010k_parse_0
         MOVS     R0,#+0
         B.N      ??rs3010k_parse_1
 ??rs3010k_parse_0:
-        LDRB     R11,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R0,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R1,[R2, #+0]
-        ADDS     R2,R2,#+1
-        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        CMP      R1,#+8
+        MOV      R9,R6
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+25]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+24]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+23]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[SP, #+23]
+        CMP      R0,#+8
         BNE.N    ??rs3010k_parse_2
-        LDR.N    R3,??DataTable2_2
-        LDRB     R3,[R3, #+0]
-        UXTB     R11,R11          ;; ZeroExt  R11,R11,#+24,#+24
-        CMP      R11,R3
+        LDRB     R0,[SP, #+25]
+        LDR.N    R1,??DataTable2_2
+        LDRB     R1,[R1, #+0]
+        CMP      R0,R1
         BNE.N    ??rs3010k_parse_2
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        LDRB     R0,[SP, #+24]
         CMP      R0,#+3
         BEQ.N    ??rs3010k_parse_3
 ??rs3010k_parse_2:
         MOVS     R0,#+1
         B.N      ??rs3010k_parse_1
 ??rs3010k_parse_3:
-        LDRB     R3,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R6,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R7,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R12,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     LR,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R8,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R9,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R10,[R2, #+0]
-        ADDS     R2,R2,#+1
-        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
-        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
-        LSLS     R5,R6,#+16
-        ORRS     R5,R5,R3, LSL #+24
-        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
-        ORRS     R5,R5,R7, LSL #+8
-        UXTB     R12,R12          ;; ZeroExt  R12,R12,#+24,#+24
-        ORRS     R5,R12,R5
-        STR      R5,[SP, #+28]
-        UXTB     LR,LR            ;; ZeroExt  LR,LR,#+24,#+24
-        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
-        LSLS     R5,R8,#+16
-        ORRS     R5,R5,LR, LSL #+24
-        UXTB     R9,R9            ;; ZeroExt  R9,R9,#+24,#+24
-        ORRS     R5,R5,R9, LSL #+8
-        UXTB     R10,R10          ;; ZeroExt  R10,R10,#+24,#+24
-        ORRS     R5,R10,R5
-        STRB     R11,[SP, #+16]
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+22]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+21]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+20]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+19]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+18]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
         STRB     R0,[SP, #+17]
-        STRB     R1,[SP, #+18]
-        STRB     R3,[SP, #+19]
-        STRB     R6,[SP, #+20]
-        STRB     R7,[SP, #+21]
-        STRB     R12,[SP, #+22]
-        STRB     LR,[SP, #+23]
-        STRB     R8,[SP, #+24]
-        STRB     R9,[SP, #+25]
-        STRB     R10,[SP, #+26]
-        LDRB     R0,[R2, #+0]
-        ADDS     R2,R2,#+1
-        LDRB     R1,[R2, #+0]
-        ADDS     R2,R2,#+1
-        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        ORRS     R6,R0,R1, LSL #+8
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+16]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        MOV      R11,R0
+        ADDS     R9,R9,#+1
+        LDRB     R0,[SP, #+22]
+        LDRB     R1,[SP, #+21]
+        LSLS     R1,R1,#+16
+        ORRS     R0,R1,R0, LSL #+24
+        LDRB     R1,[SP, #+20]
+        ORRS     R0,R0,R1, LSL #+8
+        LDRB     R1,[SP, #+19]
+        ORRS     R0,R1,R0
+        MOV      R8,R0
+        STR      R8,[SP, #+48]
+        LDRB     R0,[SP, #+18]
+        LDRB     R1,[SP, #+17]
+        LSLS     R1,R1,#+16
+        ORRS     R0,R1,R0, LSL #+24
+        LDRB     R1,[SP, #+16]
+        ORRS     R0,R0,R1, LSL #+8
+        UXTB     R11,R11          ;; ZeroExt  R11,R11,#+24,#+24
+        ORRS     R0,R11,R0
+        MOV      R8,R0
+        STR      R8,[SP, #+44]
+        LDRB     R0,[SP, #+25]
+        STRB     R0,[SP, #+32]
+        LDRB     R0,[SP, #+24]
+        STRB     R0,[SP, #+33]
+        LDRB     R0,[SP, #+23]
+        STRB     R0,[SP, #+34]
+        LDRB     R0,[SP, #+22]
+        STRB     R0,[SP, #+35]
+        LDRB     R0,[SP, #+21]
+        STRB     R0,[SP, #+36]
+        LDRB     R0,[SP, #+20]
+        STRB     R0,[SP, #+37]
+        LDRB     R0,[SP, #+19]
+        STRB     R0,[SP, #+38]
+        LDRB     R0,[SP, #+18]
+        STRB     R0,[SP, #+39]
+        LDRB     R0,[SP, #+17]
+        STRB     R0,[SP, #+40]
+        LDRB     R0,[SP, #+16]
+        STRB     R0,[SP, #+41]
+        STRB     R11,[SP, #+42]
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+27]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[R9, #+0]
+        STRB     R0,[SP, #+26]
+        ADDS     R9,R9,#+1
+        LDRB     R0,[SP, #+26]
+        LDRB     R1,[SP, #+27]
+        ORRS     R0,R1,R0, LSL #+8
+        STRH     R0,[SP, #+28]
+        LDRH     R10,[SP, #+28]
         MOVS     R1,#+11
-        ADD      R0,SP,#+16
+        ADD      R0,SP,#+32
         BL       crc16
-        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
-        CMP      R6,R0
+        CMP      R10,R0
         BEQ.N    ??rs3010k_parse_4
         MOVS     R0,#+1
         B.N      ??rs3010k_parse_1
 ??rs3010k_parse_4:
         BL       rtc_get_time
-        MOVS     R6,R0
-        MOVS     R0,R5
+        MOV      R10,R0
+        LDR      R0,[SP, #+44]
         BL       __aeabi_f2d
         STRD     R0,R1,[SP, #+8]
-        LDR      R0,[SP, #+28]
+        LDR      R0,[SP, #+48]
         BL       __aeabi_f2d
         STRD     R0,R1,[SP, #+0]
-        MOVS     R3,R6
-        LDR      R2,[SP, #+32]
+        MOV      R3,R10
+        MOVS     R2,R4
         LDR.N    R1,??DataTable2_3
-        MOVS     R0,R4
+        MOVS     R0,R5
         BL       sprintf
-        MOVS     R0,R4
+        MOVS     R0,R5
         BL       strlen
 ??rs3010k_parse_1:
-        ADD      SP,SP,#+36
+        ADD      SP,SP,#+52
         POP      {R4-R11,PC}      ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
@@ -334,9 +368,9 @@ rs3010k_senproto:
 //   1 byte  in section .bss
 //   8 bytes in section .data
 // 528 bytes in section .rodata
-// 452 bytes in section .text
+// 622 bytes in section .text
 // 
-// 452 bytes of CODE  memory
+// 622 bytes of CODE  memory
 // 528 bytes of CONST memory
 //   9 bytes of DATA  memory
 //

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:21
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:22
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\process.s
@@ -81,10 +81,10 @@ poll_requested:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 process_alloc_event:
-        LDR.N    R0,??DataTable12
+        LDR.W    R0,??DataTable12
         LDRB     R0,[R0, #+0]
         ADDS     R1,R0,#+1
-        LDR.N    R2,??DataTable12
+        LDR.W    R2,??DataTable12
         STRB     R1,[R2, #+0]
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
@@ -92,35 +92,38 @@ process_alloc_event:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 process_start:
-        PUSH     {R7,LR}
-        LDR.N    R2,??DataTable12_1
-        LDR      R2,[R2, #+0]
+        PUSH     {R4-R6,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        LDR.W    R0,??DataTable12_1
+        LDR      R0,[R0, #+0]
+        MOVS     R6,R0
+??process_start_0:
+        CMP      R6,R4
+        BEQ.N    ??process_start_1
+        CMP      R6,#+0
+        BEQ.N    ??process_start_1
+        LDR      R6,[R6, #+0]
         B.N      ??process_start_0
 ??process_start_1:
-        LDR      R2,[R2, #+0]
-??process_start_0:
-        CMP      R2,R0
+        CMP      R6,R4
         BEQ.N    ??process_start_2
-        CMP      R2,#+0
-        BNE.N    ??process_start_1
-??process_start_2:
-        CMP      R2,R0
-        BEQ.N    ??process_start_3
-??process_start_4:
-        LDR.N    R2,??DataTable12_1
-        LDR      R2,[R2, #+0]
-        STR      R2,[R0, #+0]
-        LDR.N    R2,??DataTable12_1
-        STR      R0,[R2, #+0]
-        MOVS     R2,#+1
-        STRB     R2,[R0, #+14]
-        MOVS     R2,#+0
-        STRH     R2,[R0, #+12]
-        MOVS     R2,R1
-        MOVS     R1,#+129
-        BL       process_post_synch
 ??process_start_3:
-        POP      {R0,PC}          ;; return
+        LDR.N    R0,??DataTable12_1
+        LDR      R0,[R0, #+0]
+        STR      R0,[R4, #+0]
+        LDR.N    R0,??DataTable12_1
+        STR      R4,[R0, #+0]
+        MOVS     R0,#+1
+        STRB     R0,[R4, #+14]
+        MOVS     R0,#+0
+        STRH     R0,[R4, #+12]
+        MOVS     R2,R5
+        MOVS     R1,#+129
+        MOVS     R0,R4
+        BL       process_post_synch
+??process_start_2:
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -129,47 +132,48 @@ exit_process:
         MOVS     R4,R0
         MOVS     R5,R1
         LDR.N    R0,??DataTable12_2
-        LDR      R6,[R0, #+0]
-        LDR.N    R0,??DataTable12_1
         LDR      R7,[R0, #+0]
+        LDR.N    R0,??DataTable12_1
+        LDR      R0,[R0, #+0]
+        MOVS     R6,R0
+??exit_process_0:
+        CMP      R6,R4
+        BEQ.N    ??exit_process_1
+        CMP      R6,#+0
+        BEQ.N    ??exit_process_1
+        LDR      R6,[R6, #+0]
         B.N      ??exit_process_0
 ??exit_process_1:
-        LDR      R7,[R7, #+0]
-??exit_process_0:
-        CMP      R7,R4
+        CMP      R6,#+0
         BEQ.N    ??exit_process_2
-        CMP      R7,#+0
-        BNE.N    ??exit_process_1
-??exit_process_2:
-        CMP      R7,#+0
-        BEQ.N    ??exit_process_3
-??exit_process_4:
+??exit_process_3:
         MOVS     R0,R4
         BL       process_is_running
         CMP      R0,#+0
-        BEQ.N    ??exit_process_5
+        BEQ.N    ??exit_process_4
         MOVS     R0,#+0
         STRB     R0,[R4, #+14]
         LDR.N    R0,??DataTable12_1
-        LDR      R7,[R0, #+0]
-        B.N      ??exit_process_6
-??exit_process_7:
-        CMP      R4,R7
-        BEQ.N    ??exit_process_8
+        LDR      R0,[R0, #+0]
+        MOVS     R6,R0
+??exit_process_5:
+        CMP      R6,#+0
+        BEQ.N    ??exit_process_6
+        CMP      R4,R6
+        BEQ.N    ??exit_process_7
         MOVS     R2,R4
         MOVS     R1,#+135
-        MOVS     R0,R7
+        MOVS     R0,R6
         BL       call_process
-??exit_process_8:
-        LDR      R7,[R7, #+0]
+??exit_process_7:
+        LDR      R6,[R6, #+0]
+        B.N      ??exit_process_5
 ??exit_process_6:
-        CMP      R7,#+0
-        BNE.N    ??exit_process_7
         LDR      R0,[R4, #+8]
         CMP      R0,#+0
-        BEQ.N    ??exit_process_5
+        BEQ.N    ??exit_process_4
         CMP      R4,R5
-        BEQ.N    ??exit_process_5
+        BEQ.N    ??exit_process_4
         LDR.N    R0,??DataTable12_2
         STR      R4,[R0, #+0]
         MOVS     R2,#+0
@@ -177,43 +181,46 @@ exit_process:
         ADDS     R0,R4,#+12
         LDR      R3,[R4, #+8]
         BLX      R3
-??exit_process_5:
+??exit_process_4:
         LDR.N    R0,??DataTable12_1
         LDR      R0,[R0, #+0]
         CMP      R4,R0
-        BNE.N    ??exit_process_9
+        BNE.N    ??exit_process_8
         LDR.N    R0,??DataTable12_1
         LDR      R0,[R0, #+0]
         LDR      R0,[R0, #+0]
         LDR.N    R1,??DataTable12_1
         STR      R0,[R1, #+0]
+        B.N      ??exit_process_9
+??exit_process_8:
+        LDR.N    R0,??DataTable12_1
+        LDR      R0,[R0, #+0]
+        MOVS     R6,R0
+??exit_process_10:
+        CMP      R6,#+0
+        BEQ.N    ??exit_process_9
+        LDR      R0,[R6, #+0]
+        CMP      R0,R4
+        BNE.N    ??exit_process_11
+        LDR      R0,[R4, #+0]
+        STR      R0,[R6, #+0]
+        B.N      ??exit_process_9
+??exit_process_11:
+        LDR      R6,[R6, #+0]
         B.N      ??exit_process_10
 ??exit_process_9:
-        LDR.N    R0,??DataTable12_1
-        LDR      R7,[R0, #+0]
-        B.N      ??exit_process_11
-??exit_process_12:
-        LDR      R7,[R7, #+0]
-??exit_process_11:
-        CMP      R7,#+0
-        BEQ.N    ??exit_process_10
-        LDR      R0,[R7, #+0]
-        CMP      R0,R4
-        BNE.N    ??exit_process_12
-        LDR      R0,[R4, #+0]
-        STR      R0,[R7, #+0]
-??exit_process_10:
         LDR.N    R0,??DataTable12_2
-        STR      R6,[R0, #+0]
-??exit_process_3:
+        STR      R7,[R0, #+0]
+??exit_process_2:
         POP      {R0,R4-R7,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 call_process:
-        PUSH     {R3-R5,LR}
+        PUSH     {R3-R7,LR}
         MOVS     R4,R0
         MOVS     R5,R1
+        MOVS     R6,R2
         LDRB     R0,[R4, #+14]
         LSLS     R0,R0,#+31
         BPL.N    ??call_process_0
@@ -224,14 +231,16 @@ call_process:
         STR      R4,[R0, #+0]
         MOVS     R0,#+2
         STRB     R0,[R4, #+14]
+        MOVS     R2,R6
         MOVS     R1,R5
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         ADDS     R0,R4,#+12
         LDR      R3,[R4, #+8]
         BLX      R3
-        CMP      R0,#+2
+        MOVS     R7,R0
+        CMP      R7,#+2
         BEQ.N    ??call_process_1
-        CMP      R0,#+3
+        CMP      R7,#+3
         BEQ.N    ??call_process_1
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+131
@@ -245,16 +254,18 @@ call_process:
         MOVS     R0,#+1
         STRB     R0,[R4, #+14]
 ??call_process_0:
-        POP      {R0,R4,R5,PC}    ;; return
+        POP      {R0,R4-R7,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 process_exit:
-        PUSH     {R7,LR}
-        LDR.N    R1,??DataTable12_2
-        LDR      R1,[R1, #+0]
+        PUSH     {R4,LR}
+        MOVS     R4,R0
+        LDR.N    R0,??DataTable12_2
+        LDR      R1,[R0, #+0]
+        MOVS     R0,R4
         BL       exit_process
-        POP      {R0,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -286,9 +297,11 @@ do_poll:
         LDR.N    R1,??DataTable12_5
         STRB     R0,[R1, #+0]
         LDR.N    R0,??DataTable12_1
-        LDR      R4,[R0, #+0]
-        B.N      ??do_poll_0
-??do_poll_1:
+        LDR      R0,[R0, #+0]
+        MOVS     R4,R0
+??do_poll_0:
+        CMP      R4,#+0
+        BEQ.N    ??do_poll_1
         LDRB     R0,[R4, #+15]
         CMP      R0,#+0
         BEQ.N    ??do_poll_2
@@ -302,9 +315,8 @@ do_poll:
         BL       call_process
 ??do_poll_2:
         LDR      R4,[R4, #+0]
-??do_poll_0:
-        CMP      R4,#+0
-        BNE.N    ??do_poll_1
+        B.N      ??do_poll_0
+??do_poll_1:
         POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -452,47 +464,48 @@ process_nevents:
         THUMB
 process_post:
         PUSH     {R4,R5}
-        LDR.N    R3,??DataTable12_4
-        LDRB     R3,[R3, #+0]
-        CMP      R3,#+32
+        MOVS     R3,R0
+        LDR.N    R0,??DataTable12_4
+        LDRB     R0,[R0, #+0]
+        CMP      R0,#+32
         BNE.N    ??process_post_0
         MOVS     R0,#+1
         B.N      ??process_post_1
 ??process_post_0:
-        LDR.N    R3,??DataTable12_3
-        LDRB     R3,[R3, #+0]
+        LDR.N    R0,??DataTable12_3
+        LDRB     R0,[R0, #+0]
         LDR.N    R4,??DataTable12_4
         LDRB     R4,[R4, #+0]
-        ADDS     R3,R4,R3
-        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+        ADDS     R0,R4,R0
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         MOVS     R4,#+32
-        SDIV     R5,R3,R4
-        MLS      R5,R5,R4,R3
-        LDR.N    R3,??DataTable12_11
-        STRB     R5,[R3, #+0]
-        LDR.N    R3,??DataTable12_6
+        SDIV     R5,R0,R4
+        MLS      R5,R5,R4,R0
+        LDR.N    R0,??DataTable12_11
+        STRB     R5,[R0, #+0]
+        LDR.N    R0,??DataTable12_6
         LDR.N    R4,??DataTable12_11
         LDRB     R4,[R4, #+0]
         MOVS     R5,#+12
-        MLA      R3,R5,R4,R3
-        STRB     R1,[R3, #+0]
-        LDR.N    R1,??DataTable12_6
-        LDR.N    R3,??DataTable12_11
-        LDRB     R3,[R3, #+0]
-        MOVS     R4,#+12
-        MLA      R1,R4,R3,R1
-        STR      R2,[R1, #+4]
-        LDR.N    R1,??DataTable12_6
-        LDR.N    R2,??DataTable12_11
-        LDRB     R2,[R2, #+0]
-        MOVS     R3,#+12
-        MLA      R1,R3,R2,R1
-        STR      R0,[R1, #+8]
+        MLA      R0,R5,R4,R0
+        STRB     R1,[R0, #+0]
+        LDR.N    R0,??DataTable12_6
+        LDR.N    R4,??DataTable12_11
+        LDRB     R4,[R4, #+0]
+        MOVS     R5,#+12
+        MLA      R0,R5,R4,R0
+        STR      R2,[R0, #+4]
+        LDR.N    R0,??DataTable12_6
+        LDR.N    R4,??DataTable12_11
+        LDRB     R4,[R4, #+0]
+        MOVS     R5,#+12
+        MLA      R0,R5,R4,R0
+        STR      R3,[R0, #+8]
         LDR.N    R0,??DataTable12_4
         LDRB     R0,[R0, #+0]
         ADDS     R0,R0,#+1
-        LDR.N    R1,??DataTable12_4
-        STRB     R0,[R1, #+0]
+        LDR.N    R4,??DataTable12_4
+        STRB     R0,[R4, #+0]
         MOVS     R0,#+0
 ??process_post_1:
         POP      {R4,R5}
@@ -505,14 +518,20 @@ process_post:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 process_post_synch:
-        PUSH     {R4,LR}
-        LDR.N    R3,??DataTable12_2
-        LDR      R4,[R3, #+0]
+        PUSH     {R3-R7,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        MOVS     R6,R2
+        LDR.N    R0,??DataTable12_2
+        LDR      R7,[R0, #+0]
+        MOVS     R2,R6
+        MOVS     R1,R5
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+        MOVS     R0,R4
         BL       call_process
         LDR.N    R0,??DataTable12_2
-        STR      R4,[R0, #+0]
-        POP      {R4,PC}          ;; return
+        STR      R7,[R0, #+0]
+        POP      {R0,R4-R7,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -528,9 +547,9 @@ process_poll:
 ??process_poll_1:
         MOVS     R1,#+1
         STRB     R1,[R0, #+15]
-        MOVS     R0,#+1
-        LDR.N    R1,??DataTable12_5
-        STRB     R0,[R1, #+0]
+        MOVS     R1,#+1
+        LDR.N    R2,??DataTable12_5
+        STRB     R1,[R2, #+0]
 ??process_poll_0:
         BX       LR               ;; return
 
@@ -634,9 +653,9 @@ process_is_running:
         END
 // 
 // 410 bytes in section .bss
-// 812 bytes in section .text
+// 860 bytes in section .text
 // 
-// 812 bytes of CODE memory
+// 860 bytes of CODE memory
 // 410 bytes of DATA memory
 //
 //Errors: none

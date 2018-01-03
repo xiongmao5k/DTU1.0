@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:20
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:20
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\clock.s
 //
@@ -66,36 +66,39 @@
         THUMB
 // static __interwork __softfp void NVIC_SetPriority(IRQn_Type, uint32_t)
 NVIC_SetPriority:
+        PUSH     {R4}
         SXTB     R0,R0            ;; SignExt  R0,R0,#+24,#+24
         CMP      R0,#+0
         BPL.N    ??NVIC_SetPriority_0
-        LSLS     R1,R1,#+4
-        LDR.N    R2,??DataTable6  ;; 0xe000ed18
+        LSLS     R2,R1,#+4
+        LDR.N    R3,??DataTable6  ;; 0xe000ed18
         SXTB     R0,R0            ;; SignExt  R0,R0,#+24,#+24
-        ANDS     R0,R0,#0xF
-        ADDS     R0,R0,R2
-        STRB     R1,[R0, #-4]
+        ANDS     R4,R0,#0xF
+        ADDS     R3,R4,R3
+        STRB     R2,[R3, #-4]
         B.N      ??NVIC_SetPriority_1
 ??NVIC_SetPriority_0:
-        LSLS     R1,R1,#+4
-        LDR.N    R2,??DataTable6_1  ;; 0xe000e400
+        LSLS     R2,R1,#+4
+        LDR.N    R3,??DataTable6_1  ;; 0xe000e400
         SXTB     R0,R0            ;; SignExt  R0,R0,#+24,#+24
-        STRB     R1,[R0, R2]
+        STRB     R2,[R0, R3]
 ??NVIC_SetPriority_1:
+        POP      {R4}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 // static __interwork __softfp uint32_t SysTick_Config(uint32_t)
 SysTick_Config:
-        PUSH     {R7,LR}
-        SUBS     R1,R0,#+1
-        CMP      R1,#+16777216
+        PUSH     {R4,LR}
+        MOVS     R4,R0
+        SUBS     R0,R4,#+1
+        CMP      R0,#+16777216
         BCC.N    ??SysTick_Config_0
         MOVS     R0,#+1
         B.N      ??SysTick_Config_1
 ??SysTick_Config_0:
-        SUBS     R0,R0,#+1
+        SUBS     R0,R4,#+1
         LDR.N    R1,??DataTable6_2  ;; 0xe000e014
         STR      R0,[R1, #+0]
         MOVS     R1,#+15
@@ -109,7 +112,7 @@ SysTick_Config:
         STR      R0,[R1, #+0]
         MOVS     R0,#+0
 ??SysTick_Config_1:
-        POP      {R1,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.bss`:DATA:REORDER:NOROOT(3)
 ms_count:
@@ -198,34 +201,35 @@ clock_set_seconds:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 clock_wait:
-        PUSH     {R4,LR}
+        PUSH     {R3-R5,LR}
         MOVS     R4,R0
         BL       clock_time
-        ADDS     R4,R4,R0
+        ADDS     R0,R4,R0
+        MOVS     R5,R0
 ??clock_wait_0:
         BL       clock_time
-        CMP      R0,R4
+        CMP      R0,R5
         BCC.N    ??clock_wait_0
-        POP      {R4,PC}          ;; return
+        POP      {R0,R4,R5,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 clock_delay_usec:
         MOVS     R1,#+0
-        B.N      ??clock_delay_usec_0
-??clock_delay_usec_1:
-        ADDS     R2,R2,#+1
-??clock_delay_usec_2:
-        CMP      R2,#+100
-        BLT.N    ??clock_delay_usec_1
-        ADDS     R1,R1,#+1
 ??clock_delay_usec_0:
         UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
         CMP      R1,R0
-        BGE.N    ??clock_delay_usec_3
+        BGE.N    ??clock_delay_usec_1
         MOVS     R2,#+0
+??clock_delay_usec_2:
+        CMP      R2,#+100
+        BGE.N    ??clock_delay_usec_3
+        ADDS     R2,R2,#+1
         B.N      ??clock_delay_usec_2
 ??clock_delay_usec_3:
+        ADDS     R1,R1,#+1
+        B.N      ??clock_delay_usec_0
+??clock_delay_usec_1:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -237,10 +241,12 @@ clock_fine_max:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 clock_delay:
-        PUSH     {R7,LR}
+        PUSH     {R4,LR}
+        MOVS     R4,R0
+        MOVS     R0,R4
         UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
         BL       clock_delay_usec
-        POP      {R0,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -317,9 +323,9 @@ SysTick_Handler:
         END
 // 
 //  16 bytes in section .bss
-// 378 bytes in section .text
+// 390 bytes in section .text
 // 
-// 378 bytes of CODE memory
+// 390 bytes of CODE memory
 //  16 bytes of DATA memory
 //
 //Errors: none

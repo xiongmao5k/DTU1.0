@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:21
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:23
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\rtc.s
 //
@@ -56,7 +56,6 @@
         EXTERN RTC_WaitForLastTask
         EXTERN RTC_WaitForSynchro
         EXTERN gpio_set_pin
-        EXTERN log_out
 
         PUBLIC RTCAlarm_IRQHandler
         PUBLIC rtc_get_time
@@ -70,15 +69,16 @@
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 rtc_init:
-        PUSH     {R7,LR}
-        MOVS     R0,#+0
+        PUSH     {R4,LR}
+        MOVS     R4,#+0
         MOVS     R0,#+1
         BL       PWR_BackupAccessCmd
         BL       BKP_ClearFlag
         MOVS     R0,#+4
         BL       BKP_ReadBackupRegister
-        UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
-        CMP      R0,#+1
+        MOVS     R4,R0
+        UXTH     R4,R4            ;; ZeroExt  R4,R4,#+16,#+16
+        CMP      R4,#+1
         BNE.N    ??rtc_init_0
         MOVS     R1,#+0
         MOVS     R0,#+4
@@ -121,14 +121,16 @@ rtc_init:
         MOVS     R0,#+4
         BL       gpio_set_pin
 ??rtc_init_2:
-        POP      {R0,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 rtc_set_time:
-        PUSH     {R7,LR}
+        PUSH     {R4,LR}
+        MOVS     R4,R0
+        MOVS     R0,R4
         BL       RTC_SetCounter
-        POP      {R0,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -140,9 +142,11 @@ rtc_get_time:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 rtc_set_alarm:
-        PUSH     {R7,LR}
+        PUSH     {R4,LR}
+        MOVS     R4,R0
+        MOVS     R0,R4
         BL       RTC_SetAlarm
-        POP      {R0,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -163,8 +167,6 @@ rtc_wakeup_after_second:
         MOVS     R1,#+1
         MOVS     R0,#+4
         BL       BKP_WriteBackupRegister
-        ADR.N    R0,??DataTable1  ;; 0x34, 0x0A, 0x00, 0x00
-        BL       log_out
         BL       PWR_EnterSTANDBYMode
         POP      {R4,PC}          ;; return
 
@@ -186,9 +188,8 @@ rtc_wakeup_at_second:
         ADDS     R0,R5,#+3
         CMP      R4,R0
         BCS.N    ??rtc_wakeup_at_second_1
-        ADR.N    R0,??DataTable1_1  ;; 0x35, 0x0A, 0x00, 0x00
-        BL       log_out
-        ADDS     R4,R5,#+300
+        ADDS     R0,R5,#+300
+        MOVS     R4,R0
 ??rtc_wakeup_at_second_1:
         MOVS     R0,R4
         BL       RTC_SetAlarm
@@ -198,18 +199,6 @@ rtc_wakeup_at_second:
         BL       BKP_WriteBackupRegister
         BL       PWR_EnterSTANDBYMode
         POP      {R0,R4,R5,PC}    ;; return
-
-        SECTION `.text`:CODE:NOROOT(2)
-        SECTION_TYPE SHT_PROGBITS, 0
-        DATA
-??DataTable1:
-        DC8      0x34, 0x0A, 0x00, 0x00
-
-        SECTION `.text`:CODE:NOROOT(2)
-        SECTION_TYPE SHT_PROGBITS, 0
-        DATA
-??DataTable1_1:
-        DC8      0x35, 0x0A, 0x00, 0x00
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -230,23 +219,11 @@ RTCAlarm_IRQHandler:
         SECTION __DLIB_PERTHREAD_init:DATA:REORDER:NOROOT(0)
         SECTION_TYPE SHT_PROGBITS, 0
 
-        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-        DATA
-        DC8 "4\012"
-        DC8 0
-
-        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-        DATA
-        DC8 "5\012"
-        DC8 0
-
         END
 // 
-//   8 bytes in section .rodata
-// 304 bytes in section .text
+// 296 bytes in section .text
 // 
-// 304 bytes of CODE  memory
-//   8 bytes of CONST memory
+// 296 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

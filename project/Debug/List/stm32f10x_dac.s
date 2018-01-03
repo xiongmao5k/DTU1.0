@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:25
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:27
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_dac.s
@@ -68,26 +68,28 @@ DAC_DeInit:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 DAC_Init:
-        PUSH     {R4}
-        MOVS     R2,#+0
+        PUSH     {R4,R5}
         MOVS     R3,#+0
-        LDR.N    R2,??DataTable9  ;; 0x40007400
-        LDR      R2,[R2, #+0]
-        MOVW     R3,#+4094
-        LSLS     R3,R3,R0
-        BICS     R2,R2,R3
-        LDR      R3,[R1, #+0]
-        LDR      R4,[R1, #+4]
+        MOVS     R2,#+0
+        LDR.N    R4,??DataTable9  ;; 0x40007400
+        LDR      R4,[R4, #+0]
+        MOVS     R3,R4
+        MOVW     R4,#+4094
+        LSLS     R4,R4,R0
+        BICS     R3,R3,R4
+        LDR      R4,[R1, #+0]
+        LDR      R5,[R1, #+4]
+        ORRS     R4,R5,R4
+        LDR      R5,[R1, #+8]
+        ORRS     R4,R5,R4
+        LDR      R5,[R1, #+12]
+        ORRS     R4,R5,R4
+        MOVS     R2,R4
+        LSLS     R4,R2,R0
         ORRS     R3,R4,R3
-        LDR      R4,[R1, #+8]
-        ORRS     R3,R4,R3
-        LDR      R1,[R1, #+12]
-        ORRS     R3,R1,R3
-        LSLS     R0,R3,R0
-        ORRS     R2,R0,R2
-        LDR.N    R0,??DataTable9  ;; 0x40007400
-        STR      R2,[R0, #+0]
-        POP      {R4}
+        LDR.N    R4,??DataTable9  ;; 0x40007400
+        STR      R3,[R4, #+0]
+        POP      {R4,R5}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -109,22 +111,22 @@ DAC_Cmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??DAC_Cmd_0
-        LDR.N    R1,??DataTable9  ;; 0x40007400
-        LDR      R1,[R1, #+0]
-        MOVS     R2,#+1
-        LSLS     R0,R2,R0
-        ORRS     R0,R0,R1
-        LDR.N    R1,??DataTable9  ;; 0x40007400
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable9  ;; 0x40007400
+        LDR      R2,[R2, #+0]
+        MOVS     R3,#+1
+        LSLS     R3,R3,R0
+        ORRS     R2,R3,R2
+        LDR.N    R3,??DataTable9  ;; 0x40007400
+        STR      R2,[R3, #+0]
         B.N      ??DAC_Cmd_1
 ??DAC_Cmd_0:
-        LDR.N    R1,??DataTable9  ;; 0x40007400
-        LDR      R1,[R1, #+0]
-        MOVS     R2,#+1
-        LSLS     R0,R2,R0
-        BICS     R0,R1,R0
-        LDR.N    R1,??DataTable9  ;; 0x40007400
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable9  ;; 0x40007400
+        LDR      R2,[R2, #+0]
+        MOVS     R3,#+1
+        LSLS     R3,R3,R0
+        BICS     R2,R2,R3
+        LDR.N    R3,??DataTable9  ;; 0x40007400
+        STR      R2,[R3, #+0]
 ??DAC_Cmd_1:
         BX       LR               ;; return
 
@@ -134,50 +136,52 @@ DAC_DMACmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??DAC_DMACmd_0
-        LDR.N    R1,??DataTable9  ;; 0x40007400
-        LDR      R1,[R1, #+0]
-        MOV      R2,#+4096
-        LSLS     R0,R2,R0
-        ORRS     R0,R0,R1
-        LDR.N    R1,??DataTable9  ;; 0x40007400
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable9  ;; 0x40007400
+        LDR      R2,[R2, #+0]
+        MOV      R3,#+4096
+        LSLS     R3,R3,R0
+        ORRS     R2,R3,R2
+        LDR.N    R3,??DataTable9  ;; 0x40007400
+        STR      R2,[R3, #+0]
         B.N      ??DAC_DMACmd_1
 ??DAC_DMACmd_0:
-        LDR.N    R1,??DataTable9  ;; 0x40007400
-        LDR      R1,[R1, #+0]
-        MOV      R2,#+4096
-        LSLS     R0,R2,R0
-        BICS     R0,R1,R0
-        LDR.N    R1,??DataTable9  ;; 0x40007400
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable9  ;; 0x40007400
+        LDR      R2,[R2, #+0]
+        MOV      R3,#+4096
+        LSLS     R3,R3,R0
+        BICS     R2,R2,R3
+        LDR.N    R3,??DataTable9  ;; 0x40007400
+        STR      R2,[R3, #+0]
 ??DAC_DMACmd_1:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 DAC_SoftwareTriggerCmd:
+        PUSH     {R4}
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??DAC_SoftwareTriggerCmd_0
-        LDR.N    R1,??DataTable9_1  ;; 0x40007404
-        LDR      R1,[R1, #+0]
-        MOVS     R2,#+1
-        LSRS     R0,R0,#+4
-        LSLS     R0,R2,R0
-        ORRS     R0,R0,R1
-        LDR.N    R1,??DataTable9_1  ;; 0x40007404
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable9_1  ;; 0x40007404
+        LDR      R2,[R2, #+0]
+        MOVS     R3,#+1
+        LSRS     R4,R0,#+4
+        LSLS     R3,R3,R4
+        ORRS     R2,R3,R2
+        LDR.N    R3,??DataTable9_1  ;; 0x40007404
+        STR      R2,[R3, #+0]
         B.N      ??DAC_SoftwareTriggerCmd_1
 ??DAC_SoftwareTriggerCmd_0:
-        LDR.N    R1,??DataTable9_1  ;; 0x40007404
-        LDR      R1,[R1, #+0]
-        MOVS     R2,#+1
-        LSRS     R0,R0,#+4
-        LSLS     R0,R2,R0
-        BICS     R0,R1,R0
-        LDR.N    R1,??DataTable9_1  ;; 0x40007404
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable9_1  ;; 0x40007404
+        LDR      R2,[R2, #+0]
+        MOVS     R3,#+1
+        LSRS     R4,R0,#+4
+        LSLS     R3,R3,R4
+        BICS     R2,R2,R3
+        LDR.N    R3,??DataTable9_1  ;; 0x40007404
+        STR      R2,[R3, #+0]
 ??DAC_SoftwareTriggerCmd_1:
+        POP      {R4}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -186,43 +190,45 @@ DAC_DualSoftwareTriggerCmd:
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         CMP      R0,#+0
         BEQ.N    ??DAC_DualSoftwareTriggerCmd_0
-        LDR.N    R0,??DataTable9_1  ;; 0x40007404
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0x3
         LDR.N    R1,??DataTable9_1  ;; 0x40007404
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0x3
+        LDR.N    R2,??DataTable9_1  ;; 0x40007404
+        STR      R1,[R2, #+0]
         B.N      ??DAC_DualSoftwareTriggerCmd_1
 ??DAC_DualSoftwareTriggerCmd_0:
-        LDR.N    R0,??DataTable9_1  ;; 0x40007404
-        LDR      R0,[R0, #+0]
-        LSRS     R0,R0,#+2
-        LSLS     R0,R0,#+2
         LDR.N    R1,??DataTable9_1  ;; 0x40007404
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        LSRS     R1,R1,#+2
+        LSLS     R1,R1,#+2
+        LDR.N    R2,??DataTable9_1  ;; 0x40007404
+        STR      R1,[R2, #+0]
 ??DAC_DualSoftwareTriggerCmd_1:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 DAC_WaveGenerationCmd:
+        PUSH     {R4}
         UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
         CMP      R2,#+0
         BEQ.N    ??DAC_WaveGenerationCmd_0
-        LDR.N    R2,??DataTable9  ;; 0x40007400
-        LDR      R2,[R2, #+0]
-        LSLS     R0,R1,R0
-        ORRS     R0,R0,R2
-        LDR.N    R1,??DataTable9  ;; 0x40007400
-        STR      R0,[R1, #+0]
+        LDR.N    R3,??DataTable9  ;; 0x40007400
+        LDR      R3,[R3, #+0]
+        LSLS     R4,R1,R0
+        ORRS     R3,R4,R3
+        LDR.N    R4,??DataTable9  ;; 0x40007400
+        STR      R3,[R4, #+0]
         B.N      ??DAC_WaveGenerationCmd_1
 ??DAC_WaveGenerationCmd_0:
-        LDR.N    R2,??DataTable9  ;; 0x40007400
-        LDR      R2,[R2, #+0]
-        LSLS     R0,R1,R0
-        BICS     R0,R2,R0
-        LDR.N    R1,??DataTable9  ;; 0x40007400
-        STR      R0,[R1, #+0]
+        LDR.N    R3,??DataTable9  ;; 0x40007400
+        LDR      R3,[R3, #+0]
+        LSLS     R4,R1,R0
+        BICS     R3,R3,R4
+        LDR.N    R4,??DataTable9  ;; 0x40007400
+        STR      R3,[R4, #+0]
 ??DAC_WaveGenerationCmd_1:
+        POP      {R4}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -234,12 +240,12 @@ DAC_SetChannel1Data:
         LDR.N    R2,??DataTable9  ;; 0x40007400
         STR      R2,[SP, #+0]
         LDR      R2,[SP, #+0]
-        ADDS     R0,R0,#+8
-        ADDS     R0,R0,R2
-        STR      R0,[SP, #+0]
+        ADDS     R3,R0,#+8
+        ADDS     R2,R3,R2
+        STR      R2,[SP, #+0]
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        LDR      R0,[SP, #+0]
-        STR      R1,[R0, #+0]
+        LDR      R2,[SP, #+0]
+        STR      R1,[R2, #+0]
         ADD      SP,SP,#+4
         BX       LR               ;; return
 
@@ -252,51 +258,55 @@ DAC_SetChannel2Data:
         LDR.N    R2,??DataTable9  ;; 0x40007400
         STR      R2,[SP, #+0]
         LDR      R2,[SP, #+0]
-        ADDS     R0,R0,#+20
-        ADDS     R0,R0,R2
-        STR      R0,[SP, #+0]
+        ADDS     R3,R0,#+20
+        ADDS     R2,R3,R2
+        STR      R2,[SP, #+0]
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        LDR      R0,[SP, #+0]
-        STR      R1,[R0, #+0]
+        LDR      R2,[SP, #+0]
+        STR      R1,[R2, #+0]
         ADD      SP,SP,#+4
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 DAC_SetDualChannelData:
-        PUSH     {R4}
+        PUSH     {R4,R5}
         MOVS     R3,#+0
         MOVS     R4,#+0
         CMP      R0,#+8
         BNE.N    ??DAC_SetDualChannelData_0
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
-        ORRS     R3,R2,R1, LSL #+8
+        ORRS     R5,R2,R1, LSL #+8
+        MOVS     R3,R5
         B.N      ??DAC_SetDualChannelData_1
 ??DAC_SetDualChannelData_0:
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
-        ORRS     R3,R2,R1, LSL #+16
+        ORRS     R5,R2,R1, LSL #+16
+        MOVS     R3,R5
 ??DAC_SetDualChannelData_1:
-        LDR.N    R4,??DataTable9  ;; 0x40007400
-        ADDS     R0,R0,#+32
-        ADDS     R4,R0,R4
+        LDR.N    R5,??DataTable9  ;; 0x40007400
+        MOVS     R4,R5
+        ADDS     R5,R0,#+32
+        ADDS     R4,R5,R4
         STR      R3,[R4, #+0]
-        POP      {R4}
+        POP      {R4,R5}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 DAC_GetDataOutputValue:
         SUB      SP,SP,#+4
-        MOVS     R1,#+0
-        STR      R1,[SP, #+0]
-        LDR.N    R1,??DataTable9  ;; 0x40007400
-        STR      R1,[SP, #+0]
-        LDR      R1,[SP, #+0]
-        LSRS     R0,R0,#+2
-        ADDS     R0,R0,#+44
-        ADDS     R0,R0,R1
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        STR      R0,[SP, #+0]
+        LDR.N    R0,??DataTable9  ;; 0x40007400
+        STR      R0,[SP, #+0]
+        LDR      R0,[SP, #+0]
+        LSRS     R2,R1,#+2
+        ADDS     R2,R2,#+44
+        ADDS     R0,R2,R0
         STR      R0,[SP, #+0]
         LDR      R0,[SP, #+0]
         LDR      R0,[R0, #+0]
@@ -329,9 +339,9 @@ DAC_GetDataOutputValue:
 
         END
 // 
-// 436 bytes in section .text
+// 442 bytes in section .text
 // 
-// 436 bytes of CODE memory
+// 442 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

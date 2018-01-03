@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:25
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:27
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_gpio.s
@@ -62,9 +62,10 @@
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 GPIO_DeInit:
-        PUSH     {R7,LR}
-        LDR.N    R1,??DataTable5  ;; 0x40010800
-        CMP      R0,R1
+        PUSH     {R4,LR}
+        MOVS     R4,R0
+        LDR.W    R0,??DataTable5  ;; 0x40010800
+        CMP      R4,R0
         BNE.N    ??GPIO_DeInit_0
         MOVS     R1,#+1
         MOVS     R0,#+4
@@ -74,8 +75,8 @@ GPIO_DeInit:
         BL       RCC_APB2PeriphResetCmd
         B.N      ??GPIO_DeInit_1
 ??GPIO_DeInit_0:
-        LDR.N    R1,??DataTable5_1  ;; 0x40010c00
-        CMP      R0,R1
+        LDR.W    R0,??DataTable5_1  ;; 0x40010c00
+        CMP      R4,R0
         BNE.N    ??GPIO_DeInit_2
         MOVS     R1,#+1
         MOVS     R0,#+8
@@ -85,8 +86,8 @@ GPIO_DeInit:
         BL       RCC_APB2PeriphResetCmd
         B.N      ??GPIO_DeInit_1
 ??GPIO_DeInit_2:
-        LDR.N    R1,??DataTable5_2  ;; 0x40011000
-        CMP      R0,R1
+        LDR.N    R0,??DataTable5_2  ;; 0x40011000
+        CMP      R4,R0
         BNE.N    ??GPIO_DeInit_3
         MOVS     R1,#+1
         MOVS     R0,#+16
@@ -96,8 +97,8 @@ GPIO_DeInit:
         BL       RCC_APB2PeriphResetCmd
         B.N      ??GPIO_DeInit_1
 ??GPIO_DeInit_3:
-        LDR.N    R1,??DataTable5_3  ;; 0x40011400
-        CMP      R0,R1
+        LDR.N    R0,??DataTable5_3  ;; 0x40011400
+        CMP      R4,R0
         BNE.N    ??GPIO_DeInit_4
         MOVS     R1,#+1
         MOVS     R0,#+32
@@ -107,8 +108,8 @@ GPIO_DeInit:
         BL       RCC_APB2PeriphResetCmd
         B.N      ??GPIO_DeInit_1
 ??GPIO_DeInit_4:
-        LDR.N    R1,??DataTable5_4  ;; 0x40011800
-        CMP      R0,R1
+        LDR.N    R0,??DataTable5_4  ;; 0x40011800
+        CMP      R4,R0
         BNE.N    ??GPIO_DeInit_5
         MOVS     R1,#+1
         MOVS     R0,#+64
@@ -118,8 +119,8 @@ GPIO_DeInit:
         BL       RCC_APB2PeriphResetCmd
         B.N      ??GPIO_DeInit_1
 ??GPIO_DeInit_5:
-        LDR.N    R1,??DataTable5_5  ;; 0x40011c00
-        CMP      R0,R1
+        LDR.N    R0,??DataTable5_5  ;; 0x40011c00
+        CMP      R4,R0
         BNE.N    ??GPIO_DeInit_6
         MOVS     R1,#+1
         MOVS     R0,#+128
@@ -129,8 +130,8 @@ GPIO_DeInit:
         BL       RCC_APB2PeriphResetCmd
         B.N      ??GPIO_DeInit_1
 ??GPIO_DeInit_6:
-        LDR.N    R1,??DataTable5_6  ;; 0x40012000
-        CMP      R0,R1
+        LDR.N    R0,??DataTable5_6  ;; 0x40012000
+        CMP      R4,R0
         BNE.N    ??GPIO_DeInit_1
         MOVS     R1,#+1
         MOV      R0,#+256
@@ -139,7 +140,7 @@ GPIO_DeInit:
         MOV      R0,#+256
         BL       RCC_APB2PeriphResetCmd
 ??GPIO_DeInit_1:
-        POP      {R0,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -156,105 +157,117 @@ GPIO_AFIODeInit:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 GPIO_Init:
-        PUSH     {R4-R6}
+        PUSH     {R4-R7,LR}
+        MOVS     R7,#+0
         MOVS     R2,#+0
-        MOVS     R5,#+0
         MOVS     R3,#+0
-        MOVS     R6,#+0
         MOVS     R4,#+0
         MOVS     R5,#+0
-        LDRB     R2,[R1, #+3]
-        ANDS     R2,R2,#0xF
-        LDRB     R3,[R1, #+3]
-        LSLS     R3,R3,#+27
+        MOVS     R6,#+0
+        LDRB     R12,[R1, #+3]
+        ANDS     R12,R12,#0xF
+        MOV      R7,R12
+        LDRB     R12,[R1, #+3]
+        LSLS     R12,R12,#+27
         BPL.N    ??GPIO_Init_0
-        LDRB     R3,[R1, #+2]
-        ORRS     R2,R3,R2
+        LDRB     R12,[R1, #+2]
+        ORRS     R7,R12,R7
 ??GPIO_Init_0:
-        LDRB     R3,[R1, #+0]
-        LSLS     R3,R3,#+24
+        LDRB     R12,[R1, #+0]
+        LSLS     R12,R12,#+24
         BEQ.N    ??GPIO_Init_1
-        LDR      R4,[R0, #+0]
-        MOVS     R3,#+0
-        B.N      ??GPIO_Init_2
-??GPIO_Init_3:
-        LDRB     R5,[R1, #+3]
-        CMP      R5,#+72
-        BNE.N    ??GPIO_Init_4
-        MOVS     R5,#+1
-        LSLS     R5,R5,R3
-        STR      R5,[R0, #+16]
-??GPIO_Init_4:
-        ADDS     R3,R3,#+1
+        LDR      R12,[R0, #+0]
+        MOV      R5,R12
+        MOVS     R12,#+0
+        MOV      R3,R12
 ??GPIO_Init_2:
         CMP      R3,#+8
-        BCS.N    ??GPIO_Init_5
-        MOVS     R5,#+1
-        LSLS     R6,R5,R3
-        LDRH     R5,[R1, #+0]
-        ANDS     R5,R6,R5
-        CMP      R5,R6
+        BCS.N    ??GPIO_Init_3
+        MOVS     R12,#+1
+        LSLS     R12,R12,R3
+        MOV      R4,R12
+        LDRH     R12,[R1, #+0]
+        ANDS     R12,R4,R12
+        MOV      R2,R12
+        CMP      R2,R4
         BNE.N    ??GPIO_Init_4
-        LSLS     R6,R3,#+2
-        MOVS     R5,#+15
-        LSLS     R5,R5,R6
-        BICS     R4,R4,R5
-        LSLS     R5,R2,R6
-        ORRS     R4,R5,R4
-        LDRB     R5,[R1, #+3]
-        CMP      R5,#+40
-        BNE.N    ??GPIO_Init_3
-        MOVS     R5,#+1
-        LSLS     R5,R5,R3
-        STR      R5,[R0, #+20]
+        LSLS     R12,R3,#+2
+        MOV      R4,R12
+        MOVS     R12,#+15
+        LSLS     R12,R12,R4
+        MOV      R6,R12
+        BICS     R5,R5,R6
+        LSLS     R12,R7,R4
+        ORRS     R5,R12,R5
+        LDRB     R12,[R1, #+3]
+        CMP      R12,#+40
+        BNE.N    ??GPIO_Init_5
+        MOVS     R12,#+1
+        LSLS     R12,R12,R3
+        STR      R12,[R0, #+20]
         B.N      ??GPIO_Init_4
 ??GPIO_Init_5:
-        STR      R4,[R0, #+0]
-??GPIO_Init_1:
-        LDRH     R3,[R1, #+0]
-        CMP      R3,#+255
-        BLE.N    ??GPIO_Init_6
-        LDR      R4,[R0, #+4]
-        MOVS     R3,#+0
-        B.N      ??GPIO_Init_7
-??GPIO_Init_8:
-        MOVS     R5,#+1
-        ADDS     R6,R3,#+8
-        LSLS     R6,R5,R6
-        LDRH     R5,[R1, #+0]
-        ANDS     R5,R6,R5
-        CMP      R5,R6
-        BNE.N    ??GPIO_Init_9
-        LSLS     R6,R3,#+2
-        MOVS     R5,#+15
-        LSLS     R5,R5,R6
-        BICS     R4,R4,R5
-        LSLS     R5,R2,R6
-        ORRS     R4,R5,R4
-        LDRB     R5,[R1, #+3]
-        CMP      R5,#+40
-        BNE.N    ??GPIO_Init_10
-        MOVS     R5,#+1
-        ADDS     R6,R3,#+8
-        LSLS     R5,R5,R6
-        STR      R5,[R0, #+20]
-??GPIO_Init_10:
-        LDRB     R5,[R1, #+3]
-        CMP      R5,#+72
-        BNE.N    ??GPIO_Init_9
-        MOVS     R5,#+1
-        ADDS     R6,R3,#+8
-        LSLS     R5,R5,R6
-        STR      R5,[R0, #+16]
-??GPIO_Init_9:
+        LDRB     R12,[R1, #+3]
+        CMP      R12,#+72
+        BNE.N    ??GPIO_Init_4
+        MOVS     R12,#+1
+        LSLS     R12,R12,R3
+        STR      R12,[R0, #+16]
+??GPIO_Init_4:
         ADDS     R3,R3,#+1
+        B.N      ??GPIO_Init_2
+??GPIO_Init_3:
+        STR      R5,[R0, #+0]
+??GPIO_Init_1:
+        LDRH     R12,[R1, #+0]
+        CMP      R12,#+255
+        BLE.N    ??GPIO_Init_6
+        LDR      R12,[R0, #+4]
+        MOV      R5,R12
+        MOVS     R12,#+0
+        MOV      R3,R12
 ??GPIO_Init_7:
         CMP      R3,#+8
-        BCC.N    ??GPIO_Init_8
-        STR      R4,[R0, #+4]
+        BCS.N    ??GPIO_Init_8
+        MOVS     R12,#+1
+        ADDS     LR,R3,#+8
+        LSLS     R12,R12,LR
+        MOV      R4,R12
+        LDRH     R12,[R1, #+0]
+        ANDS     R12,R4,R12
+        MOV      R2,R12
+        CMP      R2,R4
+        BNE.N    ??GPIO_Init_9
+        LSLS     R12,R3,#+2
+        MOV      R4,R12
+        MOVS     R12,#+15
+        LSLS     R12,R12,R4
+        MOV      R6,R12
+        BICS     R5,R5,R6
+        LSLS     R12,R7,R4
+        ORRS     R5,R12,R5
+        LDRB     R12,[R1, #+3]
+        CMP      R12,#+40
+        BNE.N    ??GPIO_Init_10
+        MOVS     R12,#+1
+        ADDS     LR,R3,#+8
+        LSLS     R12,R12,LR
+        STR      R12,[R0, #+20]
+??GPIO_Init_10:
+        LDRB     R12,[R1, #+3]
+        CMP      R12,#+72
+        BNE.N    ??GPIO_Init_9
+        MOVS     R12,#+1
+        ADDS     LR,R3,#+8
+        LSLS     R12,R12,LR
+        STR      R12,[R0, #+16]
+??GPIO_Init_9:
+        ADDS     R3,R3,#+1
+        B.N      ??GPIO_Init_7
+??GPIO_Init_8:
+        STR      R5,[R0, #+4]
 ??GPIO_Init_6:
-        POP      {R4-R6}
-        BX       LR               ;; return
+        POP      {R4-R7,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -270,17 +283,19 @@ GPIO_StructInit:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 GPIO_ReadInputDataBit:
-        MOVS     R2,#+0
-        LDR      R0,[R0, #+8]
+        MOVS     R2,R0
+        MOVS     R0,#+0
+        LDR      R3,[R2, #+8]
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        TST      R0,R1
+        TST      R3,R1
         BEQ.N    ??GPIO_ReadInputDataBit_0
-        MOVS     R2,#+1
+        MOVS     R3,#+1
+        MOVS     R0,R3
         B.N      ??GPIO_ReadInputDataBit_1
 ??GPIO_ReadInputDataBit_0:
-        MOVS     R2,#+0
+        MOVS     R3,#+0
+        MOVS     R0,R3
 ??GPIO_ReadInputDataBit_1:
-        MOVS     R0,R2
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -294,17 +309,19 @@ GPIO_ReadInputData:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 GPIO_ReadOutputDataBit:
-        MOVS     R2,#+0
-        LDR      R0,[R0, #+12]
+        MOVS     R2,R0
+        MOVS     R0,#+0
+        LDR      R3,[R2, #+12]
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        TST      R0,R1
+        TST      R3,R1
         BEQ.N    ??GPIO_ReadOutputDataBit_0
-        MOVS     R2,#+1
+        MOVS     R3,#+1
+        MOVS     R0,R3
         B.N      ??GPIO_ReadOutputDataBit_1
 ??GPIO_ReadOutputDataBit_0:
-        MOVS     R2,#+0
+        MOVS     R3,#+0
+        MOVS     R0,R3
 ??GPIO_ReadOutputDataBit_1:
-        MOVS     R0,R2
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -361,24 +378,27 @@ GPIO_PinLockConfig:
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         STR      R1,[R0, #+24]
         STR      R2,[R0, #+24]
-        LDR      R2,[R0, #+24]
-        LDR      R2,[R0, #+24]
+        LDR      R3,[R0, #+24]
+        MOVS     R2,R3
+        LDR      R3,[R0, #+24]
+        MOVS     R2,R3
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 GPIO_EventOutputConfig:
         MOVS     R2,#+0
-        LDR.N    R2,??DataTable5_7  ;; 0x40010000
-        LDR      R2,[R2, #+0]
+        LDR.N    R3,??DataTable5_7  ;; 0x40010000
+        LDR      R3,[R3, #+0]
+        MOVS     R2,R3
         MOVW     R3,#+65408
         ANDS     R2,R3,R2
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         ORRS     R2,R2,R0, LSL #+4
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         ORRS     R2,R1,R2
-        LDR.N    R0,??DataTable5_7  ;; 0x40010000
-        STR      R2,[R0, #+0]
+        LDR.N    R3,??DataTable5_7  ;; 0x40010000
+        STR      R2,[R3, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -392,103 +412,109 @@ GPIO_EventOutputCmd:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 GPIO_PinRemapConfig:
-        PUSH     {R4,R5}
+        PUSH     {R4-R7}
         MOVS     R2,#+0
-        MOVS     R4,#+0
         MOVS     R3,#+0
+        MOVS     R5,#+0
         MOVS     R4,#+0
         CMP      R0,#+0
         BPL.N    ??GPIO_PinRemapConfig_0
-        LDR.N    R2,??DataTable5_9  ;; 0x4001001c
-        LDR      R3,[R2, #+0]
+        LDR.N    R6,??DataTable5_9  ;; 0x4001001c
+        LDR      R6,[R6, #+0]
+        MOVS     R5,R6
         B.N      ??GPIO_PinRemapConfig_1
 ??GPIO_PinRemapConfig_0:
-        LDR.N    R2,??DataTable5_10  ;; 0x40010004
-        LDR      R3,[R2, #+0]
+        LDR.N    R6,??DataTable5_10  ;; 0x40010004
+        LDR      R6,[R6, #+0]
+        MOVS     R5,R6
 ??GPIO_PinRemapConfig_1:
-        UBFX     R4,R0,#+16,#+4
-        UXTH     R2,R0            ;; ZeroExt  R2,R0,#+16,#+16
-        ANDS     R5,R0,#0x300000
-        CMP      R5,#+3145728
+        UBFX     R6,R0,#+16,#+4
+        MOVS     R4,R6
+        UXTH     R6,R0            ;; ZeroExt  R6,R0,#+16,#+16
+        MOVS     R2,R6
+        ANDS     R6,R0,#0x300000
+        CMP      R6,#+3145728
         BNE.N    ??GPIO_PinRemapConfig_2
-        BICS     R3,R3,#0xF000000
-        LDR.N    R4,??DataTable5_10  ;; 0x40010004
-        LDR      R4,[R4, #+0]
-        BICS     R4,R4,#0xF000000
-        LDR.N    R5,??DataTable5_10  ;; 0x40010004
-        STR      R4,[R5, #+0]
+        BICS     R5,R5,#0xF000000
+        LDR.N    R6,??DataTable5_10  ;; 0x40010004
+        LDR      R6,[R6, #+0]
+        BICS     R6,R6,#0xF000000
+        LDR.N    R7,??DataTable5_10  ;; 0x40010004
+        STR      R6,[R7, #+0]
         B.N      ??GPIO_PinRemapConfig_3
 ??GPIO_PinRemapConfig_2:
-        LSLS     R5,R0,#+11
+        LSLS     R6,R0,#+11
         BPL.N    ??GPIO_PinRemapConfig_4
-        MOVS     R5,#+3
-        LSLS     R4,R5,R4
-        BICS     R3,R3,R4
-        ORRS     R3,R3,#0xF000000
+        MOVS     R6,#+3
+        LSLS     R6,R6,R4
+        MOVS     R3,R6
+        BICS     R5,R5,R3
+        ORRS     R5,R5,#0xF000000
         B.N      ??GPIO_PinRemapConfig_3
 ??GPIO_PinRemapConfig_4:
-        LSRS     R4,R0,#+21
-        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
-        LSLS     R4,R4,#+4
-        LSLS     R4,R2,R4
-        BICS     R3,R3,R4
-        ORRS     R3,R3,#0xF000000
+        LSRS     R6,R0,#+21
+        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        LSLS     R6,R6,#+4
+        LSLS     R6,R2,R6
+        BICS     R5,R5,R6
+        ORRS     R5,R5,#0xF000000
 ??GPIO_PinRemapConfig_3:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??GPIO_PinRemapConfig_5
-        LSRS     R1,R0,#+21
-        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        LSLS     R1,R1,#+4
-        LSLS     R1,R2,R1
-        ORRS     R3,R1,R3
+        LSRS     R6,R0,#+21
+        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        LSLS     R6,R6,#+4
+        LSLS     R6,R2,R6
+        ORRS     R5,R6,R5
 ??GPIO_PinRemapConfig_5:
         CMP      R0,#+0
         BPL.N    ??GPIO_PinRemapConfig_6
-        LDR.N    R0,??DataTable5_9  ;; 0x4001001c
-        STR      R3,[R0, #+0]
+        LDR.N    R6,??DataTable5_9  ;; 0x4001001c
+        STR      R5,[R6, #+0]
         B.N      ??GPIO_PinRemapConfig_7
 ??GPIO_PinRemapConfig_6:
-        LDR.N    R0,??DataTable5_10  ;; 0x40010004
-        STR      R3,[R0, #+0]
+        LDR.N    R6,??DataTable5_10  ;; 0x40010004
+        STR      R5,[R6, #+0]
 ??GPIO_PinRemapConfig_7:
-        POP      {R4,R5}
+        POP      {R4-R7}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 GPIO_EXTILineConfig:
-        PUSH     {R4}
+        PUSH     {R4,R5}
         MOVS     R2,#+0
-        MOVS     R2,#+15
-        ANDS     R3,R1,#0x3
-        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
-        LSLS     R3,R3,#+2
-        LSLS     R2,R2,R3
+        MOVS     R3,#+15
+        ANDS     R4,R1,#0x3
+        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+        LSLS     R4,R4,#+2
+        LSLS     R3,R3,R4
+        MOVS     R2,R3
         LDR.N    R3,??DataTable5_11  ;; 0x40010008
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         ASRS     R4,R1,#+2
         LDR      R3,[R3, R4, LSL #+2]
-        BICS     R2,R3,R2
+        BICS     R3,R3,R2
+        LDR.N    R4,??DataTable5_11  ;; 0x40010008
+        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+        ASRS     R5,R1,#+2
+        STR      R3,[R4, R5, LSL #+2]
         LDR.N    R3,??DataTable5_11  ;; 0x40010008
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         ASRS     R4,R1,#+2
-        STR      R2,[R3, R4, LSL #+2]
-        LDR.N    R2,??DataTable5_11  ;; 0x40010008
-        UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        ASRS     R3,R1,#+2
-        LDR      R2,[R2, R3, LSL #+2]
+        LDR      R3,[R3, R4, LSL #+2]
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        ANDS     R3,R1,#0x3
-        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
-        LSLS     R3,R3,#+2
-        LSLS     R0,R0,R3
-        ORRS     R0,R0,R2
-        LDR.N    R2,??DataTable5_11  ;; 0x40010008
+        ANDS     R4,R1,#0x3
+        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+        LSLS     R4,R4,#+2
+        LSLS     R4,R0,R4
+        ORRS     R3,R4,R3
+        LDR.N    R4,??DataTable5_11  ;; 0x40010008
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
-        ASRS     R1,R1,#+2
-        STR      R0,[R2, R1, LSL #+2]
-        POP      {R4}
+        ASRS     R5,R1,#+2
+        STR      R3,[R4, R5, LSL #+2]
+        POP      {R4,R5}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -589,9 +615,9 @@ GPIO_ETH_MediaInterfaceConfig:
 
         END
 // 
-// 816 bytes in section .text
+// 964 bytes in section .text
 // 
-// 816 bytes of CODE memory
+// 964 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

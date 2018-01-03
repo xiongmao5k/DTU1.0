@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:27
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:30
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\timer.s
 //
@@ -47,12 +47,13 @@
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 timer_set:
-        PUSH     {R4,LR}
+        PUSH     {R3-R5,LR}
         MOVS     R4,R0
-        STR      R1,[R4, #+4]
+        MOVS     R5,R1
+        STR      R5,[R4, #+4]
         BL       clock_time
         STR      R0,[R4, #+0]
-        POP      {R4,PC}          ;; return
+        POP      {R0,R4,R5,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -117,9 +118,9 @@ timer_remaining:
 
         END
 // 
-// 84 bytes in section .text
+// 86 bytes in section .text
 // 
-// 84 bytes of CODE memory
+// 86 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

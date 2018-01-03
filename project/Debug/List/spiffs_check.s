@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:23
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       25/Dec/2017  16:03:39
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\spiffs_check.s
@@ -56,80 +56,90 @@
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 spiffs_object_get_data_page_index_reference:
-        PUSH     {R2-R8,LR}
+        PUSH     {R4-R11,LR}
+        SUB      SP,SP,#+12
         MOVS     R4,R0
-        MOVS     R6,R2
-        MOVS     R5,R3
-        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
-        CMP      R6,#+39
+        MOVS     R5,R1
+        MOV      R11,R2
+        MOVS     R6,R3
+        LDR      R7,[SP, #+48]
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
+        CMP      R11,#+39
         BCS.N    ??spiffs_object_get_data_page_index_reference_0
         MOVS     R8,#+0
         B.N      ??spiffs_object_get_data_page_index_reference_1
 ??spiffs_object_get_data_page_index_reference_0:
-        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
-        SUBS     R0,R6,#+39
-        MOVS     R2,#+60
-        UDIV     R0,R0,R2
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
+        SUBS     R0,R11,#+39
+        MOVS     R1,#+60
+        UDIV     R0,R0,R1
         ADDS     R8,R0,#+1
 ??spiffs_object_get_data_page_index_reference_1:
-        LDR      R7,[SP, #+32]
         STR      R7,[SP, #+0]
         MOVS     R3,#+0
         MOV      R2,R8
         UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
-        ORRS     R1,R1,#0x8000
+        ORRS     R1,R5,#0x8000
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         MOVS     R0,R4
         BL       spiffs_obj_lu_find_id_and_span
-        CMP      R0,#+0
-        BMI.N    ??spiffs_object_get_data_page_index_reference_2
-??spiffs_object_get_data_page_index_reference_3:
+        MOV      R9,R0
+        CMP      R9,#+0
+        BPL.N    ??spiffs_object_get_data_page_index_reference_2
+        MOV      R0,R9
+        B.N      ??spiffs_object_get_data_page_index_reference_3
+??spiffs_object_get_data_page_index_reference_2:
         LDRH     R0,[R7, #+0]
         MOVS     R1,#+128
-        MUL      R3,R1,R0
+        MUL      R10,R1,R0
         UXTH     R8,R8            ;; ZeroExt  R8,R8,#+16,#+16
         CMP      R8,#+0
         BNE.N    ??spiffs_object_get_data_page_index_reference_4
-        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
-        LSLS     R0,R6,#+1
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
+        LSLS     R0,R11,#+1
         ADDS     R0,R0,#+49
-        ADDS     R3,R0,R3
+        ADDS     R10,R0,R10
         B.N      ??spiffs_object_get_data_page_index_reference_5
 ??spiffs_object_get_data_page_index_reference_4:
-        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
-        CMP      R6,#+39
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
+        CMP      R11,#+39
         BCS.N    ??spiffs_object_get_data_page_index_reference_6
-        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
+        MOV      R0,R11
         B.N      ??spiffs_object_get_data_page_index_reference_7
 ??spiffs_object_get_data_page_index_reference_6:
-        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
-        SUBS     R0,R6,#+39
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
+        SUBS     R0,R11,#+39
         MOVS     R1,#+60
         UDIV     R2,R0,R1
-        MLS      R6,R1,R2,R0
+        MLS      R0,R1,R2,R0
 ??spiffs_object_get_data_page_index_reference_7:
-        LSLS     R0,R6,#+1
+        LSLS     R0,R0,#+1
         ADDS     R0,R0,#+8
-        ADDS     R3,R0,R3
+        ADDS     R10,R0,R10
 ??spiffs_object_get_data_page_index_reference_5:
-        STR      R5,[SP, #+4]
+        STR      R6,[SP, #+4]
         MOVS     R0,#+2
         STR      R0,[SP, #+0]
+        MOV      R3,R10
         MOVS     R2,#+0
         MOVS     R1,#+21
         MOVS     R0,R4
         BL       spiffs_phys_rd
-??spiffs_object_get_data_page_index_reference_2:
-        POP      {R1,R2,R4-R8,PC}  ;; return
+        MOV      R9,R0
+        MOV      R0,R9
+??spiffs_object_get_data_page_index_reference_3:
+        POP      {R1-R11,PC}      ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 spiffs_rewrite_page:
-        PUSH     {R0-R6,LR}
+        PUSH     {R0-R8,LR}
         MOVS     R4,R0
-        MOVS     R6,R1
-        MOVS     R5,R3
-        STR      R5,[SP, #+12]
+        MOVS     R5,R1
+        MOVS     R6,R2
+        MOVS     R7,R3
+        STR      R7,[SP, #+12]
         MOVS     R0,#+0
         STR      R0,[SP, #+8]
         MOVS     R0,#+0
@@ -137,40 +147,49 @@ spiffs_rewrite_page:
         MOVS     R0,#+0
         STR      R0,[SP, #+0]
         MOVS     R3,#+0
-        LDRH     R1,[R2, #+0]
+        MOVS     R2,R6
+        LDRH     R1,[R6, #+0]
         MOVS     R0,R4
         BL       spiffs_page_allocate_data
-        CMP      R0,#+0
-        BMI.N    ??spiffs_rewrite_page_0
-??spiffs_rewrite_page_1:
+        MOV      R8,R0
+        CMP      R8,#+0
+        BPL.N    ??spiffs_rewrite_page_0
+        MOV      R0,R8
+        B.N      ??spiffs_rewrite_page_1
+??spiffs_rewrite_page_0:
         MOVS     R0,#+123
         STR      R0,[SP, #+0]
-        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
         MOVS     R0,#+128
-        MUL      R0,R0,R6
+        MUL      R0,R0,R5
         ADDS     R3,R0,#+5
-        LDRH     R0,[R5, #+0]
+        LDRH     R0,[R7, #+0]
         MOVS     R1,#+128
         MULS     R0,R1,R0
         ADDS     R2,R0,#+5
         MOVS     R1,#+0
         MOVS     R0,R4
         BL       spiffs_phys_cpy
-        CMP      R0,#+0
-        BMI.N    ??spiffs_rewrite_page_0
+        MOV      R8,R0
+        CMP      R8,#+0
+        BPL.N    ??spiffs_rewrite_page_2
+        MOV      R0,R8
+        B.N      ??spiffs_rewrite_page_1
 ??spiffs_rewrite_page_2:
-??spiffs_rewrite_page_0:
+        MOV      R0,R8
+??spiffs_rewrite_page_1:
         ADD      SP,SP,#+16
-        POP      {R4-R6,PC}       ;; return
+        POP      {R4-R8,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 spiffs_rewrite_index:
-        PUSH     {R1,R4-R9,LR}
+        PUSH     {R1,R4-R11,LR}
         SUB      SP,SP,#+16
         MOVS     R5,R0
         MOVS     R6,R2
         MOVS     R7,R3
+        LDR      R4,[SP, #+56]
         LDRH     R0,[SP, #+16]
         ORRS     R0,R0,#0x8000
         STRH     R0,[SP, #+16]
@@ -181,27 +200,31 @@ spiffs_rewrite_index:
         LDRH     R1,[R5, #+20]
         MOVS     R0,R5
         BL       spiffs_obj_lu_find_free
-        CMP      R0,#+0
-        BMI.W    ??spiffs_rewrite_index_0
-??spiffs_rewrite_index_1:
+        MOV      R9,R0
+        CMP      R9,#+0
+        BPL.N    ??spiffs_rewrite_index_0
+        MOV      R0,R9
+        B.N      ??spiffs_rewrite_index_1
+??spiffs_rewrite_index_0:
         LDRH     R0,[SP, #+8]
         LDR      R1,[SP, #+12]
         ADDS     R0,R1,R0, LSL #+5
-        ADDS     R8,R0,#+1
+        ADDS     R0,R0,#+1
+        MOV      R8,R0
         UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
         CMP      R6,#+39
         BCS.N    ??spiffs_rewrite_index_2
-        MOVS     R9,#+0
+        MOVS     R10,#+0
         B.N      ??spiffs_rewrite_index_3
 ??spiffs_rewrite_index_2:
         UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
         SUBS     R0,R6,#+39
         MOVS     R1,#+60
         UDIV     R0,R0,R1
-        ADDS     R9,R0,#+1
+        ADDS     R10,R0,#+1
 ??spiffs_rewrite_index_3:
-        UXTH     R9,R9            ;; ZeroExt  R9,R9,#+16,#+16
-        CMP      R9,#+0
+        UXTH     R10,R10          ;; ZeroExt  R10,R10,#+16,#+16
+        CMP      R10,#+0
         BNE.N    ??spiffs_rewrite_index_4
         UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
         STR      R6,[SP, #+12]
@@ -222,7 +245,6 @@ spiffs_rewrite_index:
 ??spiffs_rewrite_index_7:
         STR      R0,[SP, #+12]
 ??spiffs_rewrite_index_5:
-        LDR      R4,[SP, #+48]
         LDR      R0,[R5, #+36]
         STR      R0,[SP, #+4]
         MOVS     R0,#+128
@@ -234,33 +256,36 @@ spiffs_rewrite_index:
         MOVS     R1,#+21
         MOVS     R0,R5
         BL       spiffs_phys_rd
-        CMP      R0,#+0
-        BMI.N    ??spiffs_rewrite_index_0
+        MOV      R9,R0
+        CMP      R9,#+0
+        BPL.N    ??spiffs_rewrite_index_8
+        MOV      R0,R9
+        B.N      ??spiffs_rewrite_index_1
 ??spiffs_rewrite_index_8:
-        LDR      R0,[R5, #+36]
-        LDRH     R1,[R0, #+0]
-        LDRH     R2,[SP, #+16]
-        CMP      R1,R2
+        LDR      R11,[R5, #+36]
+        LDRH     R0,[R11, #+0]
+        LDRH     R1,[SP, #+16]
+        CMP      R0,R1
         BEQ.N    ??spiffs_rewrite_index_9
         MOV      R1,R8
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         MOVS     R0,R5
         BL       spiffs_page_delete
         LDR.W    R0,??DataTable4  ;; 0xffffd8bd
-        B.N      ??spiffs_rewrite_index_0
+        B.N      ??spiffs_rewrite_index_1
 ??spiffs_rewrite_index_9:
-        LDRH     R1,[R0, #+2]
-        UXTH     R9,R9            ;; ZeroExt  R9,R9,#+16,#+16
-        CMP      R1,R9
+        LDRH     R0,[R11, #+2]
+        UXTH     R10,R10          ;; ZeroExt  R10,R10,#+16,#+16
+        CMP      R0,R10
         BEQ.N    ??spiffs_rewrite_index_10
         MOV      R1,R8
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         MOVS     R0,R5
         BL       spiffs_page_delete
         LDR.W    R0,??DataTable4_1  ;; 0xffffd8bc
-        B.N      ??spiffs_rewrite_index_0
+        B.N      ??spiffs_rewrite_index_1
 ??spiffs_rewrite_index_10:
-        LDRB     R0,[R0, #+4]
+        LDRB     R0,[R11, #+4]
         ANDS     R0,R0,#0xC7
         CMP      R0,#+192
         BEQ.N    ??spiffs_rewrite_index_11
@@ -269,10 +294,10 @@ spiffs_rewrite_index:
         MOVS     R0,R5
         BL       spiffs_page_delete
         LDR.W    R0,??DataTable4_2  ;; 0xffffd8bb
-        B.N      ??spiffs_rewrite_index_0
+        B.N      ??spiffs_rewrite_index_1
 ??spiffs_rewrite_index_11:
-        UXTH     R9,R9            ;; ZeroExt  R9,R9,#+16,#+16
-        CMP      R9,#+0
+        UXTH     R10,R10          ;; ZeroExt  R10,R10,#+16,#+16
+        CMP      R10,#+0
         BNE.N    ??spiffs_rewrite_index_12
         LDR      R0,[R5, #+36]
         UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
@@ -284,16 +309,17 @@ spiffs_rewrite_index:
         CMP      R6,#+39
         BCS.N    ??spiffs_rewrite_index_14
         UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
+        MOVS     R0,R6
         B.N      ??spiffs_rewrite_index_15
 ??spiffs_rewrite_index_14:
         UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
         SUBS     R0,R6,#+39
         MOVS     R1,#+60
         UDIV     R2,R0,R1
-        MLS      R6,R1,R2,R0
+        MLS      R0,R1,R2,R0
 ??spiffs_rewrite_index_15:
-        LDR      R0,[R5, #+36]
-        ADDS     R0,R0,R6, LSL #+1
+        LDR      R1,[R5, #+36]
+        ADDS     R0,R1,R0, LSL #+1
         STRH     R7,[R0, #+8]
 ??spiffs_rewrite_index_13:
         LDR      R0,[R5, #+36]
@@ -307,8 +333,11 @@ spiffs_rewrite_index:
         MOVS     R1,#+7
         MOVS     R0,R5
         BL       spiffs_phys_wr
-        CMP      R0,#+0
-        BMI.N    ??spiffs_rewrite_index_0
+        MOV      R9,R0
+        CMP      R9,#+0
+        BPL.N    ??spiffs_rewrite_index_16
+        MOV      R0,R9
+        B.N      ??spiffs_rewrite_index_1
 ??spiffs_rewrite_index_16:
         ADD      R0,SP,#+16
         STR      R0,[SP, #+4]
@@ -329,38 +358,48 @@ spiffs_rewrite_index:
         MOVS     R1,#+4
         MOVS     R0,R5
         BL       spiffs_phys_wr
-        CMP      R0,#+0
-        BMI.N    ??spiffs_rewrite_index_0
+        MOV      R9,R0
+        CMP      R9,#+0
+        BPL.N    ??spiffs_rewrite_index_17
+        MOV      R0,R9
+        B.N      ??spiffs_rewrite_index_1
 ??spiffs_rewrite_index_17:
         MOVS     R1,R4
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         MOVS     R0,R5
         BL       spiffs_page_delete
-??spiffs_rewrite_index_0:
+        MOV      R9,R0
+        MOV      R0,R9
+??spiffs_rewrite_index_1:
         ADD      SP,SP,#+20
-        POP      {R4-R9,PC}       ;; return
+        POP      {R4-R11,PC}      ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 spiffs_delete_obj_lazy:
-        PUSH     {R4,LR}
+        PUSH     {R4-R6,LR}
         SUB      SP,SP,#+16
         MOVS     R4,R0
+        MOVS     R5,R1
         ADD      R0,SP,#+10
         STR      R0,[SP, #+0]
         MOVS     R3,#+0
         MOVS     R2,#+0
+        MOVS     R1,R5
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         MOVS     R0,R4
         BL       spiffs_obj_lu_find_id_and_span
-        LDR.W    R1,??DataTable4_3  ;; 0xffffd8ee
-        CMP      R0,R1
+        MOVS     R6,R0
+        LDR.W    R0,??DataTable4_3  ;; 0xffffd8ee
+        CMP      R6,R0
         BNE.N    ??spiffs_delete_obj_lazy_0
         MOVS     R0,#+0
         B.N      ??spiffs_delete_obj_lazy_1
 ??spiffs_delete_obj_lazy_0:
-        CMP      R0,#+0
-        BMI.N    ??spiffs_delete_obj_lazy_1
+        CMP      R6,#+0
+        BPL.N    ??spiffs_delete_obj_lazy_2
+        MOVS     R0,R6
+        B.N      ??spiffs_delete_obj_lazy_1
 ??spiffs_delete_obj_lazy_2:
         MOVS     R0,#+191
         STRB     R0,[SP, #+8]
@@ -376,9 +415,11 @@ spiffs_delete_obj_lazy:
         MOVS     R1,#+4
         MOVS     R0,R4
         BL       spiffs_phys_wr
+        MOVS     R6,R0
+        MOVS     R0,R6
 ??spiffs_delete_obj_lazy_1:
         ADD      SP,SP,#+16
-        POP      {R4,PC}          ;; return
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -389,9 +430,9 @@ spiffs_lookup_check_validate:
         MOVS     R5,R1
         MOVS     R6,R2
         MOVS     R7,R3
+        LDR      R8,[SP, #+112]
         MOVS     R9,#+0
         MOVS     R10,#+0
-        LDR      R8,[SP, #+112]
         UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
         CMP      R5,#+0
         BNE.N    ??spiffs_lookup_check_validate_0
@@ -409,7 +450,8 @@ spiffs_lookup_check_validate:
 ??spiffs_lookup_check_validate_1:
         MOVS     R0,#+1
         STR      R0,[R8, #+0]
-        MOVS     R9,#+1
+        MOVS     R0,#+1
+        MOV      R9,R0
         LDRB     R0,[R6, #+4]
         LSLS     R0,R0,#+29
         BPL.N    ??spiffs_lookup_check_validate_3
@@ -424,7 +466,8 @@ spiffs_lookup_check_validate:
         LDR.W    R0,??DataTable4_3  ;; 0xffffd8ee
         CMP      R10,R0
         BNE.N    ??spiffs_lookup_check_validate_4
-        MOVS     R10,#+0
+        MOVS     R0,#+0
+        MOV      R10,R0
         B.N      ??spiffs_lookup_check_validate_2
 ??spiffs_lookup_check_validate_4:
         CMP      R10,#+0
@@ -458,10 +501,12 @@ spiffs_lookup_check_validate:
         MOVS     R0,R4
         BL       spiffs_rewrite_index
         MOV      R10,R0
+        LDR.W    R0,??DataTable4_4  ;; 0xffffd8be
+        CMP      R10,R0
+        BGE.N    ??spiffs_lookup_check_validate_8
         LDR.W    R0,??DataTable4_2  ;; 0xffffd8bb
-        SUBS     R0,R10,R0
-        CMP      R0,#+3
-        BCS.N    ??spiffs_lookup_check_validate_8
+        CMP      R10,R0
+        BLT.N    ??spiffs_lookup_check_validate_8
         LDRH     R1,[SP, #+34]
         MOVS     R0,R4
         BL       spiffs_page_delete
@@ -576,7 +621,8 @@ spiffs_lookup_check_validate:
         ORRS     R1,R5,#0x8000
         CMP      R0,R1
         BEQ.W    ??spiffs_lookup_check_validate_19
-        MOVS     R9,#+1
+        MOVS     R0,#+1
+        MOV      R9,R0
         LDRB     R0,[R6, #+4]
         ANDS     R0,R0,#0x82
         CMP      R0,#+128
@@ -599,7 +645,8 @@ spiffs_lookup_check_validate:
         LDR.W    R0,??DataTable4_3  ;; 0xffffd8ee
         CMP      R10,R0
         BNE.N    ??spiffs_lookup_check_validate_21
-        MOVS     R10,#+0
+        MOVS     R0,#+0
+        MOV      R10,R0
         B.N      ??spiffs_lookup_check_validate_18
 ??spiffs_lookup_check_validate_21:
         CMP      R10,#+0
@@ -631,10 +678,12 @@ spiffs_lookup_check_validate:
         MOVS     R0,R4
         BL       spiffs_rewrite_index
         MOV      R10,R0
+        LDR.W    R0,??DataTable4_4  ;; 0xffffd8be
+        CMP      R10,R0
+        BGE.N    ??spiffs_lookup_check_validate_24
         LDR.W    R0,??DataTable4_2  ;; 0xffffd8bb
-        SUBS     R0,R10,R0
-        CMP      R0,#+3
-        BCS.N    ??spiffs_lookup_check_validate_24
+        CMP      R10,R0
+        BLT.N    ??spiffs_lookup_check_validate_24
         LDRH     R1,[SP, #+32]
         MOVS     R0,R4
         BL       spiffs_page_delete
@@ -657,8 +706,8 @@ spiffs_lookup_check_validate:
         LDRH     R2,[R6, #+0]
         MOVS     R1,#+6
         MOVS     R0,#+0
-        LDR      R5,[R4, #+92]
-        BLX      R5
+        LDR      R12,[R4, #+92]
+        BLX      R12
 ??spiffs_lookup_check_validate_26:
 ??spiffs_lookup_check_validate_24:
         CMP      R10,#+0
@@ -680,7 +729,8 @@ spiffs_lookup_check_validate:
         LDR.W    R0,??DataTable4_3  ;; 0xffffd8ee
         CMP      R10,R0
         BNE.N    ??spiffs_lookup_check_validate_28
-        MOVS     R10,#+0
+        MOVS     R0,#+0
+        MOV      R10,R0
         MOVS     R0,#+0
         STRH     R0,[SP, #+18]
 ??spiffs_lookup_check_validate_28:
@@ -702,7 +752,8 @@ spiffs_lookup_check_validate:
         LDR.W    R0,??DataTable4_3  ;; 0xffffd8ee
         CMP      R10,R0
         BNE.N    ??spiffs_lookup_check_validate_30
-        MOVS     R10,#+0
+        MOVS     R0,#+0
+        MOV      R10,R0
         MOVS     R0,#+0
         STRH     R0,[SP, #+16]
 ??spiffs_lookup_check_validate_30:
@@ -730,7 +781,8 @@ spiffs_lookup_check_validate:
         LDR.W    R0,??DataTable4_3  ;; 0xffffd8ee
         CMP      R10,R0
         BNE.N    ??spiffs_lookup_check_validate_33
-        MOVS     R10,#+0
+        MOVS     R0,#+0
+        MOV      R10,R0
         MOVS     R0,#+0
         STRH     R0,[SP, #+18]
 ??spiffs_lookup_check_validate_33:
@@ -752,7 +804,8 @@ spiffs_lookup_check_validate:
         LDR.W    R0,??DataTable4_3  ;; 0xffffd8ee
         CMP      R10,R0
         BNE.N    ??spiffs_lookup_check_validate_35
-        MOVS     R10,#+0
+        MOVS     R0,#+0
+        MOV      R10,R0
         MOVS     R0,#+0
         STRH     R0,[SP, #+16]
 ??spiffs_lookup_check_validate_35:
@@ -805,8 +858,8 @@ spiffs_lookup_check_validate:
         LDRH     R2,[R6, #+0]
         MOVS     R1,#+3
         MOVS     R0,#+0
-        LDR      R5,[R4, #+92]
-        BLX      R5
+        LDR      R12,[R4, #+92]
+        BLX      R12
 ??spiffs_lookup_check_validate_40:
         CMP      R10,#+0
         BPL.N    ??spiffs_lookup_check_validate_41
@@ -849,8 +902,8 @@ spiffs_lookup_check_validate:
         LDRH     R2,[R6, #+0]
         MOVS     R1,#+3
         MOVS     R0,#+0
-        LDR      R5,[R4, #+92]
-        BLX      R5
+        LDR      R12,[R4, #+92]
+        BLX      R12
 ??spiffs_lookup_check_validate_44:
         ADD      R3,SP,#+40
         ADD      R2,SP,#+44
@@ -890,10 +943,11 @@ spiffs_lookup_check_validate:
         MOVS     R0,R4
         BL       spiffs_obj_lu_find_id_and_span
         MOV      R10,R0
-        LDR.N    R0,??DataTable4_3  ;; 0xffffd8ee
+        LDR.W    R0,??DataTable4_3  ;; 0xffffd8ee
         CMP      R10,R0
         BNE.N    ??spiffs_lookup_check_validate_49
-        MOVS     R10,#+0
+        MOVS     R0,#+0
+        MOV      R10,R0
         MOVS     R0,#+0
         STRH     R0,[SP, #+24]
 ??spiffs_lookup_check_validate_49:
@@ -915,7 +969,8 @@ spiffs_lookup_check_validate:
         LDR.N    R0,??DataTable4_3  ;; 0xffffd8ee
         CMP      R10,R0
         BNE.N    ??spiffs_lookup_check_validate_51
-        MOVS     R10,#+0
+        MOVS     R0,#+0
+        MOV      R10,R0
         MOVS     R0,#+0
         STRH     R0,[SP, #+22]
 ??spiffs_lookup_check_validate_51:
@@ -924,7 +979,8 @@ spiffs_lookup_check_validate:
         MOV      R0,R10
         B.N      ??spiffs_lookup_check_validate_6
 ??spiffs_lookup_check_validate_52:
-        MOVS     R9,#+1
+        MOVS     R0,#+1
+        MOV      R9,R0
         LDRH     R0,[SP, #+24]
         CMP      R0,#+0
         BEQ.N    ??spiffs_lookup_check_validate_53
@@ -1062,7 +1118,8 @@ spiffs_lookup_check_validate:
         LDRB     R0,[R6, #+4]
         LSLS     R0,R0,#+24
         BMI.N    ??spiffs_lookup_check_validate_61
-        MOVS     R9,#+1
+        MOVS     R0,#+1
+        MOV      R9,R0
         B.N      ??spiffs_lookup_check_validate_18
 ??spiffs_lookup_check_validate_61:
         LDRB     R0,[R6, #+4]
@@ -1082,8 +1139,10 @@ spiffs_lookup_check_validate:
         LDR.N    R0,??DataTable4_3  ;; 0xffffd8ee
         CMP      R10,R0
         BNE.N    ??spiffs_lookup_check_validate_62
-        MOVS     R10,#+0
-        MOVS     R9,#+1
+        MOVS     R0,#+0
+        MOV      R10,R0
+        MOVS     R0,#+1
+        MOV      R9,R0
         B.N      ??spiffs_lookup_check_validate_18
 ??spiffs_lookup_check_validate_62:
         CMP      R10,#+0
@@ -1095,7 +1154,8 @@ spiffs_lookup_check_validate:
         UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
         CMP      R0,R7
         BEQ.N    ??spiffs_lookup_check_validate_64
-        MOVS     R9,#+1
+        MOVS     R0,#+1
+        MOV      R9,R0
         B.N      ??spiffs_lookup_check_validate_18
 ??spiffs_lookup_check_validate_64:
         LDR      R0,[R4, #+92]
@@ -1105,8 +1165,8 @@ spiffs_lookup_check_validate:
         LDRH     R2,[R6, #+0]
         MOVS     R1,#+3
         MOVS     R0,#+0
-        LDR      R5,[R4, #+92]
-        BLX      R5
+        LDR      R12,[R4, #+92]
+        BLX      R12
 ??spiffs_lookup_check_validate_65:
         MOVS     R0,#+253
         STRB     R0,[SP, #+8]
@@ -1135,8 +1195,8 @@ spiffs_lookup_check_validate:
         MOVS     R2,R7
         MOVS     R1,#+5
         MOVS     R0,#+0
-        LDR      R5,[R4, #+92]
-        BLX      R5
+        LDR      R12,[R4, #+92]
+        BLX      R12
 ??spiffs_lookup_check_validate_67:
         MOVS     R1,R7
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
@@ -1157,16 +1217,16 @@ spiffs_lookup_check_validate:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 spiffs_lookup_check_v:
-        PUSH     {R4-R8,LR}
-        SUB      SP,SP,#+24
+        PUSH     {R4-R9,LR}
+        SUB      SP,SP,#+28
         MOVS     R4,R0
         MOVS     R5,R1
         MOVS     R6,R2
         MOVS     R7,R3
-        MOVS     R0,#+0
+        MOVS     R8,#+0
         UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
         ADDS     R0,R7,R6, LSL #+5
-        ADDS     R8,R0,#+1
+        ADDS     R9,R0,#+1
         LDR      R0,[R4, #+92]
         CMP      R0,#+0
         BEQ.N    ??spiffs_lookup_check_v_0
@@ -1185,34 +1245,41 @@ spiffs_lookup_check_v:
         STR      R0,[SP, #+4]
         MOVS     R0,#+5
         STR      R0,[SP, #+0]
-        UXTH     R8,R8            ;; ZeroExt  R8,R8,#+16,#+16
+        UXTH     R9,R9            ;; ZeroExt  R9,R9,#+16,#+16
         MOVS     R0,#+128
-        MUL      R3,R0,R8
+        MUL      R3,R0,R9
         MOVS     R2,#+0
         MOVS     R1,#+21
         MOVS     R0,R4
         BL       spiffs_phys_rd
-        CMP      R0,#+0
-        BMI.N    ??spiffs_lookup_check_v_1
-??spiffs_lookup_check_v_2:
+        MOV      R8,R0
+        CMP      R8,#+0
+        BPL.N    ??spiffs_lookup_check_v_1
+        MOV      R0,R8
+        B.N      ??spiffs_lookup_check_v_2
+??spiffs_lookup_check_v_1:
         MOVS     R0,#+0
         STR      R0,[SP, #+12]
         ADD      R0,SP,#+12
         STR      R0,[SP, #+8]
         STR      R7,[SP, #+4]
-        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
-        STR      R6,[SP, #+0]
-        MOV      R3,R8
+        MOVS     R0,R6
+        UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+        STR      R0,[SP, #+0]
+        MOV      R3,R9
         UXTH     R3,R3            ;; ZeroExt  R3,R3,#+16,#+16
         ADD      R2,SP,#+16
         MOVS     R1,R5
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         MOVS     R0,R4
         BL       spiffs_lookup_check_validate
-        CMP      R0,#+0
-        BMI.N    ??spiffs_lookup_check_v_1
+        MOV      R8,R0
+        CMP      R8,#+0
+        BPL.N    ??spiffs_lookup_check_v_3
+        MOV      R0,R8
+        B.N      ??spiffs_lookup_check_v_2
 ??spiffs_lookup_check_v_3:
-        CMP      R0,#+0
+        CMP      R8,#+0
         BNE.N    ??spiffs_lookup_check_v_4
         LDR      R0,[SP, #+12]
         CMP      R0,#+0
@@ -1222,19 +1289,21 @@ spiffs_lookup_check_v:
 ??spiffs_lookup_check_v_5:
         LDR.W    R0,??DataTable7_1  ;; 0xffffd8aa
 ??spiffs_lookup_check_v_6:
-        B.N      ??spiffs_lookup_check_v_1
+        B.N      ??spiffs_lookup_check_v_2
 ??spiffs_lookup_check_v_4:
-??spiffs_lookup_check_v_1:
-        ADD      SP,SP,#+24
-        POP      {R4-R8,PC}       ;; return
+        MOV      R0,R8
+??spiffs_lookup_check_v_2:
+        ADD      SP,SP,#+28
+        POP      {R4-R9,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 spiffs_lookup_consistency_check:
-        PUSH     {R4-R6,LR}
-        SUB      SP,SP,#+24
+        PUSH     {R4-R7,LR}
+        SUB      SP,SP,#+28
         MOVS     R4,R0
-        MOVS     R5,#+0
+        MOVS     R5,R1
+        MOVS     R6,#+0
         LDR      R0,[R4, #+92]
         CMP      R0,#+0
         BEQ.N    ??spiffs_lookup_consistency_check_0
@@ -1242,8 +1311,8 @@ spiffs_lookup_consistency_check:
         MOVS     R2,#+0
         MOVS     R1,#+0
         MOVS     R0,#+0
-        LDR      R5,[R4, #+92]
-        BLX      R5
+        LDR      R7,[R4, #+92]
+        BLX      R7
 ??spiffs_lookup_consistency_check_0:
         MOVS     R0,#+0
         STR      R0,[SP, #+20]
@@ -1262,23 +1331,24 @@ spiffs_lookup_consistency_check:
         MOVS     R1,#+0
         MOVS     R0,R4
         BL       spiffs_obj_lu_find_entry_visitor
-        MOVS     R5,R0
+        MOVS     R6,R0
         LDR.W    R0,??DataTable7_3  ;; 0xffffd8a8
-        CMP      R5,R0
+        CMP      R6,R0
         BNE.N    ??spiffs_lookup_consistency_check_1
-        MOVS     R5,#+0
+        MOVS     R0,#+0
+        MOVS     R6,R0
 ??spiffs_lookup_consistency_check_1:
-        CMP      R5,#+0
+        CMP      R6,#+0
         BEQ.N    ??spiffs_lookup_consistency_check_2
         LDR      R0,[R4, #+92]
         CMP      R0,#+0
         BEQ.N    ??spiffs_lookup_consistency_check_3
         MOVS     R3,#+0
-        MOVS     R2,R5
+        MOVS     R2,R6
         MOVS     R1,#+1
         MOVS     R0,#+0
-        LDR      R6,[R4, #+92]
-        BLX      R6
+        LDR      R7,[R4, #+92]
+        BLX      R7
 ??spiffs_lookup_consistency_check_3:
 ??spiffs_lookup_consistency_check_2:
         LDR      R0,[R4, #+92]
@@ -1288,12 +1358,12 @@ spiffs_lookup_consistency_check:
         MOV      R2,#+256
         MOVS     R1,#+0
         MOVS     R0,#+0
-        LDR      R4,[R4, #+92]
-        BLX      R4
+        LDR      R7,[R4, #+92]
+        BLX      R7
 ??spiffs_lookup_consistency_check_4:
-        MOVS     R0,R5
-        ADD      SP,SP,#+24
-        POP      {R4-R6,PC}       ;; return
+        MOVS     R0,R6
+        ADD      SP,SP,#+28
+        POP      {R4-R7,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -1319,6 +1389,12 @@ spiffs_lookup_consistency_check:
 ??DataTable4_3:
         DC32     0xffffd8ee
 
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable4_4:
+        DC32     0xffffd8be
+
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 spiffs_page_consistency_check_i:
@@ -1326,61 +1402,50 @@ spiffs_page_consistency_check_i:
         SUB      SP,SP,#+76
         MOVS     R4,R0
         MOVS     R0,#+4
-        STR      R0,[SP, #+24]
+        STR      R0,[SP, #+32]
         MOV      R0,#+1024
-        LDR      R1,[SP, #+24]
+        LDR      R1,[SP, #+32]
         UDIV     R0,R0,R1
-        STRH     R0,[SP, #+22]
-        MOVS     R5,#+0
+        STRH     R0,[SP, #+28]
+        MOVS     R6,#+0
         MOVS     R0,#+0
-        STRH     R0,[SP, #+16]
-        B.N      ??spiffs_page_consistency_check_i_0
-??spiffs_page_consistency_check_i_1:
-        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
-        CMP      R6,#+0
-        BNE.N    ??spiffs_page_consistency_check_i_0
-        LDRH     R0,[SP, #+16]
-        LDRH     R1,[SP, #+22]
-        ADDS     R0,R1,R0
-        STRH     R0,[SP, #+16]
+        STRH     R0,[SP, #+18]
 ??spiffs_page_consistency_check_i_0:
-        LDRH     R0,[SP, #+16]
+        LDRH     R0,[SP, #+18]
         LDR      R1,[R4, #+16]
         CMP      R0,R1, LSL #+5
-        BCS.W    ??spiffs_page_consistency_check_i_2
-        MOVS     R6,#+0
-        MOVS     R1,#+128
-        MOVS     R2,#+0
-        LDR      R7,[R4, #+40]
-        MOVS     R0,R7
+        BCS.W    ??spiffs_page_consistency_check_i_1
+        MOVS     R0,#+0
+        STRB     R0,[SP, #+16]
+        MOVS     R5,#+128
+        MOVS     R7,#+0
+        LDR      R8,[R4, #+40]
+        MOVS     R2,R7
+        MOVS     R1,R5
+        MOV      R0,R8
         BL       __aeabi_memset
         MOVS     R0,#+0
-        STRH     R0,[SP, #+18]
-        B.N      ??spiffs_page_consistency_check_i_3
-??spiffs_page_consistency_check_i_4:
-        LDRH     R0,[SP, #+18]
-        ADDS     R0,R0,#+1
-        STRH     R0,[SP, #+18]
-??spiffs_page_consistency_check_i_3:
-        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
-        CMP      R6,#+0
-        BNE.W    ??spiffs_page_consistency_check_i_5
-        LDRH     R0,[SP, #+18]
+        STRH     R0,[SP, #+24]
+??spiffs_page_consistency_check_i_2:
+        LDRB     R0,[SP, #+16]
+        CMP      R0,#+0
+        BNE.W    ??spiffs_page_consistency_check_i_3
+        LDRH     R0,[SP, #+24]
         LDR      R1,[R4, #+16]
         CMP      R0,R1
-        BCS.W    ??spiffs_page_consistency_check_i_5
+        BCS.W    ??spiffs_page_consistency_check_i_3
         LDR      R0,[R4, #+92]
         CMP      R0,#+0
-        BEQ.N    ??spiffs_page_consistency_check_i_6
+        BEQ.N    ??spiffs_page_consistency_check_i_4
         MOVS     R3,#+0
-        LDRH     R0,[SP, #+16]
+        LDRH     R0,[SP, #+18]
         MOV      R1,#+256
         MULS     R0,R1,R0
         LDR      R1,[R4, #+16]
         LSLS     R1,R1,#+5
         UDIV     R0,R0,R1
-        LDRH     R1,[SP, #+18]
-        LDRH     R2,[SP, #+22]
+        LDRH     R1,[SP, #+24]
+        LDRH     R2,[SP, #+28]
         MULS     R1,R2,R1
         MOV      R2,#+256
         MULS     R1,R2,R1
@@ -1392,208 +1457,234 @@ spiffs_page_consistency_check_i:
         ADDS     R2,R1,R0
         MOVS     R1,#+0
         MOVS     R0,#+2
-        LDR      R7,[R4, #+92]
-        BLX      R7
-??spiffs_page_consistency_check_i_6:
-        LDRH     R0,[SP, #+18]
+        LDR      R5,[R4, #+92]
+        BLX      R5
+??spiffs_page_consistency_check_i_4:
+        LDRH     R0,[SP, #+24]
         LSLS     R0,R0,#+5
-        ADDS     R7,R0,#+1
-        B.N      ??spiffs_page_consistency_check_i_7
-??spiffs_page_consistency_check_i_8:
-        LDRH     R0,[SP, #+16]
-        UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
-        CMP      R7,R0
+        ADDS     R5,R0,#+1
+??spiffs_page_consistency_check_i_5:
+        LDRB     R0,[SP, #+16]
+        CMP      R0,#+0
+        BNE.W    ??spiffs_page_consistency_check_i_6
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
+        LDRH     R0,[SP, #+24]
+        ADDS     R0,R0,#+1
+        CMP      R5,R0, LSL #+5
+        BGE.W    ??spiffs_page_consistency_check_i_6
+        ADD      R0,SP,#+36
+        STR      R0,[SP, #+4]
+        MOVS     R0,#+5
+        STR      R0,[SP, #+0]
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
+        MOVS     R0,#+128
+        MUL      R3,R0,R5
+        MOVS     R2,#+0
+        MOVS     R1,#+21
+        MOVS     R0,R4
+        BL       spiffs_phys_rd
+        MOVS     R6,R0
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_7
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_7:
+        LDRH     R0,[SP, #+18]
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
+        CMP      R5,R0
         BCC.N    ??spiffs_page_consistency_check_i_9
-        UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
-        LDRH     R0,[SP, #+16]
-        LDRH     R1,[SP, #+22]
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
+        LDRH     R0,[SP, #+18]
+        LDRH     R1,[SP, #+28]
         ADDS     R0,R1,R0
-        CMP      R7,R0
+        CMP      R5,R0
         BGE.N    ??spiffs_page_consistency_check_i_9
         MOVS     R0,#+1
+        STRB     R0,[SP, #+17]
         B.N      ??spiffs_page_consistency_check_i_10
 ??spiffs_page_consistency_check_i_9:
         MOVS     R0,#+0
+        STRB     R0,[SP, #+17]
 ??spiffs_page_consistency_check_i_10:
-        MOVS     R1,#+8
-        LDR      R2,[SP, #+24]
-        UDIV     R1,R1,R2
-        UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
-        LDRH     R2,[SP, #+16]
-        SUBS     R2,R7,R2
-        UDIV     R1,R2,R1
-        MOVS     R2,#+8
-        LDR      R3,[SP, #+24]
-        UDIV     R2,R2,R3
-        SUBS     R2,R2,#+1
-        ANDS     R2,R2,R7
-        LDR      R3,[SP, #+24]
-        MULS     R2,R3,R2
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        MOVS     R0,#+8
+        LDR      R1,[SP, #+32]
+        UDIV     R0,R0,R1
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
+        LDRH     R1,[SP, #+18]
+        SUBS     R1,R5,R1
+        UDIV     R0,R1,R0
+        STR      R0,[SP, #+48]
+        MOVS     R0,#+8
+        LDR      R1,[SP, #+32]
+        UDIV     R0,R0,R1
+        SUBS     R0,R0,#+1
+        ANDS     R0,R0,R5
+        LDR      R1,[SP, #+32]
+        MULS     R0,R1,R0
+        STRB     R0,[SP, #+22]
+        LDRB     R0,[SP, #+17]
         CMP      R0,#+0
         BEQ.N    ??spiffs_page_consistency_check_i_11
-        LDRB     R3,[SP, #+32]
-        ANDS     R3,R3,#0x81
-        CMP      R3,#+128
+        LDRB     R0,[SP, #+40]
+        ANDS     R0,R0,#0x81
+        CMP      R0,#+128
         BNE.N    ??spiffs_page_consistency_check_i_11
-        LDR      R3,[R4, #+40]
-        LDRB     R3,[R1, R3]
-        MOVS     R12,#+1
-        LSLS     R12,R12,R2
-        ORRS     R3,R12,R3
-        LDR      R12,[R4, #+40]
-        STRB     R3,[R1, R12]
+        LDR      R0,[R4, #+40]
+        LDR      R1,[SP, #+48]
+        LDRB     R0,[R1, R0]
+        MOVS     R1,#+1
+        LDRSB    R2,[SP, #+22]
+        LSLS     R1,R1,R2
+        ORRS     R0,R1,R0
+        LDR      R1,[R4, #+40]
+        LDR      R2,[SP, #+48]
+        STRB     R0,[R2, R1]
 ??spiffs_page_consistency_check_i_11:
-        LDRB     R3,[SP, #+32]
-        ANDS     R3,R3,#0xC5
-        CMP      R3,#+192
+        LDRB     R0,[SP, #+40]
+        ANDS     R0,R0,#0xC5
+        CMP      R0,#+192
         BNE.W    ??spiffs_page_consistency_check_i_12
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        LDRB     R0,[SP, #+17]
         CMP      R0,#+0
         BEQ.N    ??spiffs_page_consistency_check_i_13
         LDR      R0,[R4, #+40]
+        LDR      R1,[SP, #+48]
         LDRB     R0,[R1, R0]
-        MOVS     R3,#+1
+        MOVS     R1,#+1
+        LDRB     R2,[SP, #+22]
         ADDS     R2,R2,#+2
-        LSLS     R2,R3,R2
-        ORRS     R0,R2,R0
-        LDR      R2,[R4, #+40]
-        STRB     R0,[R1, R2]
+        LSLS     R1,R1,R2
+        ORRS     R0,R1,R0
+        LDR      R1,[R4, #+40]
+        LDR      R2,[SP, #+48]
+        STRB     R0,[R2, R1]
 ??spiffs_page_consistency_check_i_13:
         LDR      R0,[R4, #+36]
         STR      R0,[SP, #+4]
         MOVS     R0,#+128
         STR      R0,[SP, #+0]
-        UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
         MOVS     R0,#+128
-        MUL      R3,R0,R7
+        MUL      R3,R0,R5
         MOVS     R2,#+0
         MOVS     R1,#+21
         MOVS     R0,R4
         BL       spiffs_phys_rd
-        MOVS     R5,R0
-        CMP      R5,#+0
+        MOVS     R6,R0
+        CMP      R6,#+0
         BPL.N    ??spiffs_page_consistency_check_i_14
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
 ??spiffs_page_consistency_check_i_14:
         LDR      R0,[R4, #+36]
-        STR      R0,[SP, #+36]
-        LDRH     R0,[SP, #+30]
+        STR      R0,[SP, #+44]
+        LDRH     R0,[SP, #+38]
         CMP      R0,#+0
-        BNE.N    ??spiffs_page_consistency_check_i_16
+        BNE.N    ??spiffs_page_consistency_check_i_15
         MOVS     R0,#+39
-        STR      R0,[SP, #+40]
-        MOVS     R11,#+0
+        STR      R0,[SP, #+52]
+        MOVS     R0,#+0
+        STRH     R0,[SP, #+20]
         LDR      R0,[R4, #+36]
         ADDS     R0,R0,#+49
-        STR      R0,[SP, #+44]
-        B.N      ??spiffs_page_consistency_check_i_17
-??spiffs_page_consistency_check_i_16:
+        STR      R0,[SP, #+56]
+        B.N      ??spiffs_page_consistency_check_i_16
+??spiffs_page_consistency_check_i_15:
         MOVS     R0,#+60
-        STR      R0,[SP, #+40]
-        LDRH     R0,[SP, #+30]
+        STR      R0,[SP, #+52]
+        LDRH     R0,[SP, #+38]
         MOVS     R1,#+60
         MULS     R0,R1,R0
-        SUBS     R11,R0,#+21
+        SUBS     R0,R0,#+21
+        STRH     R0,[SP, #+20]
         LDR      R0,[R4, #+36]
         ADDS     R0,R0,#+8
-        STR      R0,[SP, #+44]
-??spiffs_page_consistency_check_i_17:
-        MOVS     R8,#+0
-        B.N      ??spiffs_page_consistency_check_i_18
-??spiffs_page_consistency_check_i_19:
-        MOVS     R6,#+1
-??spiffs_page_consistency_check_i_20:
-        LDR      R0,[R4, #+40]
-        LDRB     R0,[R9, R0]
-        MOVS     R1,#+1
-        ADDS     R2,R10,#+1
-        LSLS     R1,R1,R2
-        ORRS     R0,R1,R0
-        LDR      R1,[R4, #+40]
-        STRB     R0,[R9, R1]
-??spiffs_page_consistency_check_i_21:
-        ADDS     R8,R8,#+1
-??spiffs_page_consistency_check_i_18:
-        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
-        CMP      R6,#+0
-        BNE.W    ??spiffs_page_consistency_check_i_12
-        LDR      R0,[SP, #+40]
-        CMP      R8,R0
-        BGE.W    ??spiffs_page_consistency_check_i_12
-        LDR      R0,[SP, #+44]
-        LDRH     R10,[R0, R8, LSL #+1]
-        LDRH     R0,[SP, #+16]
-        UXTH     R10,R10          ;; ZeroExt  R10,R10,#+16,#+16
-        CMP      R10,R0
-        BCC.N    ??spiffs_page_consistency_check_i_22
-        UXTH     R10,R10          ;; ZeroExt  R10,R10,#+16,#+16
-        LDRH     R0,[SP, #+16]
-        LDRH     R1,[SP, #+22]
-        ADDS     R0,R1,R0
-        CMP      R10,R0
-        BGE.N    ??spiffs_page_consistency_check_i_22
-        MOVS     R0,#+1
-        B.N      ??spiffs_page_consistency_check_i_23
-??spiffs_page_consistency_check_i_22:
+        STR      R0,[SP, #+56]
+??spiffs_page_consistency_check_i_16:
         MOVS     R0,#+0
-??spiffs_page_consistency_check_i_23:
-        UXTH     R10,R10          ;; ZeroExt  R10,R10,#+16,#+16
-        MOVW     R1,#+65535
-        CMP      R10,R1
-        BEQ.N    ??spiffs_page_consistency_check_i_24
-        UXTH     R10,R10          ;; ZeroExt  R10,R10,#+16,#+16
-        CMP      R10,#+1024
-        BGT.N    ??spiffs_page_consistency_check_i_25
-??spiffs_page_consistency_check_i_24:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        MOVS     R7,R0
+??spiffs_page_consistency_check_i_17:
+        LDRB     R0,[SP, #+16]
         CMP      R0,#+0
-        BEQ.W    ??spiffs_page_consistency_check_i_26
-        UXTH     R10,R10          ;; ZeroExt  R10,R10,#+16,#+16
-        MOVS     R1,#+32
-        SDIV     R2,R10,R1
-        MLS      R2,R2,R1,R10
-        CMP      R2,#+0
-        BNE.N    ??spiffs_page_consistency_check_i_26
-??spiffs_page_consistency_check_i_25:
-        ADD      R0,SP,#+20
+        BNE.W    ??spiffs_page_consistency_check_i_12
+        LDR      R0,[SP, #+52]
+        CMP      R7,R0
+        BGE.W    ??spiffs_page_consistency_check_i_12
+        LDR      R0,[SP, #+56]
+        LDRH     R11,[R0, R7, LSL #+1]
+        LDRH     R0,[SP, #+18]
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
+        CMP      R11,R0
+        BCC.N    ??spiffs_page_consistency_check_i_18
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
+        LDRH     R0,[SP, #+18]
+        LDRH     R1,[SP, #+28]
+        ADDS     R0,R1,R0
+        CMP      R11,R0
+        BGE.N    ??spiffs_page_consistency_check_i_18
+        MOVS     R8,#+1
+        B.N      ??spiffs_page_consistency_check_i_19
+??spiffs_page_consistency_check_i_18:
+        MOVS     R8,#+0
+??spiffs_page_consistency_check_i_19:
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
+        MOVW     R0,#+65535
+        CMP      R11,R0
+        BEQ.N    ??spiffs_page_consistency_check_i_20
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
+        CMP      R11,#+1024
+        BGT.N    ??spiffs_page_consistency_check_i_21
+??spiffs_page_consistency_check_i_20:
+        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
+        CMP      R8,#+0
+        BEQ.W    ??spiffs_page_consistency_check_i_22
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
+        MOVS     R0,#+32
+        SDIV     R1,R11,R0
+        MLS      R1,R1,R0,R11
+        CMP      R1,#+0
+        BNE.W    ??spiffs_page_consistency_check_i_22
+??spiffs_page_consistency_check_i_21:
+        ADD      R0,SP,#+26
         STR      R0,[SP, #+0]
         MOVS     R3,#+0
-        ADDS     R2,R8,R11
+        LDRH     R0,[SP, #+20]
+        ADDS     R2,R7,R0
         UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
-        LDR      R0,[SP, #+36]
+        LDR      R0,[SP, #+44]
         LDRH     R0,[R0, #+0]
         LSLS     R1,R0,#+17       ;; ZeroExtS R1,R0,#+17,#+17
         LSRS     R1,R1,#+17
         MOVS     R0,R4
         BL       spiffs_obj_lu_find_id_and_span
-        MOVS     R5,R0
+        MOVS     R6,R0
         LDR.W    R0,??DataTable7_4  ;; 0xffffd8ee
-        CMP      R5,R0
-        BNE.N    ??spiffs_page_consistency_check_i_27
-        MOVS     R5,#+0
+        CMP      R6,R0
+        BNE.N    ??spiffs_page_consistency_check_i_23
         MOVS     R0,#+0
-        STRH     R0,[SP, #+20]
-??spiffs_page_consistency_check_i_27:
-        CMP      R5,#+0
-        BPL.N    ??spiffs_page_consistency_check_i_28
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_28:
-        LDRH     R0,[SP, #+20]
+        MOVS     R6,R0
+        MOVS     R0,#+0
+        STRH     R0,[SP, #+26]
+??spiffs_page_consistency_check_i_23:
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_24
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_24:
+        LDRH     R0,[SP, #+26]
         CMP      R0,#+0
-        BNE.N    ??spiffs_page_consistency_check_i_29
+        BNE.N    ??spiffs_page_consistency_check_i_25
         MOVS     R0,#+252
-        STRB     R0,[SP, #+52]
-        LDR      R0,[SP, #+36]
+        STRB     R0,[SP, #+64]
+        LDR      R0,[SP, #+44]
         LDRH     R0,[R0, #+0]
         LSLS     R0,R0,#+17       ;; ZeroExtS R0,R0,#+17,#+17
         LSRS     R0,R0,#+17
-        STRH     R0,[SP, #+48]
-        ADDS     R0,R8,R11
-        STRH     R0,[SP, #+50]
-        ADD      R0,SP,#+20
+        STRH     R0,[SP, #+60]
+        LDRH     R0,[SP, #+20]
+        ADDS     R0,R7,R0
+        STRH     R0,[SP, #+62]
+        ADD      R0,SP,#+26
         STR      R0,[SP, #+12]
         MOVS     R0,#+1
         STR      R0,[SP, #+8]
@@ -1602,244 +1693,228 @@ spiffs_page_consistency_check_i:
         MOVS     R0,#+0
         STR      R0,[SP, #+0]
         MOVS     R3,#+0
-        ADD      R2,SP,#+48
-        LDRH     R1,[SP, #+48]
+        ADD      R2,SP,#+60
+        LDRH     R1,[SP, #+60]
         MOVS     R0,R4
         BL       spiffs_page_allocate_data
-        MOVS     R5,R0
-        CMP      R5,#+0
-        BPL.N    ??spiffs_page_consistency_check_i_30
+        MOVS     R6,R0
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_26
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_26:
+??spiffs_page_consistency_check_i_25:
         MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_30:
-??spiffs_page_consistency_check_i_29:
-        MOVS     R0,R7
         UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
         STR      R0,[SP, #+0]
-        LDRH     R3,[SP, #+20]
-        ADDS     R2,R8,R11
+        LDRH     R3,[SP, #+26]
+        LDRH     R0,[SP, #+20]
+        ADDS     R2,R7,R0
         UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
-        LDR      R0,[SP, #+36]
+        LDR      R0,[SP, #+44]
         LDRH     R0,[R0, #+0]
         ORRS     R1,R0,#0x8000
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         MOVS     R0,R4
         BL       spiffs_rewrite_index
-        MOVS     R5,R0
-        LDR.W    R0,??DataTable7_5  ;; 0xffffd8bb
-        SUBS     R0,R5,R0
-        CMP      R0,#+3
-        BCS.N    ??spiffs_page_consistency_check_i_31
+        MOVS     R6,R0
+        LDR.W    R0,??DataTable7_5  ;; 0xffffd8be
+        CMP      R6,R0
+        BGE.N    ??spiffs_page_consistency_check_i_27
+        LDR.W    R0,??DataTable7_6  ;; 0xffffd8bb
+        CMP      R6,R0
+        BLT.N    ??spiffs_page_consistency_check_i_27
         LDR      R0,[R4, #+92]
         CMP      R0,#+0
-        BEQ.N    ??spiffs_page_consistency_check_i_32
+        BEQ.N    ??spiffs_page_consistency_check_i_28
         MOVS     R3,#+0
-        LDR      R0,[SP, #+36]
+        LDR      R0,[SP, #+44]
         LDRH     R2,[R0, #+0]
         MOVS     R1,#+6
         MOVS     R0,#+2
-        LDR      R5,[R4, #+92]
-        BLX      R5
-??spiffs_page_consistency_check_i_32:
-        MOVS     R1,R7
+        LDR      R12,[R4, #+92]
+        BLX      R12
+??spiffs_page_consistency_check_i_28:
+        MOVS     R1,R5
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         MOVS     R0,R4
         BL       spiffs_page_delete
-        MOVS     R5,R0
-        B.N      ??spiffs_page_consistency_check_i_33
-??spiffs_page_consistency_check_i_31:
+        MOVS     R6,R0
+        B.N      ??spiffs_page_consistency_check_i_29
+??spiffs_page_consistency_check_i_27:
         LDR      R0,[R4, #+92]
         CMP      R0,#+0
-        BEQ.N    ??spiffs_page_consistency_check_i_34
-        LDR      R0,[SP, #+36]
+        BEQ.N    ??spiffs_page_consistency_check_i_30
+        LDR      R0,[SP, #+44]
         LDRH     R3,[R0, #+2]
-        LDR      R0,[SP, #+36]
+        LDR      R0,[SP, #+44]
         LDRH     R2,[R0, #+0]
         MOVS     R1,#+2
         MOVS     R0,#+2
-        LDR      R6,[R4, #+92]
-        BLX      R6
-??spiffs_page_consistency_check_i_34:
-??spiffs_page_consistency_check_i_33:
-        CMP      R5,#+0
-        BPL.N    ??spiffs_page_consistency_check_i_35
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_35:
-        MOVS     R6,#+1
-        B.N      ??spiffs_page_consistency_check_i_21
-??spiffs_page_consistency_check_i_26:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+0
-        BEQ.W    ??spiffs_page_consistency_check_i_21
-        ADD      R0,SP,#+56
+        LDR      R12,[R4, #+92]
+        BLX      R12
+??spiffs_page_consistency_check_i_30:
+??spiffs_page_consistency_check_i_29:
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_31
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_31:
+        MOVS     R0,#+1
+        STRB     R0,[SP, #+16]
+        B.N      ??spiffs_page_consistency_check_i_32
+??spiffs_page_consistency_check_i_22:
+        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
+        CMP      R8,#+0
+        BEQ.W    ??spiffs_page_consistency_check_i_32
+        ADD      R0,SP,#+68
         STR      R0,[SP, #+4]
         MOVS     R0,#+5
         STR      R0,[SP, #+0]
-        UXTH     R10,R10          ;; ZeroExt  R10,R10,#+16,#+16
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
         MOVS     R0,#+128
-        MUL      R3,R0,R10
+        MUL      R3,R0,R11
         MOVS     R2,#+0
         MOVS     R1,#+21
         MOVS     R0,R4
         BL       spiffs_phys_rd
-        MOVS     R5,R0
-        CMP      R5,#+0
-        BPL.N    ??spiffs_page_consistency_check_i_36
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_36:
-        LDRH     R0,[SP, #+56]
-        LDRH     R1,[SP, #+28]
+        MOVS     R6,R0
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_33
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_33:
+        LDRH     R0,[SP, #+68]
+        LDRH     R1,[SP, #+36]
         BICS     R1,R1,#0x8000
         CMP      R0,R1
-        BNE.N    ??spiffs_page_consistency_check_i_37
-        LDRH     R0,[SP, #+58]
-        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
-        ADDS     R1,R8,R11
+        BNE.N    ??spiffs_page_consistency_check_i_34
+        LDRH     R0,[SP, #+70]
+        LDRH     R1,[SP, #+20]
+        ADDS     R1,R7,R1
         CMP      R0,R1
-        BNE.N    ??spiffs_page_consistency_check_i_37
-        LDRB     R0,[SP, #+60]
+        BNE.N    ??spiffs_page_consistency_check_i_34
+        LDRB     R0,[SP, #+72]
         ANDS     R0,R0,#0x85
         CMP      R0,#+132
-        BEQ.W    ??spiffs_page_consistency_check_i_38
-??spiffs_page_consistency_check_i_37:
+        BEQ.N    ??spiffs_page_consistency_check_i_35
+??spiffs_page_consistency_check_i_34:
         ADD      R0,SP,#+10
         STR      R0,[SP, #+0]
-        MOV      R3,R10
+        MOV      R3,R11
         UXTH     R3,R3            ;; ZeroExt  R3,R3,#+16,#+16
-        ADDS     R2,R8,R11
+        LDRH     R0,[SP, #+20]
+        ADDS     R2,R7,R0
         UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
-        LDRH     R0,[SP, #+28]
+        LDRH     R0,[SP, #+36]
         LSLS     R1,R0,#+17       ;; ZeroExtS R1,R0,#+17,#+17
         LSRS     R1,R1,#+17
         MOVS     R0,R4
         BL       spiffs_obj_lu_find_id_and_span
-        MOVS     R5,R0
+        MOVS     R6,R0
         LDR.W    R0,??DataTable7_4  ;; 0xffffd8ee
-        CMP      R5,R0
-        BNE.N    ??spiffs_page_consistency_check_i_39
-        MOVS     R5,#+0
+        CMP      R6,R0
+        BNE.N    ??spiffs_page_consistency_check_i_36
+        MOVS     R0,#+0
+        MOVS     R6,R0
         MOVS     R0,#+0
         STRH     R0,[SP, #+10]
-??spiffs_page_consistency_check_i_39:
-        CMP      R5,#+0
-        BPL.N    ??spiffs_page_consistency_check_i_40
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_40:
+??spiffs_page_consistency_check_i_36:
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_37
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_37:
         LDRH     R0,[SP, #+10]
         CMP      R0,#+0
-        BNE.N    ??spiffs_page_consistency_check_i_41
+        BNE.N    ??spiffs_page_consistency_check_i_38
+        LDR      R0,[R4, #+92]
+        CMP      R0,#+0
+        BEQ.N    ??spiffs_page_consistency_check_i_39
+        MOVS     R3,#+0
+        LDRH     R2,[SP, #+36]
+        MOVS     R1,#+6
+        MOVS     R0,#+2
+        LDR      R12,[R4, #+92]
+        BLX      R12
+??spiffs_page_consistency_check_i_39:
+        LDRH     R1,[SP, #+36]
+        MOVS     R0,R4
+        BL       spiffs_delete_obj_lazy
+        MOVS     R6,R0
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_40
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_40:
+        B.N      ??spiffs_page_consistency_check_i_12
+??spiffs_page_consistency_check_i_38:
+        MOVS     R0,R5
+        UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+        STR      R0,[SP, #+0]
+        LDRH     R3,[SP, #+10]
+        LDRH     R0,[SP, #+20]
+        ADDS     R2,R7,R0
+        UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
+        LDRH     R1,[SP, #+36]
+        MOVS     R0,R4
+        BL       spiffs_rewrite_index
+        MOVS     R6,R0
+        LDR.W    R0,??DataTable7_5  ;; 0xffffd8be
+        CMP      R6,R0
+        BGE.N    ??spiffs_page_consistency_check_i_41
+        LDR.W    R0,??DataTable7_6  ;; 0xffffd8bb
+        CMP      R6,R0
+        BLT.N    ??spiffs_page_consistency_check_i_41
         LDR      R0,[R4, #+92]
         CMP      R0,#+0
         BEQ.N    ??spiffs_page_consistency_check_i_42
         MOVS     R3,#+0
-        LDRH     R2,[SP, #+28]
+        LDRH     R2,[SP, #+36]
         MOVS     R1,#+6
         MOVS     R0,#+2
-        LDR      R5,[R4, #+92]
-        BLX      R5
+        LDR      R12,[R4, #+92]
+        BLX      R12
 ??spiffs_page_consistency_check_i_42:
-        LDRH     R1,[SP, #+28]
+        LDRH     R1,[SP, #+36]
         MOVS     R0,R4
         BL       spiffs_delete_obj_lazy
-        MOVS     R5,R0
-        CMP      R5,#+0
-        BPL.N    ??spiffs_page_consistency_check_i_43
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_43:
-??spiffs_page_consistency_check_i_12:
-        ADDS     R7,R7,#+1
-??spiffs_page_consistency_check_i_7:
-        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
-        CMP      R6,#+0
-        BNE.W    ??spiffs_page_consistency_check_i_4
-        UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
-        LDRH     R0,[SP, #+18]
-        ADDS     R0,R0,#+1
-        CMP      R7,R0, LSL #+5
-        BGE.W    ??spiffs_page_consistency_check_i_4
-        ADD      R0,SP,#+28
-        STR      R0,[SP, #+4]
-        MOVS     R0,#+5
-        STR      R0,[SP, #+0]
-        UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
-        MOVS     R0,#+128
-        MUL      R3,R0,R7
-        MOVS     R2,#+0
-        MOVS     R1,#+21
-        MOVS     R0,R4
-        BL       spiffs_phys_rd
-        MOVS     R5,R0
-        CMP      R5,#+0
-        BPL.W    ??spiffs_page_consistency_check_i_8
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
+        MOVS     R6,R0
+        B.N      ??spiffs_page_consistency_check_i_43
 ??spiffs_page_consistency_check_i_41:
-        MOVS     R0,R7
-        UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
-        STR      R0,[SP, #+0]
-        LDRH     R3,[SP, #+10]
-        ADDS     R2,R8,R11
-        UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
-        LDRH     R1,[SP, #+28]
-        MOVS     R0,R4
-        BL       spiffs_rewrite_index
-        MOVS     R5,R0
-        LDR.W    R0,??DataTable7_5  ;; 0xffffd8bb
-        SUBS     R0,R5,R0
-        CMP      R0,#+3
-        BCS.N    ??spiffs_page_consistency_check_i_44
         LDR      R0,[R4, #+92]
         CMP      R0,#+0
-        BEQ.N    ??spiffs_page_consistency_check_i_45
-        MOVS     R3,#+0
-        LDRH     R2,[SP, #+28]
-        MOVS     R1,#+6
-        MOVS     R0,#+2
-        LDR      R5,[R4, #+92]
-        BLX      R5
-??spiffs_page_consistency_check_i_45:
-        LDRH     R1,[SP, #+28]
-        MOVS     R0,R4
-        BL       spiffs_delete_obj_lazy
-        MOVS     R5,R0
-        B.N      ??spiffs_page_consistency_check_i_46
-??spiffs_page_consistency_check_i_44:
-        LDR      R0,[R4, #+92]
-        CMP      R0,#+0
-        BEQ.N    ??spiffs_page_consistency_check_i_47
-        LDRH     R3,[SP, #+30]
-        LDRH     R2,[SP, #+28]
+        BEQ.N    ??spiffs_page_consistency_check_i_44
+        LDRH     R3,[SP, #+38]
+        LDRH     R2,[SP, #+36]
         MOVS     R1,#+2
         MOVS     R0,#+2
-        LDR      R6,[R4, #+92]
-        BLX      R6
-??spiffs_page_consistency_check_i_47:
-??spiffs_page_consistency_check_i_46:
-        CMP      R5,#+0
-        BPL.N    ??spiffs_page_consistency_check_i_48
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_48:
-        MOVS     R6,#+1
-        B.N      ??spiffs_page_consistency_check_i_21
-??spiffs_page_consistency_check_i_38:
+        LDR      R12,[R4, #+92]
+        BLX      R12
+??spiffs_page_consistency_check_i_44:
+??spiffs_page_consistency_check_i_43:
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_45
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_45:
+        MOVS     R0,#+1
+        STRB     R0,[SP, #+16]
+        B.N      ??spiffs_page_consistency_check_i_32
+??spiffs_page_consistency_check_i_35:
         MOVS     R0,#+8
-        LDR      R1,[SP, #+24]
+        LDR      R1,[SP, #+32]
         UDIV     R0,R0,R1
-        UXTH     R10,R10          ;; ZeroExt  R10,R10,#+16,#+16
-        LDRH     R1,[SP, #+16]
-        SUBS     R1,R10,R1
+        UXTH     R11,R11          ;; ZeroExt  R11,R11,#+16,#+16
+        LDRH     R1,[SP, #+18]
+        SUBS     R1,R11,R1
         UDIV     R9,R1,R0
         MOVS     R0,#+8
-        LDR      R1,[SP, #+24]
+        LDR      R1,[SP, #+32]
         UDIV     R0,R0,R1
         SUBS     R0,R0,#+1
-        ANDS     R0,R0,R10
-        LDR      R1,[SP, #+24]
+        ANDS     R0,R0,R11
+        LDR      R1,[SP, #+32]
         MUL      R10,R1,R0
         LDR      R0,[R4, #+40]
         LDRB     R0,[R9, R0]
@@ -1847,85 +1922,102 @@ spiffs_page_consistency_check_i:
         ADDS     R2,R10,#+1
         LSLS     R1,R1,R2
         TST      R0,R1
-        BEQ.W    ??spiffs_page_consistency_check_i_20
+        BEQ.N    ??spiffs_page_consistency_check_i_46
         LDR      R0,[R4, #+92]
         CMP      R0,#+0
-        BEQ.N    ??spiffs_page_consistency_check_i_49
+        BEQ.N    ??spiffs_page_consistency_check_i_47
         MOVS     R3,#+0
-        LDRH     R2,[SP, #+28]
+        LDRH     R2,[SP, #+36]
         MOVS     R1,#+6
         MOVS     R0,#+2
-        LDR      R5,[R4, #+92]
-        BLX      R5
-??spiffs_page_consistency_check_i_49:
-        LDRH     R1,[SP, #+28]
+        LDR      R12,[R4, #+92]
+        BLX      R12
+??spiffs_page_consistency_check_i_47:
+        LDRH     R1,[SP, #+36]
         MOVS     R0,R4
         BL       spiffs_delete_obj_lazy
-        MOVS     R5,R0
-        CMP      R5,#+0
-        BPL.N    ??spiffs_page_consistency_check_i_50
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_50:
-        MOVS     R1,R7
+        MOVS     R6,R0
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_48
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_48:
+        MOVS     R1,R5
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         MOVS     R0,R4
         BL       spiffs_page_delete
-        MOVS     R5,R0
-        CMP      R5,#+0
-        BPL.W    ??spiffs_page_consistency_check_i_19
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_5:
-        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        MOVS     R6,R0
         CMP      R6,#+0
-        BNE.W    ??spiffs_page_consistency_check_i_1
-        MOVS     R7,#+0
-        B.N      ??spiffs_page_consistency_check_i_51
-??spiffs_page_consistency_check_i_52:
-        ADDS     R7,R7,#+1
-??spiffs_page_consistency_check_i_51:
-        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
-        CMP      R6,#+0
-        BNE.W    ??spiffs_page_consistency_check_i_1
-        CMP      R7,#+128
-        BCS.W    ??spiffs_page_consistency_check_i_1
-        MOVS     R8,#+0
-        B.N      ??spiffs_page_consistency_check_i_53
-??spiffs_page_consistency_check_i_54:
-??spiffs_page_consistency_check_i_55:
-??spiffs_page_consistency_check_i_56:
-        ADDS     R8,R8,#+1
-??spiffs_page_consistency_check_i_53:
-        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
-        CMP      R6,#+0
-        BNE.N    ??spiffs_page_consistency_check_i_52
-        MOVS     R0,#+8
-        LDR      R1,[SP, #+24]
-        UDIV     R0,R0,R1
-        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
-        CMP      R8,R0
-        BCS.N    ??spiffs_page_consistency_check_i_52
+        BPL.N    ??spiffs_page_consistency_check_i_49
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_49:
+        MOVS     R0,#+1
+        STRB     R0,[SP, #+16]
+??spiffs_page_consistency_check_i_46:
         LDR      R0,[R4, #+40]
-        LDRB     R0,[R7, R0]
-        LDR      R1,[SP, #+24]
-        MUL      R1,R1,R8
+        LDRB     R0,[R9, R0]
+        MOVS     R1,#+1
+        ADDS     R2,R10,#+1
+        LSLS     R1,R1,R2
+        ORRS     R0,R1,R0
+        LDR      R1,[R4, #+40]
+        STRB     R0,[R9, R1]
+??spiffs_page_consistency_check_i_32:
+        ADDS     R7,R7,#+1
+        B.N      ??spiffs_page_consistency_check_i_17
+??spiffs_page_consistency_check_i_12:
+        ADDS     R5,R5,#+1
+        B.N      ??spiffs_page_consistency_check_i_5
+??spiffs_page_consistency_check_i_6:
+        LDRH     R0,[SP, #+24]
+        ADDS     R0,R0,#+1
+        STRH     R0,[SP, #+24]
+        B.N      ??spiffs_page_consistency_check_i_2
+??spiffs_page_consistency_check_i_3:
+        LDRB     R0,[SP, #+16]
+        CMP      R0,#+0
+        BNE.W    ??spiffs_page_consistency_check_i_50
+        MOVS     R0,#+0
+        MOVS     R5,R0
+??spiffs_page_consistency_check_i_51:
+        LDRB     R0,[SP, #+16]
+        CMP      R0,#+0
+        BNE.W    ??spiffs_page_consistency_check_i_50
+        CMP      R5,#+128
+        BCS.W    ??spiffs_page_consistency_check_i_50
+        MOVS     R0,#+0
+        MOVS     R7,R0
+??spiffs_page_consistency_check_i_52:
+        LDRB     R0,[SP, #+16]
+        CMP      R0,#+0
+        BNE.W    ??spiffs_page_consistency_check_i_53
+        MOVS     R0,#+8
+        LDR      R1,[SP, #+32]
+        UDIV     R0,R0,R1
+        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
+        CMP      R7,R0
+        BCS.W    ??spiffs_page_consistency_check_i_53
+        LDR      R0,[R4, #+40]
+        LDRB     R0,[R5, R0]
+        LDR      R1,[SP, #+32]
+        MUL      R1,R1,R7
         MOVS     R2,R0
         ASRS     R2,R2,R1
-        ANDS     R0,R2,#0x7
-        LDRH     R1,[SP, #+16]
-        MOVS     R2,#+8
-        LDR      R3,[SP, #+24]
-        UDIV     R2,R2,R3
-        MLA      R1,R2,R7,R1
+        ANDS     R8,R2,#0x7
+        LDRH     R0,[SP, #+18]
+        MOVS     R1,#+8
+        LDR      R2,[SP, #+32]
+        UDIV     R1,R1,R2
+        MLA      R0,R1,R5,R0
+        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
+        ADDS     R9,R7,R0
         UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
-        ADDS     R9,R8,R1
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+1
-        BNE.N    ??spiffs_page_consistency_check_i_55
+        CMP      R8,#+1
+        BNE.W    ??spiffs_page_consistency_check_i_54
         MOVS     R10,#+0
         MOVS     R11,#+0
-        ADD      R0,SP,#+36
+        ADD      R0,SP,#+44
         STR      R0,[SP, #+4]
         MOVS     R0,#+5
         STR      R0,[SP, #+0]
@@ -1936,40 +2028,41 @@ spiffs_page_consistency_check_i:
         MOVS     R1,#+21
         MOVS     R0,R4
         BL       spiffs_phys_rd
-        MOVS     R5,R0
-        CMP      R5,#+0
-        BPL.N    ??spiffs_page_consistency_check_i_57
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_57:
+        MOVS     R6,R0
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_55
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_55:
         ADD      R0,SP,#+12
         STR      R0,[SP, #+0]
         ADD      R3,SP,#+8
-        LDRH     R2,[SP, #+38]
-        LDRH     R1,[SP, #+36]
+        LDRH     R2,[SP, #+46]
+        LDRH     R1,[SP, #+44]
         MOVS     R0,R4
         BL       spiffs_object_get_data_page_index_reference
-        MOVS     R5,R0
-        CMP      R5,#+0
-        BNE.N    ??spiffs_page_consistency_check_i_58
+        MOVS     R6,R0
+        CMP      R6,#+0
+        BNE.N    ??spiffs_page_consistency_check_i_56
         LDRH     R0,[SP, #+8]
         MOVW     R1,#+65535
         CMP      R0,R1
-        BEQ.N    ??spiffs_page_consistency_check_i_59
+        BEQ.N    ??spiffs_page_consistency_check_i_57
         LDRH     R0,[SP, #+8]
         CMP      R0,#+1024
-        BGT.N    ??spiffs_page_consistency_check_i_59
+        BGT.N    ??spiffs_page_consistency_check_i_57
         LDRH     R0,[SP, #+8]
         MOVS     R1,#+32
         SDIV     R2,R0,R1
         MLS      R2,R2,R1,R0
         CMP      R2,#+0
-        BNE.N    ??spiffs_page_consistency_check_i_60
-??spiffs_page_consistency_check_i_59:
-        MOVS     R10,#+1
-        B.N      ??spiffs_page_consistency_check_i_61
-??spiffs_page_consistency_check_i_60:
-        ADD      R0,SP,#+64
+        BNE.N    ??spiffs_page_consistency_check_i_58
+??spiffs_page_consistency_check_i_57:
+        MOVS     R0,#+1
+        MOV      R10,R0
+        B.N      ??spiffs_page_consistency_check_i_59
+??spiffs_page_consistency_check_i_58:
+        ADD      R0,SP,#+52
         STR      R0,[SP, #+4]
         MOVS     R0,#+5
         STR      R0,[SP, #+0]
@@ -1980,125 +2073,149 @@ spiffs_page_consistency_check_i:
         MOVS     R1,#+21
         MOVS     R0,R4
         BL       spiffs_phys_rd
-        MOVS     R5,R0
-        CMP      R5,#+0
-        BPL.N    ??spiffs_page_consistency_check_i_62
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_62:
-        LDRH     R0,[SP, #+36]
+        MOVS     R6,R0
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_60
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_60:
+        LDRH     R0,[SP, #+44]
         BICS     R0,R0,#0x8000
-        LDRH     R1,[SP, #+64]
+        LDRH     R1,[SP, #+52]
         CMP      R0,R1
-        BNE.N    ??spiffs_page_consistency_check_i_63
-        LDRB     R0,[SP, #+68]
+        BNE.N    ??spiffs_page_consistency_check_i_61
+        LDRB     R0,[SP, #+56]
         ANDS     R0,R0,#0x87
         CMP      R0,#+132
-        BNE.N    ??spiffs_page_consistency_check_i_63
-        MOVS     R11,#+1
-        B.N      ??spiffs_page_consistency_check_i_61
-??spiffs_page_consistency_check_i_63:
+        BNE.N    ??spiffs_page_consistency_check_i_61
+        MOVS     R0,#+1
+        MOV      R11,R0
+        B.N      ??spiffs_page_consistency_check_i_59
+??spiffs_page_consistency_check_i_61:
         LDRH     R0,[SP, #+8]
         UXTH     R9,R9            ;; ZeroExt  R9,R9,#+16,#+16
         CMP      R0,R9
-        BEQ.N    ??spiffs_page_consistency_check_i_61
-        MOVS     R10,#+1
-        B.N      ??spiffs_page_consistency_check_i_61
-??spiffs_page_consistency_check_i_58:
+        BEQ.N    ??spiffs_page_consistency_check_i_59
+        MOVS     R0,#+1
+        MOV      R10,R0
+        B.N      ??spiffs_page_consistency_check_i_59
+??spiffs_page_consistency_check_i_56:
         LDR.W    R0,??DataTable7_4  ;; 0xffffd8ee
-        CMP      R5,R0
-        BNE.N    ??spiffs_page_consistency_check_i_61
-        MOVS     R11,#+1
-        MOVS     R5,#+0
-??spiffs_page_consistency_check_i_61:
+        CMP      R6,R0
+        BNE.N    ??spiffs_page_consistency_check_i_59
+        MOVS     R0,#+1
+        MOV      R11,R0
+        MOVS     R0,#+0
+        MOVS     R6,R0
+??spiffs_page_consistency_check_i_59:
         UXTB     R10,R10          ;; ZeroExt  R10,R10,#+24,#+24
         CMP      R10,#+0
-        BEQ.N    ??spiffs_page_consistency_check_i_64
+        BEQ.N    ??spiffs_page_consistency_check_i_62
         LDRH     R0,[SP, #+12]
         STR      R0,[SP, #+0]
         MOV      R3,R9
         UXTH     R3,R3            ;; ZeroExt  R3,R3,#+16,#+16
-        LDRH     R2,[SP, #+38]
-        LDRH     R1,[SP, #+36]
+        LDRH     R2,[SP, #+46]
+        LDRH     R1,[SP, #+44]
         MOVS     R0,R4
         BL       spiffs_rewrite_index
-        MOVS     R5,R0
-        LDR.N    R0,??DataTable7_5  ;; 0xffffd8bb
-        SUBS     R0,R5,R0
-        CMP      R0,#+3
-        BCS.N    ??spiffs_page_consistency_check_i_65
+        MOVS     R6,R0
+        LDR.W    R0,??DataTable7_5  ;; 0xffffd8be
+        CMP      R6,R0
+        BGE.N    ??spiffs_page_consistency_check_i_63
+        LDR.W    R0,??DataTable7_6  ;; 0xffffd8bb
+        CMP      R6,R0
+        BLT.N    ??spiffs_page_consistency_check_i_63
         LDR      R0,[R4, #+92]
         CMP      R0,#+0
-        BEQ.N    ??spiffs_page_consistency_check_i_66
+        BEQ.N    ??spiffs_page_consistency_check_i_64
         MOVS     R3,#+0
-        LDRH     R2,[SP, #+36]
+        LDRH     R2,[SP, #+44]
         MOVS     R1,#+6
         MOVS     R0,#+2
-        LDR      R5,[R4, #+92]
-        BLX      R5
-??spiffs_page_consistency_check_i_66:
+        LDR      R12,[R4, #+92]
+        BLX      R12
+??spiffs_page_consistency_check_i_64:
         MOV      R1,R9
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         MOVS     R0,R4
         BL       spiffs_page_delete
-        MOVS     R5,R0
-        CMP      R5,#+0
-        BPL.N    ??spiffs_page_consistency_check_i_67
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_67:
-        LDRH     R1,[SP, #+36]
+        MOVS     R6,R0
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_65
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_65:
+        LDRH     R1,[SP, #+44]
         MOVS     R0,R4
         BL       spiffs_delete_obj_lazy
-        MOVS     R5,R0
-        B.N      ??spiffs_page_consistency_check_i_68
-??spiffs_page_consistency_check_i_65:
+        MOVS     R6,R0
+        B.N      ??spiffs_page_consistency_check_i_66
+??spiffs_page_consistency_check_i_63:
         LDR      R0,[R4, #+92]
         CMP      R0,#+0
-        BEQ.N    ??spiffs_page_consistency_check_i_69
-        LDRH     R3,[SP, #+38]
-        LDRH     R2,[SP, #+36]
+        BEQ.N    ??spiffs_page_consistency_check_i_67
+        LDRH     R3,[SP, #+46]
+        LDRH     R2,[SP, #+44]
         MOVS     R1,#+2
         MOVS     R0,#+2
-        LDR      R6,[R4, #+92]
-        BLX      R6
-??spiffs_page_consistency_check_i_69:
+        LDR      R12,[R4, #+92]
+        BLX      R12
+??spiffs_page_consistency_check_i_67:
+??spiffs_page_consistency_check_i_66:
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_68
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
 ??spiffs_page_consistency_check_i_68:
-        CMP      R5,#+0
-        BPL.N    ??spiffs_page_consistency_check_i_70
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_70:
-        MOVS     R6,#+1
-        B.N      ??spiffs_page_consistency_check_i_56
-??spiffs_page_consistency_check_i_64:
+        MOVS     R0,#+1
+        STRB     R0,[SP, #+16]
+        B.N      ??spiffs_page_consistency_check_i_69
+??spiffs_page_consistency_check_i_62:
         UXTB     R11,R11          ;; ZeroExt  R11,R11,#+24,#+24
         CMP      R11,#+0
-        BEQ.N    ??spiffs_page_consistency_check_i_71
+        BEQ.N    ??spiffs_page_consistency_check_i_70
         LDR      R0,[R4, #+92]
         CMP      R0,#+0
-        BEQ.N    ??spiffs_page_consistency_check_i_72
+        BEQ.N    ??spiffs_page_consistency_check_i_71
         MOVS     R3,#+0
         UXTH     R9,R9            ;; ZeroExt  R9,R9,#+16,#+16
         MOV      R2,R9
         MOVS     R1,#+5
         MOVS     R0,#+2
-        LDR      R5,[R4, #+92]
-        BLX      R5
-??spiffs_page_consistency_check_i_72:
+        LDR      R12,[R4, #+92]
+        BLX      R12
+??spiffs_page_consistency_check_i_71:
         MOV      R1,R9
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         MOVS     R0,R4
         BL       spiffs_page_delete
-        MOVS     R5,R0
-??spiffs_page_consistency_check_i_71:
-        CMP      R5,#+0
-        BPL.W    ??spiffs_page_consistency_check_i_54
-        MOVS     R0,R5
-        B.N      ??spiffs_page_consistency_check_i_15
-??spiffs_page_consistency_check_i_2:
-        MOVS     R0,R5
-??spiffs_page_consistency_check_i_15:
+        MOVS     R6,R0
+??spiffs_page_consistency_check_i_70:
+        CMP      R6,#+0
+        BPL.N    ??spiffs_page_consistency_check_i_72
+        MOVS     R0,R6
+        B.N      ??spiffs_page_consistency_check_i_8
+??spiffs_page_consistency_check_i_72:
+??spiffs_page_consistency_check_i_54:
+??spiffs_page_consistency_check_i_69:
+        ADDS     R7,R7,#+1
+        B.N      ??spiffs_page_consistency_check_i_52
+??spiffs_page_consistency_check_i_53:
+        ADDS     R5,R5,#+1
+        B.N      ??spiffs_page_consistency_check_i_51
+??spiffs_page_consistency_check_i_50:
+        LDRB     R0,[SP, #+16]
+        CMP      R0,#+0
+        BNE.W    ??spiffs_page_consistency_check_i_0
+        LDRH     R0,[SP, #+18]
+        LDRH     R1,[SP, #+28]
+        ADDS     R0,R1,R0
+        STRH     R0,[SP, #+18]
+        B.N      ??spiffs_page_consistency_check_i_0
+??spiffs_page_consistency_check_i_1:
+        MOVS     R0,R6
+??spiffs_page_consistency_check_i_8:
         ADD      SP,SP,#+76
         POP      {R4-R11,PC}      ;; return
 
@@ -2140,8 +2257,8 @@ spiffs_page_consistency_check:
         MOV      R2,#+256
         MOVS     R1,#+0
         MOVS     R0,#+2
-        LDR      R4,[R4, #+92]
-        BLX      R4
+        LDR      R6,[R4, #+92]
+        BLX      R6
 ??spiffs_page_consistency_check_3:
         MOVS     R0,R5
         POP      {R4-R6,PC}       ;; return
@@ -2149,229 +2266,255 @@ spiffs_page_consistency_check:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 spiffs_object_index_search:
-        LDR      R2,[R0, #+40]
+        PUSH     {R4}
+        MOVS     R2,R0
+        LDR      R4,[R2, #+40]
         LSLS     R1,R1,#+17       ;; ZeroExtS R1,R1,#+17,#+17
         LSRS     R1,R1,#+17
         MOVS     R0,#+0
-        B.N      ??spiffs_object_index_search_0
-??spiffs_object_index_search_1:
-        ADDS     R0,R0,#+1
+        MOVS     R3,R0
 ??spiffs_object_index_search_0:
-        CMP      R0,#+64
-        BCS.N    ??spiffs_object_index_search_2
-        LDRH     R3,[R2, R0, LSL #+1]
-        BICS     R3,R3,#0x8000
+        CMP      R3,#+64
+        BCS.N    ??spiffs_object_index_search_1
+        LDRH     R0,[R4, R3, LSL #+1]
+        BICS     R0,R0,#0x8000
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        CMP      R3,R1
-        BNE.N    ??spiffs_object_index_search_1
+        CMP      R0,R1
+        BNE.N    ??spiffs_object_index_search_2
+        MOVS     R0,R3
         B.N      ??spiffs_object_index_search_3
 ??spiffs_object_index_search_2:
+        ADDS     R3,R3,#+1
+        B.N      ??spiffs_object_index_search_0
+??spiffs_object_index_search_1:
         MOVS     R0,#-1
 ??spiffs_object_index_search_3:
+        POP      {R4}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 spiffs_object_index_consistency_check_v:
-        PUSH     {R0-R10,LR}
-        MOV      R8,R0
-        MOVS     R4,R1
-        MOV      R9,R2
-        MOV      R10,R3
-        LDR.N    R5,??DataTable7_1  ;; 0xffffd8aa
-        MOVS     R0,#+0
-        LDR      R6,[SP, #+52]
-        LDR      R7,[R8, #+40]
-        LDR      R0,[R8, #+92]
+        PUSH     {R3-R11,LR}
+        SUB      SP,SP,#+24
+        MOVS     R4,R0
+        MOVS     R5,R1
+        MOVS     R6,R2
+        LDR.W    R8,??DataTable7_1  ;; 0xffffd8aa
+        MOVS     R11,#+0
+        LDR      R7,[SP, #+68]
+        LDR      R0,[R4, #+40]
+        STR      R0,[SP, #+12]
+        LDR      R0,[R4, #+92]
         CMP      R0,#+0
         BEQ.N    ??spiffs_object_index_consistency_check_v_0
         MOVS     R3,#+0
-        UXTH     R9,R9            ;; ZeroExt  R9,R9,#+16,#+16
+        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
         MOV      R0,#+256
-        MUL      R0,R0,R9
-        LDR      R1,[R8, #+16]
+        MUL      R0,R0,R6
+        LDR      R1,[R4, #+16]
         UDIV     R2,R0,R1
         MOVS     R1,#+0
         MOVS     R0,#+1
-        LDR      R12,[R8, #+92]
+        LDR      R12,[R4, #+92]
         BLX      R12
 ??spiffs_object_index_consistency_check_v_0:
-        UXTH     R4,R4            ;; ZeroExt  R4,R4,#+16,#+16
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
         MOVW     R0,#+65535
-        CMP      R4,R0
+        CMP      R5,R0
         BEQ.W    ??spiffs_object_index_consistency_check_v_1
-        UXTH     R4,R4            ;; ZeroExt  R4,R4,#+16,#+16
-        CMP      R4,#+0
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
+        CMP      R5,#+0
         BEQ.W    ??spiffs_object_index_consistency_check_v_1
-        LSLS     R0,R4,#+16
+        LSLS     R0,R5,#+16
         BPL.W    ??spiffs_object_index_consistency_check_v_1
-        UXTH     R9,R9            ;; ZeroExt  R9,R9,#+16,#+16
-        ADDS     R0,R10,R9, LSL #+5
-        ADDS     R9,R0,#+1
-        ADD      R0,SP,#+8
+        UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
+        LDR      R0,[SP, #+24]
+        ADDS     R0,R0,R6, LSL #+5
+        ADDS     R0,R0,#+1
+        STRH     R0,[SP, #+8]
+        ADD      R0,SP,#+16
         STR      R0,[SP, #+4]
         MOVS     R0,#+5
         STR      R0,[SP, #+0]
-        UXTH     R9,R9            ;; ZeroExt  R9,R9,#+16,#+16
-        MOVS     R0,#+128
-        MUL      R3,R0,R9
+        LDRH     R0,[SP, #+8]
+        MOVS     R1,#+128
+        MUL      R3,R1,R0
         MOVS     R2,#+0
         MOVS     R1,#+21
-        MOV      R0,R8
+        MOVS     R0,R4
         BL       spiffs_phys_rd
-        CMP      R0,#+0
-        BMI.W    ??spiffs_object_index_consistency_check_v_2
-??spiffs_object_index_consistency_check_v_3:
-        LDRH     R0,[SP, #+10]
+        MOV      R11,R0
+        CMP      R11,#+0
+        BPL.N    ??spiffs_object_index_consistency_check_v_2
+        MOV      R0,R11
+        B.N      ??spiffs_object_index_consistency_check_v_3
+??spiffs_object_index_consistency_check_v_2:
+        LDRH     R0,[SP, #+18]
         CMP      R0,#+0
         BNE.N    ??spiffs_object_index_consistency_check_v_4
-        LDRB     R0,[SP, #+12]
+        LDRB     R0,[SP, #+20]
         ANDS     R0,R0,#0xC6
         CMP      R0,#+128
         BNE.N    ??spiffs_object_index_consistency_check_v_4
-        LDR      R0,[R8, #+92]
+        LDR      R0,[R4, #+92]
         CMP      R0,#+0
         BEQ.N    ??spiffs_object_index_consistency_check_v_5
-        UXTH     R4,R4            ;; ZeroExt  R4,R4,#+16,#+16
-        MOVS     R3,R4
-        UXTH     R9,R9            ;; ZeroExt  R9,R9,#+16,#+16
-        MOV      R2,R9
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
+        MOVS     R3,R5
+        LDRH     R2,[SP, #+8]
         MOVS     R1,#+5
         MOVS     R0,#+1
-        LDR      R4,[R8, #+92]
-        BLX      R4
+        LDR      R12,[R4, #+92]
+        BLX      R12
 ??spiffs_object_index_consistency_check_v_5:
-        MOV      R1,R9
-        UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        MOV      R0,R8
+        LDRH     R1,[SP, #+8]
+        MOVS     R0,R4
         BL       spiffs_page_delete
-        CMP      R0,#+0
-        BMI.N    ??spiffs_object_index_consistency_check_v_2
+        MOV      R11,R0
+        CMP      R11,#+0
+        BPL.N    ??spiffs_object_index_consistency_check_v_6
+        MOV      R0,R11
+        B.N      ??spiffs_object_index_consistency_check_v_3
 ??spiffs_object_index_consistency_check_v_6:
-        MOVS     R0,R5
-        B.N      ??spiffs_object_index_consistency_check_v_2
+        MOV      R0,R8
+        B.N      ??spiffs_object_index_consistency_check_v_3
 ??spiffs_object_index_consistency_check_v_4:
-        LDRB     R0,[SP, #+12]
+        LDRB     R0,[SP, #+20]
         ANDS     R0,R0,#0xC6
         CMP      R0,#+192
         BNE.N    ??spiffs_object_index_consistency_check_v_7
-        MOVS     R0,R5
-        B.N      ??spiffs_object_index_consistency_check_v_2
+        MOV      R0,R8
+        B.N      ??spiffs_object_index_consistency_check_v_3
 ??spiffs_object_index_consistency_check_v_7:
-        LDRH     R0,[SP, #+10]
+        LDRH     R0,[SP, #+18]
         CMP      R0,#+0
         BNE.N    ??spiffs_object_index_consistency_check_v_8
-        MOVS     R1,R4
+        MOVS     R1,R5
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        MOV      R0,R8
+        MOVS     R0,R4
         BL       spiffs_object_index_search
         CMN      R0,#+1
         BNE.N    ??spiffs_object_index_consistency_check_v_1
-        LSLS     R0,R4,#+17       ;; ZeroExtS R0,R4,#+17,#+17
-        LSRS     R0,R0,#+17
-        LDR      R1,[R6, #+0]
-        STRH     R0,[R7, R1, LSL #+1]
-        LDR      R0,[R6, #+0]
-        ADDS     R0,R0,#+1
-        STR      R0,[R6, #+0]
-        LDR      R0,[R6, #+0]
-        CMP      R0,#+64
+        LSLS     R1,R5,#+17       ;; ZeroExtS R1,R5,#+17,#+17
+        LSRS     R1,R1,#+17
+        LDR      R2,[SP, #+12]
+        LDR      R3,[R7, #+0]
+        STRH     R1,[R2, R3, LSL #+1]
+        LDR      R1,[R7, #+0]
+        ADDS     R1,R1,#+1
+        STR      R1,[R7, #+0]
+        LDR      R1,[R7, #+0]
+        CMP      R1,#+64
         BCC.N    ??spiffs_object_index_consistency_check_v_1
-        MOVS     R0,#+0
-        STR      R0,[R6, #+0]
+        MOVS     R1,#+0
+        STR      R1,[R7, #+0]
         B.N      ??spiffs_object_index_consistency_check_v_1
 ??spiffs_object_index_consistency_check_v_8:
-        MOVS     R1,R4
+        MOVS     R1,R5
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        MOV      R0,R8
+        MOVS     R0,R4
         BL       spiffs_object_index_search
+        MOV      R9,R0
         MOVS     R10,#+0
-        CMN      R0,#+1
+        CMN      R9,#+1
         BNE.N    ??spiffs_object_index_consistency_check_v_9
         ADD      R0,SP,#+4
         STR      R0,[SP, #+0]
         MOVS     R3,#+0
         MOVS     R2,#+0
-        ORRS     R1,R4,#0x8000
+        ORRS     R1,R5,#0x8000
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        MOV      R0,R8
+        MOVS     R0,R4
         BL       spiffs_obj_lu_find_id_and_span
-        LDR.N    R5,??DataTable7  ;; 0xffffd8a9
-        CMP      R0,#+0
+        MOV      R11,R0
+        LDR.N    R0,??DataTable7  ;; 0xffffd8a9
+        MOV      R8,R0
+        CMP      R11,#+0
         BNE.N    ??spiffs_object_index_consistency_check_v_10
-        LSLS     R0,R4,#+17       ;; ZeroExtS R0,R4,#+17,#+17
+        LSLS     R0,R5,#+17       ;; ZeroExtS R0,R5,#+17,#+17
         LSRS     R0,R0,#+17
-        LDR      R1,[R6, #+0]
-        STRH     R0,[R7, R1, LSL #+1]
+        LDR      R1,[SP, #+12]
+        LDR      R2,[R7, #+0]
+        STRH     R0,[R1, R2, LSL #+1]
         B.N      ??spiffs_object_index_consistency_check_v_11
 ??spiffs_object_index_consistency_check_v_10:
-        LDR.N    R1,??DataTable7_4  ;; 0xffffd8ee
-        CMP      R0,R1
+        LDR.N    R0,??DataTable7_4  ;; 0xffffd8ee
+        CMP      R11,R0
         BNE.N    ??spiffs_object_index_consistency_check_v_12
-        MOVS     R10,#+1
-        ORRS     R0,R4,#0x8000
-        LDR      R1,[R6, #+0]
-        STRH     R0,[R7, R1, LSL #+1]
+        MOVS     R0,#+1
+        MOV      R10,R0
+        ORRS     R0,R5,#0x8000
+        LDR      R1,[SP, #+12]
+        LDR      R2,[R7, #+0]
+        STRH     R0,[R1, R2, LSL #+1]
         B.N      ??spiffs_object_index_consistency_check_v_11
 ??spiffs_object_index_consistency_check_v_12:
-        CMP      R0,#+0
-        BMI.N    ??spiffs_object_index_consistency_check_v_2
+        CMP      R11,#+0
+        BPL.N    ??spiffs_object_index_consistency_check_v_13
+        MOV      R0,R11
+        B.N      ??spiffs_object_index_consistency_check_v_3
 ??spiffs_object_index_consistency_check_v_13:
 ??spiffs_object_index_consistency_check_v_11:
-        LDR      R0,[R6, #+0]
+        LDR      R0,[R7, #+0]
         ADDS     R0,R0,#+1
-        STR      R0,[R6, #+0]
-        LDR      R0,[R6, #+0]
+        STR      R0,[R7, #+0]
+        LDR      R0,[R7, #+0]
         CMP      R0,#+64
         BCC.N    ??spiffs_object_index_consistency_check_v_14
         MOVS     R0,#+0
-        STR      R0,[R6, #+0]
+        STR      R0,[R7, #+0]
         B.N      ??spiffs_object_index_consistency_check_v_14
 ??spiffs_object_index_consistency_check_v_9:
-        LDRH     R0,[R7, R0, LSL #+1]
+        LDR      R0,[SP, #+12]
+        LDRH     R0,[R0, R9, LSL #+1]
         LSLS     R0,R0,#+16
         BPL.N    ??spiffs_object_index_consistency_check_v_14
-        MOVS     R10,#+1
+        MOVS     R0,#+1
+        MOV      R10,R0
 ??spiffs_object_index_consistency_check_v_14:
         UXTB     R10,R10          ;; ZeroExt  R10,R10,#+24,#+24
         CMP      R10,#+0
         BEQ.N    ??spiffs_object_index_consistency_check_v_1
-        LDR      R0,[R8, #+92]
+        LDR      R0,[R4, #+92]
         CMP      R0,#+0
         BEQ.N    ??spiffs_object_index_consistency_check_v_15
-        UXTH     R4,R4            ;; ZeroExt  R4,R4,#+16,#+16
-        MOVS     R3,R4
-        UXTH     R9,R9            ;; ZeroExt  R9,R9,#+16,#+16
-        MOV      R2,R9
+        UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
+        MOVS     R3,R5
+        LDRH     R2,[SP, #+8]
         MOVS     R1,#+4
         MOVS     R0,#+1
-        LDR      R4,[R8, #+92]
-        BLX      R4
+        LDR      R12,[R4, #+92]
+        BLX      R12
 ??spiffs_object_index_consistency_check_v_15:
-        MOV      R1,R9
-        UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        MOV      R0,R8
+        LDRH     R1,[SP, #+8]
+        MOVS     R0,R4
         BL       spiffs_page_delete
-        CMP      R0,#+0
-        BMI.N    ??spiffs_object_index_consistency_check_v_2
+        MOV      R11,R0
+        CMP      R11,#+0
+        BPL.N    ??spiffs_object_index_consistency_check_v_16
+        MOV      R0,R11
+        B.N      ??spiffs_object_index_consistency_check_v_3
 ??spiffs_object_index_consistency_check_v_16:
 ??spiffs_object_index_consistency_check_v_1:
-        MOVS     R0,R5
-??spiffs_object_index_consistency_check_v_2:
-        ADD      SP,SP,#+16
-        POP      {R4-R10,PC}      ;; return
+        MOV      R0,R8
+??spiffs_object_index_consistency_check_v_3:
+        ADD      SP,SP,#+28
+        POP      {R4-R11,PC}      ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 spiffs_object_index_consistency_check:
-        PUSH     {R4-R6,LR}
+        PUSH     {R4-R8,LR}
         SUB      SP,SP,#+32
         MOVS     R4,R0
         MOVS     R5,#+0
-        MOVS     R1,#+128
-        MOVS     R2,#+0
-        LDR      R5,[R4, #+40]
-        MOVS     R0,R5
+        MOVS     R6,#+128
+        MOVS     R7,#+0
+        LDR      R8,[R4, #+40]
+        MOVS     R2,R7
+        MOVS     R1,R6
+        MOV      R0,R8
         BL       __aeabi_memset
         MOVS     R0,#+0
         STR      R0,[SP, #+24]
@@ -2382,8 +2525,8 @@ spiffs_object_index_consistency_check:
         MOVS     R2,#+0
         MOVS     R1,#+0
         MOVS     R0,#+1
-        LDR      R5,[R4, #+92]
-        BLX      R5
+        LDR      R6,[R4, #+92]
+        BLX      R6
 ??spiffs_object_index_consistency_check_0:
         MOVS     R0,#+0
         STR      R0,[SP, #+20]
@@ -2393,7 +2536,7 @@ spiffs_object_index_consistency_check:
         STR      R0,[SP, #+12]
         MOVS     R0,#+0
         STR      R0,[SP, #+8]
-        LDR.N    R0,??DataTable7_6
+        LDR.N    R0,??DataTable7_7
         STR      R0,[SP, #+4]
         MOVS     R0,#+0
         STR      R0,[SP, #+0]
@@ -2406,7 +2549,8 @@ spiffs_object_index_consistency_check:
         LDR.N    R0,??DataTable7_3  ;; 0xffffd8a8
         CMP      R5,R0
         BNE.N    ??spiffs_object_index_consistency_check_1
-        MOVS     R5,#+0
+        MOVS     R0,#+0
+        MOVS     R5,R0
 ??spiffs_object_index_consistency_check_1:
         CMP      R5,#+0
         BEQ.N    ??spiffs_object_index_consistency_check_2
@@ -2428,12 +2572,12 @@ spiffs_object_index_consistency_check:
         MOV      R2,#+256
         MOVS     R1,#+0
         MOVS     R0,#+1
-        LDR      R4,[R4, #+92]
-        BLX      R4
+        LDR      R6,[R4, #+92]
+        BLX      R6
 ??spiffs_object_index_consistency_check_4:
         MOVS     R0,R5
         ADD      SP,SP,#+32
-        POP      {R4-R6,PC}       ;; return
+        POP      {R4-R8,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -2469,12 +2613,18 @@ spiffs_object_index_consistency_check:
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable7_5:
-        DC32     0xffffd8bb
+        DC32     0xffffd8be
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable7_6:
+        DC32     0xffffd8bb
+
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable7_7:
         DC32     spiffs_object_index_consistency_check_v
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
@@ -2490,9 +2640,9 @@ spiffs_object_index_consistency_check:
 
         END
 // 
-// 5 334 bytes in section .text
+// 5 708 bytes in section .text
 // 
-// 5 334 bytes of CODE memory
+// 5 708 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

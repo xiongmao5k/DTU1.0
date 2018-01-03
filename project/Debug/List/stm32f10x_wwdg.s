@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:27
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:30
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_wwdg.s
@@ -65,12 +65,13 @@ WWDG_DeInit:
         THUMB
 WWDG_SetPrescaler:
         MOVS     R1,#+0
-        LDR.N    R1,??DataTable6  ;; 0x40002c04
-        LDR      R1,[R1, #+0]
-        BICS     R1,R1,#0x180
+        LDR.N    R2,??DataTable6  ;; 0x40002c04
+        LDR      R2,[R2, #+0]
+        BICS     R2,R2,#0x180
+        MOVS     R1,R2
         ORRS     R1,R0,R1
-        LDR.N    R0,??DataTable6  ;; 0x40002c04
-        STR      R1,[R0, #+0]
+        LDR.N    R2,??DataTable6  ;; 0x40002c04
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -86,12 +87,12 @@ WWDG_SetWindowValue:
         STR      R1,[SP, #+0]
         LDR      R1,[SP, #+0]
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        ANDS     R0,R0,#0x7F
-        ORRS     R0,R0,R1
-        STR      R0,[SP, #+0]
-        LDR      R0,[SP, #+0]
-        LDR.N    R1,??DataTable6  ;; 0x40002c04
-        STR      R0,[R1, #+0]
+        ANDS     R2,R0,#0x7F
+        ORRS     R1,R2,R1
+        STR      R1,[SP, #+0]
+        LDR      R1,[SP, #+0]
+        LDR.N    R2,??DataTable6  ;; 0x40002c04
+        STR      R1,[R2, #+0]
         ADD      SP,SP,#+4
         BX       LR               ;; return
 
@@ -107,18 +108,18 @@ WWDG_EnableIT:
         THUMB
 WWDG_SetCounter:
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        ANDS     R0,R0,#0x7F
-        LDR.N    R1,??DataTable6_2  ;; 0x40002c00
-        STR      R0,[R1, #+0]
+        ANDS     R1,R0,#0x7F
+        LDR.N    R2,??DataTable6_2  ;; 0x40002c00
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 WWDG_Enable:
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        ORRS     R0,R0,#0x80
-        LDR.N    R1,??DataTable6_2  ;; 0x40002c00
-        STR      R0,[R1, #+0]
+        ORRS     R1,R0,#0x80
+        LDR.N    R2,??DataTable6_2  ;; 0x40002c00
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -174,9 +175,9 @@ WWDG_ClearFlag:
 
         END
 // 
-// 144 bytes in section .text
+// 146 bytes in section .text
 // 
-// 144 bytes of CODE memory
+// 146 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

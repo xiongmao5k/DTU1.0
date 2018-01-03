@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:20
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:20
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\crc.s
 //
@@ -56,103 +56,107 @@ crc_init:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 swapBinaryArray:
+        PUSH     {R4}
+        MOVS     R2,R0
+??swapBinaryArray_0:
+        MOVS     R3,R1
+        SUBS     R1,R3,#+1
+        CMP      R3,#+0
+        BEQ.N    ??swapBinaryArray_1
+        LDRB     R3,[R2, #+0]
+        ANDS     R3,R3,#0x55
+        LDRB     R4,[R2, #+0]
+        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+        LSRS     R4,R4,#+1
+        ANDS     R4,R4,#0x55
+        ORRS     R3,R4,R3, LSL #+1
+        STRB     R3,[R2, #+0]
+        LDRB     R3,[R2, #+0]
+        ANDS     R3,R3,#0x33
+        LDRB     R4,[R2, #+0]
+        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+        LSRS     R4,R4,#+2
+        ANDS     R4,R4,#0x33
+        ORRS     R3,R4,R3, LSL #+2
+        STRB     R3,[R2, #+0]
+        LDRB     R3,[R2, #+0]
+        LDRB     R4,[R2, #+0]
+        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+        LSRS     R4,R4,#+4
+        ORRS     R3,R4,R3, LSL #+4
+        STRB     R3,[R2, #+0]
+        ADDS     R2,R2,#+1
         B.N      ??swapBinaryArray_0
 ??swapBinaryArray_1:
-        LDRB     R2,[R0, #+0]
-        ANDS     R2,R2,#0x55
-        LDRB     R3,[R0, #+0]
-        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
-        LSRS     R3,R3,#+1
-        ANDS     R3,R3,#0x55
-        ORRS     R2,R3,R2, LSL #+1
-        STRB     R2,[R0, #+0]
-        LDRB     R2,[R0, #+0]
-        ANDS     R2,R2,#0x33
-        LDRB     R3,[R0, #+0]
-        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
-        LSRS     R3,R3,#+2
-        ANDS     R3,R3,#0x33
-        ORRS     R2,R3,R2, LSL #+2
-        STRB     R2,[R0, #+0]
-        LDRB     R2,[R0, #+0]
-        LDRB     R3,[R0, #+0]
-        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
-        LSRS     R3,R3,#+4
-        ORRS     R2,R3,R2, LSL #+4
-        STRB     R2,[R0, #+0]
-        ADDS     R0,R0,#+1
-??swapBinaryArray_0:
-        MOVS     R2,R1
-        SUBS     R1,R2,#+1
-        CMP      R2,#+0
-        BNE.N    ??swapBinaryArray_1
+        POP      {R4}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 crc_calc:
-        PUSH     {R3-R7,LR}
-        MOVS     R6,R0
-        MOVS     R7,R1
-        LSRS     R4,R7,#+2
+        PUSH     {R3-R9,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        LSRS     R9,R5,#+2
         MOVS     R0,#+4
-        UDIV     R5,R7,R0
-        MLS      R5,R5,R0,R7
-        MOVS     R0,#+0
+        UDIV     R6,R5,R0
+        MLS      R6,R6,R0,R5
+        MOVS     R7,R4
+        MOVS     R8,#+0
         BL       CRC_ResetDR
-        MOVS     R1,R7
-        MOVS     R0,R6
+        MOVS     R1,R5
+        MOVS     R0,R4
         BL       swapBinaryArray
-        B.N      ??crc_calc_0
-??crc_calc_1:
-        LDR      R0,[R6, #+0]
-        LDR      R1,[R6, #+0]
+??crc_calc_0:
+        MOV      R0,R9
+        SUBS     R9,R0,#+1
+        CMP      R0,#+0
+        BEQ.N    ??crc_calc_1
+        LDR      R0,[R7, #+0]
+        LDR      R1,[R7, #+0]
         LSRS     R1,R1,#+8
         ANDS     R1,R1,#0xFF00
         ORRS     R0,R1,R0, LSR #+24
-        LDR      R1,[R6, #+0]
+        LDR      R1,[R7, #+0]
         LSLS     R1,R1,#+8
         ANDS     R1,R1,#0xFF0000
         ORRS     R0,R1,R0
-        LDR      R1,[R6, #+0]
+        LDR      R1,[R7, #+0]
         ORRS     R0,R0,R1, LSL #+24
         LDR.N    R1,??DataTable1  ;; 0x40023000
         STR      R0,[R1, #+0]
-        ADDS     R6,R6,#+4
-??crc_calc_0:
-        MOVS     R0,R4
-        SUBS     R4,R0,#+1
-        CMP      R0,#+0
-        BNE.N    ??crc_calc_1
-        CMP      R5,#+0
+        ADDS     R7,R7,#+4
+        B.N      ??crc_calc_0
+??crc_calc_1:
+        CMP      R6,#+0
         BEQ.N    ??crc_calc_2
-        LDR      R0,[R6, #+0]
+        LDR      R0,[R7, #+0]
         MOVS     R1,#+1
-        LSLS     R2,R5,#+3
+        LSLS     R2,R6,#+3
         LSLS     R1,R1,R2
         SUBS     R1,R1,#+1
         ANDS     R0,R1,R0
-        LDR      R1,[R6, #+0]
+        LDR      R1,[R7, #+0]
         MOVS     R2,#+1
-        LSLS     R3,R5,#+3
+        LSLS     R3,R6,#+3
         LSLS     R2,R2,R3
         SUBS     R2,R2,#+1
         ANDS     R1,R2,R1
         LSRS     R1,R1,#+8
         ANDS     R1,R1,#0xFF00
         ORRS     R0,R1,R0, LSR #+24
-        LDR      R1,[R6, #+0]
+        LDR      R1,[R7, #+0]
         MOVS     R2,#+1
-        LSLS     R3,R5,#+3
+        LSLS     R3,R6,#+3
         LSLS     R2,R2,R3
         SUBS     R2,R2,#+1
         ANDS     R1,R2,R1
         LSLS     R1,R1,#+8
         ANDS     R1,R1,#0xFF0000
         ORRS     R0,R1,R0
-        LDR      R1,[R6, #+0]
+        LDR      R1,[R7, #+0]
         MOVS     R2,#+1
-        LSLS     R3,R5,#+3
+        LSLS     R3,R6,#+3
         LSLS     R2,R2,R3
         SUBS     R2,R2,#+1
         ANDS     R1,R2,R1
@@ -162,26 +166,27 @@ crc_calc:
 ??crc_calc_2:
         LDR.N    R0,??DataTable1  ;; 0x40023000
         LDR      R0,[R0, #+0]
-        ANDS     R1,R0,#0x55555555
-        LSRS     R0,R0,#+1
-        ANDS     R0,R0,#0x55555555
-        ORRS     R0,R0,R1, LSL #+1
-        ANDS     R1,R0,#0x33333333
-        LSRS     R0,R0,#+2
-        ANDS     R0,R0,#0x33333333
-        ORRS     R0,R0,R1, LSL #+2
-        ANDS     R1,R0,#0xF0F0F0F
-        LSRS     R0,R0,#+4
-        ANDS     R0,R0,#0xF0F0F0F
-        ORRS     R0,R0,R1, LSL #+4
-        ANDS     R1,R0,#0xFF00FF
-        LSRS     R0,R0,#+8
-        ANDS     R0,R0,#0xFF00FF
-        ORRS     R0,R0,R1, LSL #+8
-        RORS     R0,R0,#+16
-        MOVS     R1,#-1
-        EORS     R0,R1,R0
-        POP      {R1,R4-R7,PC}    ;; return
+        MOV      R8,R0
+        ANDS     R0,R8,#0x55555555
+        LSRS     R1,R8,#+1
+        ANDS     R1,R1,#0x55555555
+        ORRS     R8,R1,R0, LSL #+1
+        ANDS     R0,R8,#0x33333333
+        LSRS     R1,R8,#+2
+        ANDS     R1,R1,#0x33333333
+        ORRS     R8,R1,R0, LSL #+2
+        ANDS     R0,R8,#0xF0F0F0F
+        LSRS     R1,R8,#+4
+        ANDS     R1,R1,#0xF0F0F0F
+        ORRS     R8,R1,R0, LSL #+4
+        ANDS     R0,R8,#0xFF00FF
+        LSRS     R1,R8,#+8
+        ANDS     R1,R1,#0xFF00FF
+        ORRS     R8,R1,R0, LSL #+8
+        RORS     R8,R8,#+16
+        MOVS     R0,#-1
+        EORS     R0,R0,R8
+        POP      {R1,R4-R9,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -225,90 +230,96 @@ refout:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 crc32_calc:
-        PUSH     {R3-R7,LR}
-        MOVS     R5,R0
+        PUSH     {R4-R10,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
         MOVS     R0,#+4
-        UDIV     R7,R1,R0
-        MLS      R7,R7,R0,R1
-        LSRS     R4,R1,#+2
-        MOVS     R6,#+0
-        MOVS     R0,#+0
+        UDIV     R6,R5,R0
+        MLS      R6,R6,R0,R5
+        LSRS     R7,R5,#+2
+        MOVS     R8,#+0
+        MOV      R9,R4
+        MOVS     R10,#+0
         BL       CRC_ResetDR
-        CMP      R7,#+0
+        CMP      R6,#+0
         BEQ.N    ??crc32_calc_0
-        CMP      R7,#+2
+        CMP      R6,#+2
         BEQ.N    ??crc32_calc_1
         BCC.N    ??crc32_calc_2
-        CMP      R7,#+3
+        CMP      R6,#+3
         BEQ.N    ??crc32_calc_3
         B.N      ??crc32_calc_4
-??crc32_calc_0:
-        MOVS     R6,R5
-        B.N      ??crc32_calc_5
-??crc32_calc_2:
-        LDR.N    R0,??DataTable1_1  ;; 0x6aa59e9d
-        LDR.N    R1,??DataTable1  ;; 0x40023000
-        STR      R0,[R1, #+0]
-        LDRB     R0,[R5, #+0]
-        BL       refin
-        LDR.N    R1,??DataTable1  ;; 0x40023000
-        STR      R0,[R1, #+0]
-        ADDS     R6,R5,#+1
-        B.N      ??crc32_calc_5
-??crc32_calc_1:
-        LDR.N    R0,??DataTable1_2  ;; 0x9746cd0a
-        LDR.N    R1,??DataTable1  ;; 0x40023000
-        STR      R0,[R1, #+0]
-        LDRB     R0,[R5, #+0]
-        LDRB     R1,[R5, #+1]
-        ORRS     R0,R1,R0, LSL #+8
-        BL       refin
-        LDR.N    R1,??DataTable1  ;; 0x40023000
-        STR      R0,[R1, #+0]
-        ADDS     R6,R5,#+2
-        B.N      ??crc32_calc_5
-??crc32_calc_3:
-        LDR.N    R0,??DataTable1_3  ;; 0xcc6021d0
-        LDR.N    R1,??DataTable1  ;; 0x40023000
-        STR      R0,[R1, #+0]
-        LDRB     R0,[R5, #+0]
-        LDRB     R1,[R5, #+1]
-        LSLS     R1,R1,#+8
-        ORRS     R0,R1,R0, LSL #+16
-        LDRB     R1,[R5, #+2]
-        ORRS     R0,R1,R0
-        BL       refin
-        LDR.N    R1,??DataTable1  ;; 0x40023000
-        STR      R0,[R1, #+0]
-        ADDS     R6,R5,#+3
-        B.N      ??crc32_calc_5
-??crc32_calc_6:
-        LDR      R0,[R6, #+0]
-        LDR      R1,[R6, #+0]
+??crc32_calc_5:
+        LDR      R0,[R8, #+0]
+        LDR      R1,[R8, #+0]
         LSRS     R1,R1,#+8
         ANDS     R1,R1,#0xFF00
         ORRS     R0,R1,R0, LSR #+24
-        LDR      R1,[R6, #+0]
+        LDR      R1,[R8, #+0]
         LSLS     R1,R1,#+8
         ANDS     R1,R1,#0xFF0000
         ORRS     R0,R1,R0
-        LDR      R1,[R6, #+0]
+        LDR      R1,[R8, #+0]
         ORRS     R0,R0,R1, LSL #+24
         BL       refin
         LDR.N    R1,??DataTable1  ;; 0x40023000
         STR      R0,[R1, #+0]
-        ADDS     R6,R6,#+4
-??crc32_calc_5:
-        MOVS     R0,R4
-        SUBS     R4,R0,#+1
+        ADDS     R8,R8,#+4
+        B.N      ??crc32_calc_6
+??crc32_calc_0:
+        MOV      R8,R4
+        B.N      ??crc32_calc_6
+??crc32_calc_2:
+        LDR.N    R0,??DataTable1_1  ;; 0x6aa59e9d
+        LDR.N    R1,??DataTable1  ;; 0x40023000
+        STR      R0,[R1, #+0]
+        LDRB     R0,[R9, #+0]
+        BL       refin
+        LDR.N    R1,??DataTable1  ;; 0x40023000
+        STR      R0,[R1, #+0]
+        ADDS     R0,R9,#+1
+        MOV      R8,R0
+        B.N      ??crc32_calc_6
+??crc32_calc_1:
+        LDR.N    R0,??DataTable1_2  ;; 0x9746cd0a
+        LDR.N    R1,??DataTable1  ;; 0x40023000
+        STR      R0,[R1, #+0]
+        LDRB     R0,[R9, #+0]
+        LDRB     R1,[R9, #+1]
+        ORRS     R0,R1,R0, LSL #+8
+        BL       refin
+        LDR.N    R1,??DataTable1  ;; 0x40023000
+        STR      R0,[R1, #+0]
+        ADDS     R0,R9,#+2
+        MOV      R8,R0
+        B.N      ??crc32_calc_6
+??crc32_calc_3:
+        LDR.N    R0,??DataTable1_3  ;; 0xcc6021d0
+        LDR.N    R1,??DataTable1  ;; 0x40023000
+        STR      R0,[R1, #+0]
+        LDRB     R0,[R9, #+0]
+        LDRB     R1,[R9, #+1]
+        LSLS     R1,R1,#+8
+        ORRS     R0,R1,R0, LSL #+16
+        LDRB     R1,[R9, #+2]
+        ORRS     R0,R1,R0
+        BL       refin
+        LDR.N    R1,??DataTable1  ;; 0x40023000
+        STR      R0,[R1, #+0]
+        ADDS     R0,R9,#+3
+        MOV      R8,R0
+??crc32_calc_6:
+        MOVS     R0,R7
+        SUBS     R7,R0,#+1
         CMP      R0,#+0
-        BNE.N    ??crc32_calc_6
+        BNE.N    ??crc32_calc_5
 ??crc32_calc_4:
         LDR.N    R0,??DataTable1  ;; 0x40023000
         LDR      R0,[R0, #+0]
         BL       refout
-        MVNS     R0,R0
-        POP      {R1,R4-R7,PC}    ;; return
+        MOV      R10,R0
+        MVNS     R0,R10
+        POP      {R4-R10,PC}      ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -347,9 +358,9 @@ crc32_calc:
 
         END
 // 
-// 620 bytes in section .text
+// 700 bytes in section .text
 // 
-// 620 bytes of CODE memory
+// 700 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

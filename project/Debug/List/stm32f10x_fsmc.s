@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:25
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:27
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_fsmc.s
@@ -88,32 +88,32 @@ FSMC_NORSRAMDeInit:
 FSMC_NANDDeInit:
         CMP      R0,#+16
         BNE.N    ??FSMC_NANDDeInit_0
-        MOVS     R0,#+24
-        LDR.W    R1,??DataTable15_1  ;; 0xa0000060
-        STR      R0,[R1, #+0]
-        MOVS     R0,#+64
-        LDR.W    R1,??DataTable15_2  ;; 0xa0000064
-        STR      R0,[R1, #+0]
-        MOVS     R0,#-50529028
-        LDR.W    R1,??DataTable15_3  ;; 0xa0000068
-        STR      R0,[R1, #+0]
-        MOVS     R0,#-50529028
-        LDR.W    R1,??DataTable15_4  ;; 0xa000006c
-        STR      R0,[R1, #+0]
+        MOVS     R1,#+24
+        LDR.W    R2,??DataTable15_1  ;; 0xa0000060
+        STR      R1,[R2, #+0]
+        MOVS     R1,#+64
+        LDR.W    R2,??DataTable15_2  ;; 0xa0000064
+        STR      R1,[R2, #+0]
+        MOVS     R1,#-50529028
+        LDR.W    R2,??DataTable15_3  ;; 0xa0000068
+        STR      R1,[R2, #+0]
+        MOVS     R1,#-50529028
+        LDR.W    R2,??DataTable15_4  ;; 0xa000006c
+        STR      R1,[R2, #+0]
         B.N      ??FSMC_NANDDeInit_1
 ??FSMC_NANDDeInit_0:
-        MOVS     R0,#+24
-        LDR.W    R1,??DataTable15_5  ;; 0xa0000080
-        STR      R0,[R1, #+0]
-        MOVS     R0,#+64
-        LDR.W    R1,??DataTable15_6  ;; 0xa0000084
-        STR      R0,[R1, #+0]
-        MOVS     R0,#-50529028
-        LDR.W    R1,??DataTable15_7  ;; 0xa0000088
-        STR      R0,[R1, #+0]
-        MOVS     R0,#-50529028
-        LDR.W    R1,??DataTable15_8  ;; 0xa000008c
-        STR      R0,[R1, #+0]
+        MOVS     R1,#+24
+        LDR.W    R2,??DataTable15_5  ;; 0xa0000080
+        STR      R1,[R2, #+0]
+        MOVS     R1,#+64
+        LDR.W    R2,??DataTable15_6  ;; 0xa0000084
+        STR      R1,[R2, #+0]
+        MOVS     R1,#-50529028
+        LDR.W    R2,??DataTable15_7  ;; 0xa0000088
+        STR      R1,[R2, #+0]
+        MOVS     R1,#-50529028
+        LDR.W    R2,??DataTable15_8  ;; 0xa000008c
+        STR      R1,[R2, #+0]
 ??FSMC_NANDDeInit_1:
         BX       LR               ;; return
 
@@ -225,77 +225,80 @@ FSMC_NORSRAMInit:
         LDR      R2,[R2, #+24]
         ORRS     R1,R2,R1
         LDR.W    R2,??DataTable15  ;; 0xa0000104
-        LDR      R0,[R0, #+0]
-        STR      R1,[R2, R0, LSL #+2]
+        LDR      R3,[R0, #+0]
+        STR      R1,[R2, R3, LSL #+2]
         B.N      ??FSMC_NORSRAMInit_2
 ??FSMC_NORSRAMInit_1:
         MVNS     R1,#-268435456
         LDR.W    R2,??DataTable15  ;; 0xa0000104
-        LDR      R0,[R0, #+0]
-        STR      R1,[R2, R0, LSL #+2]
+        LDR      R3,[R0, #+0]
+        STR      R1,[R2, R3, LSL #+2]
 ??FSMC_NORSRAMInit_2:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FSMC_NANDInit:
-        PUSH     {R4}
+        PUSH     {R4,R5}
         MOVS     R1,#+0
         MOVS     R2,#+0
         MOVS     R3,#+0
-        LDR      R1,[R0, #+4]
-        LDR      R2,[R0, #+8]
-        ORRS     R1,R2,R1
-        LDR      R2,[R0, #+12]
-        ORRS     R1,R2,R1
-        LDR      R2,[R0, #+16]
-        ORRS     R1,R2,R1
-        LDR      R2,[R0, #+20]
-        ORRS     R1,R1,R2, LSL #+9
-        LDR      R2,[R0, #+24]
-        ORRS     R1,R1,R2, LSL #+13
-        ORRS     R1,R1,#0x8
-        LDR      R2,[R0, #+28]
-        LDR      R2,[R2, #+0]
-        LDR      R3,[R0, #+28]
-        LDR      R3,[R3, #+4]
-        ORRS     R2,R2,R3, LSL #+8
-        LDR      R3,[R0, #+28]
-        LDR      R3,[R3, #+8]
-        ORRS     R2,R2,R3, LSL #+16
-        LDR      R3,[R0, #+28]
-        LDR      R3,[R3, #+12]
-        ORRS     R2,R2,R3, LSL #+24
-        LDR      R3,[R0, #+32]
-        LDR      R3,[R3, #+0]
+        LDR      R4,[R0, #+4]
+        LDR      R5,[R0, #+8]
+        ORRS     R4,R5,R4
+        LDR      R5,[R0, #+12]
+        ORRS     R4,R5,R4
+        LDR      R5,[R0, #+16]
+        ORRS     R4,R5,R4
+        LDR      R5,[R0, #+20]
+        ORRS     R4,R4,R5, LSL #+9
+        LDR      R5,[R0, #+24]
+        ORRS     R4,R4,R5, LSL #+13
+        ORRS     R4,R4,#0x8
+        MOVS     R1,R4
+        LDR      R4,[R0, #+28]
+        LDR      R4,[R4, #+0]
+        LDR      R5,[R0, #+28]
+        LDR      R5,[R5, #+4]
+        ORRS     R4,R4,R5, LSL #+8
+        LDR      R5,[R0, #+28]
+        LDR      R5,[R5, #+8]
+        ORRS     R4,R4,R5, LSL #+16
+        LDR      R5,[R0, #+28]
+        LDR      R5,[R5, #+12]
+        ORRS     R4,R4,R5, LSL #+24
+        MOVS     R2,R4
         LDR      R4,[R0, #+32]
-        LDR      R4,[R4, #+4]
-        ORRS     R3,R3,R4, LSL #+8
-        LDR      R4,[R0, #+32]
-        LDR      R4,[R4, #+8]
-        ORRS     R3,R3,R4, LSL #+16
-        LDR      R4,[R0, #+32]
-        LDR      R4,[R4, #+12]
-        ORRS     R3,R3,R4, LSL #+24
-        LDR      R0,[R0, #+0]
-        CMP      R0,#+16
+        LDR      R4,[R4, #+0]
+        LDR      R5,[R0, #+32]
+        LDR      R5,[R5, #+4]
+        ORRS     R4,R4,R5, LSL #+8
+        LDR      R5,[R0, #+32]
+        LDR      R5,[R5, #+8]
+        ORRS     R4,R4,R5, LSL #+16
+        LDR      R5,[R0, #+32]
+        LDR      R5,[R5, #+12]
+        ORRS     R4,R4,R5, LSL #+24
+        MOVS     R3,R4
+        LDR      R4,[R0, #+0]
+        CMP      R4,#+16
         BNE.N    ??FSMC_NANDInit_0
-        LDR.W    R0,??DataTable15_1  ;; 0xa0000060
-        STR      R1,[R0, #+0]
-        LDR.W    R0,??DataTable15_3  ;; 0xa0000068
-        STR      R2,[R0, #+0]
-        LDR.W    R0,??DataTable15_4  ;; 0xa000006c
-        STR      R3,[R0, #+0]
+        LDR.W    R4,??DataTable15_1  ;; 0xa0000060
+        STR      R1,[R4, #+0]
+        LDR.W    R4,??DataTable15_3  ;; 0xa0000068
+        STR      R2,[R4, #+0]
+        LDR.W    R4,??DataTable15_4  ;; 0xa000006c
+        STR      R3,[R4, #+0]
         B.N      ??FSMC_NANDInit_1
 ??FSMC_NANDInit_0:
-        LDR.W    R0,??DataTable15_5  ;; 0xa0000080
-        STR      R1,[R0, #+0]
-        LDR.W    R0,??DataTable15_7  ;; 0xa0000088
-        STR      R2,[R0, #+0]
-        LDR.W    R0,??DataTable15_8  ;; 0xa000008c
-        STR      R3,[R0, #+0]
+        LDR.W    R4,??DataTable15_5  ;; 0xa0000080
+        STR      R1,[R4, #+0]
+        LDR.W    R4,??DataTable15_7  ;; 0xa0000088
+        STR      R2,[R4, #+0]
+        LDR.W    R4,??DataTable15_8  ;; 0xa000008c
+        STR      R3,[R4, #+0]
 ??FSMC_NANDInit_1:
-        POP      {R4}
+        POP      {R4,R5}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -343,11 +346,11 @@ FSMC_PCCARDInit:
         LDR      R2,[R0, #+20]
         LDR      R2,[R2, #+8]
         ORRS     R1,R1,R2, LSL #+16
-        LDR      R0,[R0, #+20]
-        LDR      R0,[R0, #+12]
-        ORRS     R0,R1,R0, LSL #+24
-        LDR.W    R1,??DataTable15_13  ;; 0xa00000b0
-        STR      R0,[R1, #+0]
+        LDR      R2,[R0, #+20]
+        LDR      R2,[R2, #+12]
+        ORRS     R1,R1,R2, LSL #+24
+        LDR.W    R2,??DataTable15_13  ;; 0xa00000b0
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -419,8 +422,8 @@ FSMC_NORSRAMStructInit:
         LDR      R2,[R0, #+56]
         STR      R1,[R2, #+20]
         MOVS     R1,#+0
-        LDR      R0,[R0, #+56]
-        STR      R1,[R0, #+24]
+        LDR      R2,[R0, #+56]
+        STR      R1,[R2, #+24]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -462,8 +465,8 @@ FSMC_NANDStructInit:
         LDR      R2,[R0, #+32]
         STR      R1,[R2, #+8]
         MOVS     R1,#+252
-        LDR      R0,[R0, #+32]
-        STR      R1,[R0, #+12]
+        LDR      R2,[R0, #+32]
+        STR      R1,[R2, #+12]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -509,8 +512,8 @@ FSMC_PCCARDStructInit:
         LDR      R2,[R0, #+20]
         STR      R1,[R2, #+8]
         MOVS     R1,#+252
-        LDR      R0,[R0, #+20]
-        STR      R1,[R0, #+12]
+        LDR      R2,[R0, #+20]
+        STR      R1,[R2, #+12]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -519,23 +522,23 @@ FSMC_NORSRAMCmd:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??FSMC_NORSRAMCmd_0
-        LSLS     R1,R0,#+2
-        SUBS     R1,R1,#+1610612736
-        LDR      R1,[R1, #+0]
-        ORRS     R1,R1,#0x1
-        LSLS     R0,R0,#+2
-        SUBS     R0,R0,#+1610612736
-        STR      R1,[R0, #+0]
+        LSLS     R2,R0,#+2
+        SUBS     R2,R2,#+1610612736
+        LDR      R2,[R2, #+0]
+        ORRS     R2,R2,#0x1
+        LSLS     R3,R0,#+2
+        SUBS     R3,R3,#+1610612736
+        STR      R2,[R3, #+0]
         B.N      ??FSMC_NORSRAMCmd_1
 ??FSMC_NORSRAMCmd_0:
-        LSLS     R1,R0,#+2
-        SUBS     R1,R1,#+1610612736
-        LDR      R1,[R1, #+0]
-        LDR.N    R2,??DataTable15_14  ;; 0xffffe
-        ANDS     R1,R2,R1
-        LSLS     R0,R0,#+2
-        SUBS     R0,R0,#+1610612736
-        STR      R1,[R0, #+0]
+        LSLS     R2,R0,#+2
+        SUBS     R2,R2,#+1610612736
+        LDR      R2,[R2, #+0]
+        LDR.N    R3,??DataTable15_14  ;; 0xffffe
+        ANDS     R2,R3,R2
+        LSLS     R3,R0,#+2
+        SUBS     R3,R3,#+1610612736
+        STR      R2,[R3, #+0]
 ??FSMC_NORSRAMCmd_1:
         BX       LR               ;; return
 
@@ -547,36 +550,36 @@ FSMC_NANDCmd:
         BEQ.N    ??FSMC_NANDCmd_0
         CMP      R0,#+16
         BNE.N    ??FSMC_NANDCmd_1
-        LDR.N    R0,??DataTable15_1  ;; 0xa0000060
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0x4
-        LDR.N    R1,??DataTable15_1  ;; 0xa0000060
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_1  ;; 0xa0000060
+        LDR      R2,[R2, #+0]
+        ORRS     R2,R2,#0x4
+        LDR.N    R3,??DataTable15_1  ;; 0xa0000060
+        STR      R2,[R3, #+0]
         B.N      ??FSMC_NANDCmd_2
 ??FSMC_NANDCmd_1:
-        LDR.N    R0,??DataTable15_5  ;; 0xa0000080
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0x4
-        LDR.N    R1,??DataTable15_5  ;; 0xa0000080
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_5  ;; 0xa0000080
+        LDR      R2,[R2, #+0]
+        ORRS     R2,R2,#0x4
+        LDR.N    R3,??DataTable15_5  ;; 0xa0000080
+        STR      R2,[R3, #+0]
         B.N      ??FSMC_NANDCmd_2
 ??FSMC_NANDCmd_0:
         CMP      R0,#+16
         BNE.N    ??FSMC_NANDCmd_3
-        LDR.N    R0,??DataTable15_1  ;; 0xa0000060
-        LDR      R0,[R0, #+0]
-        LDR.N    R1,??DataTable15_15  ;; 0xffffb
-        ANDS     R0,R1,R0
-        LDR.N    R1,??DataTable15_1  ;; 0xa0000060
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_1  ;; 0xa0000060
+        LDR      R2,[R2, #+0]
+        LDR.N    R3,??DataTable15_15  ;; 0xffffb
+        ANDS     R2,R3,R2
+        LDR.N    R3,??DataTable15_1  ;; 0xa0000060
+        STR      R2,[R3, #+0]
         B.N      ??FSMC_NANDCmd_2
 ??FSMC_NANDCmd_3:
-        LDR.N    R0,??DataTable15_5  ;; 0xa0000080
-        LDR      R0,[R0, #+0]
-        LDR.N    R1,??DataTable15_15  ;; 0xffffb
-        ANDS     R0,R1,R0
-        LDR.N    R1,??DataTable15_5  ;; 0xa0000080
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_5  ;; 0xa0000080
+        LDR      R2,[R2, #+0]
+        LDR.N    R3,??DataTable15_15  ;; 0xffffb
+        ANDS     R2,R3,R2
+        LDR.N    R3,??DataTable15_5  ;; 0xa0000080
+        STR      R2,[R3, #+0]
 ??FSMC_NANDCmd_2:
         BX       LR               ;; return
 
@@ -586,19 +589,19 @@ FSMC_PCCARDCmd:
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         CMP      R0,#+0
         BEQ.N    ??FSMC_PCCARDCmd_0
-        LDR.N    R0,??DataTable15_9  ;; 0xa00000a0
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0x4
         LDR.N    R1,??DataTable15_9  ;; 0xa00000a0
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        ORRS     R1,R1,#0x4
+        LDR.N    R2,??DataTable15_9  ;; 0xa00000a0
+        STR      R1,[R2, #+0]
         B.N      ??FSMC_PCCARDCmd_1
 ??FSMC_PCCARDCmd_0:
-        LDR.N    R0,??DataTable15_9  ;; 0xa00000a0
-        LDR      R0,[R0, #+0]
-        LDR.N    R1,??DataTable15_15  ;; 0xffffb
-        ANDS     R0,R1,R0
         LDR.N    R1,??DataTable15_9  ;; 0xa00000a0
-        STR      R0,[R1, #+0]
+        LDR      R1,[R1, #+0]
+        LDR.N    R2,??DataTable15_15  ;; 0xffffb
+        ANDS     R1,R2,R1
+        LDR.N    R2,??DataTable15_9  ;; 0xa00000a0
+        STR      R1,[R2, #+0]
 ??FSMC_PCCARDCmd_1:
         BX       LR               ;; return
 
@@ -610,141 +613,152 @@ FSMC_NANDECCCmd:
         BEQ.N    ??FSMC_NANDECCCmd_0
         CMP      R0,#+16
         BNE.N    ??FSMC_NANDECCCmd_1
-        LDR.N    R0,??DataTable15_1  ;; 0xa0000060
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0x40
-        LDR.N    R1,??DataTable15_1  ;; 0xa0000060
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_1  ;; 0xa0000060
+        LDR      R2,[R2, #+0]
+        ORRS     R2,R2,#0x40
+        LDR.N    R3,??DataTable15_1  ;; 0xa0000060
+        STR      R2,[R3, #+0]
         B.N      ??FSMC_NANDECCCmd_2
 ??FSMC_NANDECCCmd_1:
-        LDR.N    R0,??DataTable15_5  ;; 0xa0000080
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0x40
-        LDR.N    R1,??DataTable15_5  ;; 0xa0000080
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_5  ;; 0xa0000080
+        LDR      R2,[R2, #+0]
+        ORRS     R2,R2,#0x40
+        LDR.N    R3,??DataTable15_5  ;; 0xa0000080
+        STR      R2,[R3, #+0]
         B.N      ??FSMC_NANDECCCmd_2
 ??FSMC_NANDECCCmd_0:
         CMP      R0,#+16
         BNE.N    ??FSMC_NANDECCCmd_3
-        LDR.N    R0,??DataTable15_1  ;; 0xa0000060
-        LDR      R0,[R0, #+0]
-        LDR.N    R1,??DataTable15_16  ;; 0xfffbf
-        ANDS     R0,R1,R0
-        LDR.N    R1,??DataTable15_1  ;; 0xa0000060
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_1  ;; 0xa0000060
+        LDR      R2,[R2, #+0]
+        LDR.N    R3,??DataTable15_16  ;; 0xfffbf
+        ANDS     R2,R3,R2
+        LDR.N    R3,??DataTable15_1  ;; 0xa0000060
+        STR      R2,[R3, #+0]
         B.N      ??FSMC_NANDECCCmd_2
 ??FSMC_NANDECCCmd_3:
-        LDR.N    R0,??DataTable15_5  ;; 0xa0000080
-        LDR      R0,[R0, #+0]
-        LDR.N    R1,??DataTable15_16  ;; 0xfffbf
-        ANDS     R0,R1,R0
-        LDR.N    R1,??DataTable15_5  ;; 0xa0000080
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_5  ;; 0xa0000080
+        LDR      R2,[R2, #+0]
+        LDR.N    R3,??DataTable15_16  ;; 0xfffbf
+        ANDS     R2,R3,R2
+        LDR.N    R3,??DataTable15_5  ;; 0xa0000080
+        STR      R2,[R3, #+0]
 ??FSMC_NANDECCCmd_2:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FSMC_GetECC:
-        MOVS     R1,#+0
-        CMP      R0,#+16
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        CMP      R1,#+16
         BNE.N    ??FSMC_GetECC_0
-        LDR.N    R0,??DataTable15_17  ;; 0xa0000074
-        LDR      R1,[R0, #+0]
+        LDR.N    R2,??DataTable15_17  ;; 0xa0000074
+        LDR      R2,[R2, #+0]
+        MOVS     R0,R2
         B.N      ??FSMC_GetECC_1
 ??FSMC_GetECC_0:
-        LDR.N    R0,??DataTable15_18  ;; 0xa0000094
-        LDR      R1,[R0, #+0]
+        LDR.N    R2,??DataTable15_18  ;; 0xa0000094
+        LDR      R2,[R2, #+0]
+        MOVS     R0,R2
 ??FSMC_GetECC_1:
-        MOVS     R0,R1
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FSMC_ITConfig:
+        PUSH     {R4}
         UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
         CMP      R2,#+0
         BEQ.N    ??FSMC_ITConfig_0
         CMP      R0,#+16
         BNE.N    ??FSMC_ITConfig_1
-        LDR.N    R0,??DataTable15_2  ;; 0xa0000064
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R1,R0
-        LDR.N    R1,??DataTable15_2  ;; 0xa0000064
-        STR      R0,[R1, #+0]
+        LDR.N    R3,??DataTable15_2  ;; 0xa0000064
+        LDR      R3,[R3, #+0]
+        ORRS     R3,R1,R3
+        LDR.N    R4,??DataTable15_2  ;; 0xa0000064
+        STR      R3,[R4, #+0]
         B.N      ??FSMC_ITConfig_2
 ??FSMC_ITConfig_1:
         CMP      R0,#+256
         BNE.N    ??FSMC_ITConfig_3
-        LDR.N    R0,??DataTable15_6  ;; 0xa0000084
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R1,R0
-        LDR.N    R1,??DataTable15_6  ;; 0xa0000084
-        STR      R0,[R1, #+0]
+        LDR.N    R3,??DataTable15_6  ;; 0xa0000084
+        LDR      R3,[R3, #+0]
+        ORRS     R3,R1,R3
+        LDR.N    R4,??DataTable15_6  ;; 0xa0000084
+        STR      R3,[R4, #+0]
         B.N      ??FSMC_ITConfig_2
 ??FSMC_ITConfig_3:
-        LDR.N    R0,??DataTable15_10  ;; 0xa00000a4
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R1,R0
-        LDR.N    R1,??DataTable15_10  ;; 0xa00000a4
-        STR      R0,[R1, #+0]
+        LDR.N    R3,??DataTable15_10  ;; 0xa00000a4
+        LDR      R3,[R3, #+0]
+        ORRS     R3,R1,R3
+        LDR.N    R4,??DataTable15_10  ;; 0xa00000a4
+        STR      R3,[R4, #+0]
         B.N      ??FSMC_ITConfig_2
 ??FSMC_ITConfig_0:
         CMP      R0,#+16
         BNE.N    ??FSMC_ITConfig_4
-        LDR.N    R0,??DataTable15_2  ;; 0xa0000064
-        LDR      R0,[R0, #+0]
-        BICS     R0,R0,R1
-        LDR.N    R1,??DataTable15_2  ;; 0xa0000064
-        STR      R0,[R1, #+0]
+        LDR.N    R3,??DataTable15_2  ;; 0xa0000064
+        LDR      R3,[R3, #+0]
+        BICS     R3,R3,R1
+        LDR.N    R4,??DataTable15_2  ;; 0xa0000064
+        STR      R3,[R4, #+0]
         B.N      ??FSMC_ITConfig_2
 ??FSMC_ITConfig_4:
         CMP      R0,#+256
         BNE.N    ??FSMC_ITConfig_5
-        LDR.N    R0,??DataTable15_6  ;; 0xa0000084
-        LDR      R0,[R0, #+0]
-        BICS     R0,R0,R1
-        LDR.N    R1,??DataTable15_6  ;; 0xa0000084
-        STR      R0,[R1, #+0]
+        LDR.N    R3,??DataTable15_6  ;; 0xa0000084
+        LDR      R3,[R3, #+0]
+        BICS     R3,R3,R1
+        LDR.N    R4,??DataTable15_6  ;; 0xa0000084
+        STR      R3,[R4, #+0]
         B.N      ??FSMC_ITConfig_2
 ??FSMC_ITConfig_5:
-        LDR.N    R0,??DataTable15_10  ;; 0xa00000a4
-        LDR      R0,[R0, #+0]
-        BICS     R0,R0,R1
-        LDR.N    R1,??DataTable15_10  ;; 0xa00000a4
-        STR      R0,[R1, #+0]
+        LDR.N    R3,??DataTable15_10  ;; 0xa00000a4
+        LDR      R3,[R3, #+0]
+        BICS     R3,R3,R1
+        LDR.N    R4,??DataTable15_10  ;; 0xa00000a4
+        STR      R3,[R4, #+0]
 ??FSMC_ITConfig_2:
+        POP      {R4}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FSMC_GetFlagStatus:
-        MOVS     R2,#+0
-        MOVS     R2,#+0
-        CMP      R0,#+16
+        PUSH     {R4}
+        MOVS     R2,R0
+        MOVS     R0,#+0
+        MOVS     R3,#+0
+        CMP      R2,#+16
         BNE.N    ??FSMC_GetFlagStatus_0
-        LDR.N    R0,??DataTable15_2  ;; 0xa0000064
-        LDR      R2,[R0, #+0]
+        LDR.N    R4,??DataTable15_2  ;; 0xa0000064
+        LDR      R4,[R4, #+0]
+        MOVS     R3,R4
         B.N      ??FSMC_GetFlagStatus_1
 ??FSMC_GetFlagStatus_0:
-        CMP      R0,#+256
+        CMP      R2,#+256
         BNE.N    ??FSMC_GetFlagStatus_2
-        LDR.N    R0,??DataTable15_6  ;; 0xa0000084
-        LDR      R2,[R0, #+0]
+        LDR.N    R4,??DataTable15_6  ;; 0xa0000084
+        LDR      R4,[R4, #+0]
+        MOVS     R3,R4
         B.N      ??FSMC_GetFlagStatus_1
 ??FSMC_GetFlagStatus_2:
-        LDR.N    R0,??DataTable15_10  ;; 0xa00000a4
-        LDR      R2,[R0, #+0]
+        LDR.N    R4,??DataTable15_10  ;; 0xa00000a4
+        LDR      R4,[R4, #+0]
+        MOVS     R3,R4
 ??FSMC_GetFlagStatus_1:
-        TST      R2,R1
+        TST      R3,R1
         BEQ.N    ??FSMC_GetFlagStatus_3
-        MOVS     R2,#+1
+        MOVS     R4,#+1
+        MOVS     R0,R4
         B.N      ??FSMC_GetFlagStatus_4
 ??FSMC_GetFlagStatus_3:
-        MOVS     R2,#+0
+        MOVS     R4,#+0
+        MOVS     R0,R4
 ??FSMC_GetFlagStatus_4:
-        MOVS     R0,R2
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        POP      {R4}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -752,65 +766,74 @@ FSMC_GetFlagStatus:
 FSMC_ClearFlag:
         CMP      R0,#+16
         BNE.N    ??FSMC_ClearFlag_0
-        LDR.N    R0,??DataTable15_2  ;; 0xa0000064
-        LDR      R0,[R0, #+0]
-        BICS     R0,R0,R1
-        LDR.N    R1,??DataTable15_2  ;; 0xa0000064
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_2  ;; 0xa0000064
+        LDR      R2,[R2, #+0]
+        BICS     R2,R2,R1
+        LDR.N    R3,??DataTable15_2  ;; 0xa0000064
+        STR      R2,[R3, #+0]
         B.N      ??FSMC_ClearFlag_1
 ??FSMC_ClearFlag_0:
         CMP      R0,#+256
         BNE.N    ??FSMC_ClearFlag_2
-        LDR.N    R0,??DataTable15_6  ;; 0xa0000084
-        LDR      R0,[R0, #+0]
-        BICS     R0,R0,R1
-        LDR.N    R1,??DataTable15_6  ;; 0xa0000084
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_6  ;; 0xa0000084
+        LDR      R2,[R2, #+0]
+        BICS     R2,R2,R1
+        LDR.N    R3,??DataTable15_6  ;; 0xa0000084
+        STR      R2,[R3, #+0]
         B.N      ??FSMC_ClearFlag_1
 ??FSMC_ClearFlag_2:
-        LDR.N    R0,??DataTable15_10  ;; 0xa00000a4
-        LDR      R0,[R0, #+0]
-        BICS     R0,R0,R1
-        LDR.N    R1,??DataTable15_10  ;; 0xa00000a4
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_10  ;; 0xa00000a4
+        LDR      R2,[R2, #+0]
+        BICS     R2,R2,R1
+        LDR.N    R3,??DataTable15_10  ;; 0xa00000a4
+        STR      R2,[R3, #+0]
 ??FSMC_ClearFlag_1:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FSMC_GetITStatus:
-        MOVS     R2,#+0
-        MOVS     R2,#+0
+        PUSH     {R4-R6}
+        MOVS     R2,R0
+        MOVS     R0,#+0
         MOVS     R3,#+0
-        MOVS     R2,#+0
-        CMP      R0,#+16
+        MOVS     R4,#+0
+        MOVS     R5,#+0
+        CMP      R2,#+16
         BNE.N    ??FSMC_GetITStatus_0
-        LDR.N    R0,??DataTable15_2  ;; 0xa0000064
-        LDR      R2,[R0, #+0]
+        LDR.N    R6,??DataTable15_2  ;; 0xa0000064
+        LDR      R6,[R6, #+0]
+        MOVS     R3,R6
         B.N      ??FSMC_GetITStatus_1
 ??FSMC_GetITStatus_0:
-        CMP      R0,#+256
+        CMP      R2,#+256
         BNE.N    ??FSMC_GetITStatus_2
-        LDR.N    R0,??DataTable15_6  ;; 0xa0000084
-        LDR      R2,[R0, #+0]
+        LDR.N    R6,??DataTable15_6  ;; 0xa0000084
+        LDR      R6,[R6, #+0]
+        MOVS     R3,R6
         B.N      ??FSMC_GetITStatus_1
 ??FSMC_GetITStatus_2:
-        LDR.N    R0,??DataTable15_10  ;; 0xa00000a4
-        LDR      R2,[R0, #+0]
+        LDR.N    R6,??DataTable15_10  ;; 0xa00000a4
+        LDR      R6,[R6, #+0]
+        MOVS     R3,R6
 ??FSMC_GetITStatus_1:
-        ANDS     R3,R1,R2
-        ANDS     R2,R2,R1, LSR #+3
-        CMP      R3,#+0
+        ANDS     R6,R1,R3
+        MOVS     R4,R6
+        ANDS     R6,R3,R1, LSR #+3
+        MOVS     R5,R6
+        CMP      R4,#+0
         BEQ.N    ??FSMC_GetITStatus_3
-        CMP      R2,#+0
+        CMP      R5,#+0
         BEQ.N    ??FSMC_GetITStatus_3
-        MOVS     R2,#+1
+        MOVS     R6,#+1
+        MOVS     R0,R6
         B.N      ??FSMC_GetITStatus_4
 ??FSMC_GetITStatus_3:
-        MOVS     R2,#+0
+        MOVS     R6,#+0
+        MOVS     R0,R6
 ??FSMC_GetITStatus_4:
-        MOVS     R0,R2
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        POP      {R4-R6}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -818,27 +841,27 @@ FSMC_GetITStatus:
 FSMC_ClearITPendingBit:
         CMP      R0,#+16
         BNE.N    ??FSMC_ClearITPendingBit_0
-        LDR.N    R0,??DataTable15_2  ;; 0xa0000064
-        LDR      R0,[R0, #+0]
-        BICS     R0,R0,R1, LSR #+3
-        LDR.N    R1,??DataTable15_2  ;; 0xa0000064
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_2  ;; 0xa0000064
+        LDR      R2,[R2, #+0]
+        BICS     R2,R2,R1, LSR #+3
+        LDR.N    R3,??DataTable15_2  ;; 0xa0000064
+        STR      R2,[R3, #+0]
         B.N      ??FSMC_ClearITPendingBit_1
 ??FSMC_ClearITPendingBit_0:
         CMP      R0,#+256
         BNE.N    ??FSMC_ClearITPendingBit_2
-        LDR.N    R0,??DataTable15_6  ;; 0xa0000084
-        LDR      R0,[R0, #+0]
-        BICS     R0,R0,R1, LSR #+3
-        LDR.N    R1,??DataTable15_6  ;; 0xa0000084
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_6  ;; 0xa0000084
+        LDR      R2,[R2, #+0]
+        BICS     R2,R2,R1, LSR #+3
+        LDR.N    R3,??DataTable15_6  ;; 0xa0000084
+        STR      R2,[R3, #+0]
         B.N      ??FSMC_ClearITPendingBit_1
 ??FSMC_ClearITPendingBit_2:
-        LDR.N    R0,??DataTable15_10  ;; 0xa00000a4
-        LDR      R0,[R0, #+0]
-        BICS     R0,R0,R1, LSR #+3
-        LDR.N    R1,??DataTable15_10  ;; 0xa00000a4
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable15_10  ;; 0xa00000a4
+        LDR      R2,[R2, #+0]
+        BICS     R2,R2,R1, LSR #+3
+        LDR.N    R3,??DataTable15_10  ;; 0xa00000a4
+        STR      R2,[R3, #+0]
 ??FSMC_ClearITPendingBit_1:
         BX       LR               ;; return
 
@@ -969,9 +992,9 @@ FSMC_ClearITPendingBit:
 
         END
 // 
-// 1 608 bytes in section .text
+// 1 654 bytes in section .text
 // 
-// 1 608 bytes of CODE memory
+// 1 654 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

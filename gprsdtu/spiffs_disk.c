@@ -307,7 +307,6 @@ int dl_SPIFFS_stat(void *fs, char *file_name, void *a)
     return -1;
 }
 
-
 int dl_SPIFFS_lseek(void *fs, int fd, int len, int whence)
 {
     int i;
@@ -318,17 +317,24 @@ int dl_SPIFFS_lseek(void *fs, int fd, int len, int whence)
 
     i = fd;
 
+    int real_len = (len/4088+1)*sizeof(g_fs_block) + len;
+
+
     if((g_fs_header.fs_header.file_open_flag & ((uint32_t)1<<i)) == 0) {
         return -1; //need to open file
     }
 
     if(whence == SPIFFS_SEEK_SET) {
-        g_fs_header.fs_header.curr_file_seek_addr[i] = (uint32_t)(g_fs_header.fs_header.file_content_index[i])*4096+sizeof(g_fs_block)+len;
+        g_fs_header.fs_header.curr_file_seek_addr[i] = (uint32_t)(g_fs_header.fs_header.file_content_index[i])*4096+real_len;
+        // PRINTF2("SEEK = %08x, %d\n", g_fs_header.fs_header.curr_file_seek_addr[i], g_fs_header.fs_header.curr_file_seek_addr[i]);
         return 0;
     }
 
     if(whence == SPIFFS_SEEK_CUR) {
         g_fs_header.fs_header.curr_file_seek_addr[i] += len;
+        if(g_fs_header.fs_header.curr_file_seek_addr[i] % 4096 < sizeof(g_fs_block)) {
+            g_fs_header.fs_header.curr_file_seek_addr[i] += sizeof(g_fs_block);
+        }
         return 0;
     }
 
@@ -338,6 +344,7 @@ int dl_SPIFFS_lseek(void *fs, int fd, int len, int whence)
 
     return -1;
 }
+
 
 
 
@@ -391,35 +398,40 @@ int dl_SPIFFS_read(void *fs, int fd, uint8_t *buf, int len)
     int temp_size;
 
     if(fd < 0 && fd >= DL_FS_MAX_FILE_SUM) {
-//        PRINTF("dl_SPIFFS_read: fd err\n");
+        // PRINTF("dl_SPIFFS_read: fd err\n");
         return fd;
     }
 
     i = fd;
     if(len > g_fs_header.fs_header.file_size[i]) {
         len = g_fs_header.fs_header.file_size[i];
-//        PRINTF("dl_SPIFFS_read: max_len=%d\n", len);
+        // PRINTF2("dl_SPIFFS_read: max_len=%d\n", len);
     }
 
 
     while(1) {
+        if(g_fs_header.fs_header.curr_file_seek_addr[i] % 4096 < sizeof(g_fs_block)) {
+            g_fs_header.fs_header.curr_file_seek_addr[i] += sizeof(g_fs_block);
+        }
+
         addr = g_fs_header.fs_header.curr_file_seek_addr[i]/4096*4096;
         curr_size = g_fs_header.fs_header.curr_file_seek_addr[i]%4096 - sizeof(g_fs_block);
         SPI_FLASH_Read(addr, &g_fs_block, sizeof(g_fs_block));
         if(g_fs_block.crc16 != inner_make_crc16((uint8_t *)&g_fs_block.fs_block, sizeof(g_fs_block.fs_block))) {
-//            PRINTF("dl_SPIFFS_read: crc err\n");
+            // PRINTF2("dl_SPIFFS_read: crc err\n");
             return -1;
         }
         if(g_fs_block.fs_block.content_len>curr_size) {
             temp_size = g_fs_block.fs_block.content_len-curr_size;
             if(len-copy_sum > temp_size) {
+                // PRINTF2("read1 seek=%d\n", g_fs_header.fs_header.curr_file_seek_addr[i]%4096);
                 SPI_FLASH_Read(g_fs_header.fs_header.curr_file_seek_addr[i], buf, temp_size);
                 g_fs_header.fs_header.curr_file_seek_addr[i] += temp_size;
-//                PRINTF("dl_SPIFFS_read: read ok1, len=%d\n", temp_size);
+                // PRINTF2("dl_SPIFFS_read: read ok1, len=%d\n", temp_size);
                 copy_sum += temp_size;
                 if(g_fs_block.fs_block.cur_block_index != g_fs_block.fs_block.next_block_index) {
                     g_fs_header.fs_header.curr_file_seek_addr[i] = (uint32_t)(g_fs_block.fs_block.next_block_index)*4096+sizeof(g_fs_block);
-//                    PRINTF("dl_SPIFFS_read: next block = %08X\n", g_fs_header.fs_header.curr_file_seek_addr[i]);
+                    // PRINTF2("dl_SPIFFS_read: next block = %08X\n", g_fs_header.fs_header.curr_file_seek_addr[i]);
                 }
                 else {
                     //dl_fs_debug();
@@ -427,20 +439,21 @@ int dl_SPIFFS_read(void *fs, int fd, uint8_t *buf, int len)
                 }
             }
             else {
+                // PRINTF2("read3 seek=0x%08x, %d\n", g_fs_header.fs_header.curr_file_seek_addr[i], g_fs_header.fs_header.curr_file_seek_addr[i]%4096);
                 SPI_FLASH_Read(g_fs_header.fs_header.curr_file_seek_addr[i], buf+copy_sum, len-copy_sum);
                 g_fs_header.fs_header.curr_file_seek_addr[i] += (len-copy_sum);
                 copy_sum += (len-copy_sum);
-//                PRINTF("dl_SPIFFS_read: read ok2, len=%d\n", copy_sum);
+                // PRINTF2("dl_SPIFFS_read: read ok2, len=%d\n", copy_sum);
                 //dl_fs_debug();
                 return copy_sum;
             }
         }
         else if(g_fs_block.fs_block.content_len == curr_size){
-//            PRINTF("dl_SPIFFS_read: read end\n");
+            // PRINTF2("dl_SPIFFS_read: read end:%d\n", curr_size);
             return 0;
         }
         else {
-//            PRINTF("dl_SPIFFS_read: inner err\n");
+            // PRINTF2("dl_SPIFFS_read: inner err\n");
             return -1;
         }
     }
@@ -465,25 +478,32 @@ int dl_SPIFFS_write(void *fs, int fd, uint8_t *buf, int len)
 
     i = fd;
 
-    if(g_fs_header.fs_header.block_use_flag & 0xFFFFFFFE == 0xFFFFFFFE) {
-//        PRINTF("no_new_block\n");
+    #if FLASH_SAVE_FLAG
+    if(g_fs_header.fs_header.block_use_flag & 0x0000FFFE == 0x0000FFFE) {
+        // PRINTF2("no_new_block\n");
         no_new_block = 1;
     }
-
+    #else
+    if(g_fs_header.fs_header.block_use_flag & 0xFFFFFFFE == 0xFFFFFFFE) {
+        // PRINTF2("no_new_block\n");
+        no_new_block = 1;
+    }
+    #endif
     addr = g_fs_header.fs_header.curr_file_seek_addr[i]/4096*4096;
     curr_size = g_fs_header.fs_header.curr_file_seek_addr[i]%4096 - sizeof(g_fs_block);
     SPI_FLASH_Read(addr, &g_fs_block, sizeof(g_fs_block));
     if(g_fs_block.crc16 != inner_make_crc16((uint8_t *)&g_fs_block.fs_block, sizeof(g_fs_block.fs_block))) {
-//        PRINTF("dl_SPIFFS_write crc err:%04X\n", g_fs_block.crc16);
+        // PRINTF2("dl_SPIFFS_write crc err:%04X\n", g_fs_block.crc16);
         return -1;
     }
     if(g_fs_block.fs_block.cur_block_index == g_fs_block.fs_block.next_block_index) {
-        if(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size >= len) {
+        if(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size > len) {
             malloc_buf = malloc(4096);
             if(!malloc_buf) {
                 return -1;
             }
-            SPI_FLASH_Read(addr, malloc_buf, sizeof(g_fs_block)+curr_size);
+            //SPI_FLASH_Read(addr, malloc_buf, sizeof(g_fs_block)+curr_size);
+            SPI_FLASH_Read(addr, malloc_buf, sizeof(g_fs_block)+g_fs_block.fs_block.content_len);
             g_fs_header.fs_header.file_size[i] += (dl_max(g_fs_block.fs_block.content_len, curr_size+len) - g_fs_block.fs_block.content_len);
             g_fs_block.fs_block.content_len = dl_max(g_fs_block.fs_block.content_len, curr_size+len);
             g_fs_block.fs_block.valid = 1;
@@ -494,11 +514,12 @@ int dl_SPIFFS_write(void *fs, int fd, uint8_t *buf, int len)
             memcpy(malloc_buf+sizeof(g_fs_block)+curr_size, buf, len);
 
             SPI_FLASH_SectorErase(addr);
-            SPI_FLASH_Write(addr, malloc_buf, sizeof(g_fs_block)+curr_size+len);
+            //SPI_FLASH_Write(addr, malloc_buf, sizeof(g_fs_block)+curr_size+len);
+            SPI_FLASH_Write(addr, malloc_buf, sizeof(g_fs_block)+g_fs_block.fs_block.content_len);
             //dl_fs_debug();
             free(malloc_buf);
-
-//            PRINTF("dl_SPIFFS_write write: total=%d, w=%d, %d\n", g_fs_header.fs_header.file_size[i], sizeof(g_fs_block)+curr_size+len, g_fs_block.fs_block.content_len);
+            // PRINTF2("write2 seek=%d\n", g_fs_header.fs_header.curr_file_seek_addr[i]%4096);
+            // PRINTF2("dl_SPIFFS_write write2: total=%d, w=%d, %d\n", g_fs_header.fs_header.file_size[i], sizeof(g_fs_block)+curr_size+len, g_fs_block.fs_block.content_len);
             return len;
         }
         else {
@@ -525,10 +546,10 @@ int dl_SPIFFS_write(void *fs, int fd, uint8_t *buf, int len)
                 DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size
             );
             SPI_FLASH_SectorErase(addr);
-            SPI_FLASH_Write(addr, malloc_buf, sizeof(g_fs_block)+g_fs_block.fs_block.content_len);
+            SPI_FLASH_Write(addr, malloc_buf, 4096);
             //dl_fs_debug();
             free(malloc_buf);
-//            PRINTF("dl_SPIFFS_write write2: total=%d, w=%d, %d\n", g_fs_header.fs_header.file_size[i], DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size, g_fs_block.fs_block.content_len);
+            // PRINTF2("dl_SPIFFS_write write3: total=%d, w=%d, %d\n", g_fs_header.fs_header.file_size[i], DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size, g_fs_block.fs_block.content_len);
             malloc_buf = malloc(4096);
             if(!malloc_buf) {
                 return -1;
@@ -540,14 +561,16 @@ int dl_SPIFFS_write(void *fs, int fd, uint8_t *buf, int len)
             g_fs_block.fs_block.content_len = len-(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size);
             g_fs_block.fs_block.valid = 1;
             g_fs_block.crc16 = inner_make_crc16((uint8_t *)&g_fs_block.fs_block, sizeof(g_fs_block.fs_block));
-            g_fs_header.fs_header.curr_file_seek_addr[i] = addr+sizeof(g_fs_block)+len;
+            g_fs_header.fs_header.curr_file_seek_addr[i] = addr+sizeof(g_fs_block)+(len-(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size));
 
             memcpy(malloc_buf, &g_fs_block, sizeof(g_fs_block));
-            memcpy(
-                malloc_buf+sizeof(g_fs_block),
-                buf+(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size),
-                len-(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size)
-            );
+            if(len-(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size)) {
+                memcpy(
+                    malloc_buf+sizeof(g_fs_block),
+                    buf+(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size),
+                    len-(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size)
+                );
+            }
 
             SPI_FLASH_SectorErase(addr);
             SPI_FLASH_Write(addr, malloc_buf, sizeof(g_fs_block)+(len-(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size)));
@@ -556,25 +579,27 @@ int dl_SPIFFS_write(void *fs, int fd, uint8_t *buf, int len)
 
             g_fs_header.fs_header.file_size[i] += (len-(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size));
             //dl_fs_debug();
-//            PRINTF("dl_SPIFFS_write write3: total=%d, w=%d, %d\n", g_fs_header.fs_header.file_size[i], sizeof(g_fs_block)+(len-(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size)), g_fs_block.fs_block.content_len);
+            // PRINTF2("write4 seek=%d\n", g_fs_header.fs_header.curr_file_seek_addr[i]%4096);
+            // PRINTF2("dl_SPIFFS_write write4: total=%d, w=%d, %d\n", g_fs_header.fs_header.file_size[i], sizeof(g_fs_block)+(len-(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size)), g_fs_block.fs_block.content_len);
             return len;
         }
     }
     else {
-        if(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size >= len) {
+        if(DL_FS_BLOCK_FILE_CONTENT_MAX_SIZE-curr_size > len) {
             malloc_buf = malloc(4096);
             if(!malloc_buf) {
                 return -1;
             }
-            SPI_FLASH_Read(addr, malloc_buf, sizeof(g_fs_block)+g_fs_block.fs_block.content_len);
+            SPI_FLASH_Read(addr, malloc_buf, 4096);
             g_fs_header.fs_header.curr_file_seek_addr[i] += len;
 
             memcpy(malloc_buf+sizeof(g_fs_block)+curr_size, buf, len);
 
             SPI_FLASH_SectorErase(addr);
-            SPI_FLASH_Write(addr, malloc_buf, sizeof(g_fs_block)+g_fs_block.fs_block.content_len);
+            SPI_FLASH_Write(addr, malloc_buf, 4096);
             free(malloc_buf);
-//            PRINTF("dl_SPIFFS_write write4: addr=%08X, size=%d\n", addr, sizeof(g_fs_block)+curr_size+len);
+            // PRINTF2("write5 seek=%d\n", g_fs_header.fs_header.curr_file_seek_addr[i]%4096);
+            // PRINTF2("dl_SPIFFS_write write5: addr=%08X, size=%d\n", addr, sizeof(g_fs_block)+curr_size+len);
             return len;
         }
         else {
@@ -602,7 +627,7 @@ int dl_SPIFFS_write(void *fs, int fd, uint8_t *buf, int len)
             SPI_FLASH_Read(addr, malloc_buf, 4096);
             memcpy(&g_fs_block, malloc_buf, sizeof(g_fs_block));
             if(g_fs_block.crc16 != inner_make_crc16((uint8_t *)&g_fs_block.fs_block, sizeof(g_fs_block.fs_block))) {
-//                PRINTF("dl_SPIFFS_write crc err2:%04X\n", g_fs_block.crc16);
+                // PRINTF("dl_SPIFFS_write crc err2:%04X\n", g_fs_block.crc16);
                 free(malloc_buf);
                 return -1;
             }
@@ -624,6 +649,8 @@ int dl_SPIFFS_write(void *fs, int fd, uint8_t *buf, int len)
             SPI_FLASH_SectorErase(addr);
             SPI_FLASH_Write(addr, malloc_buf, sizeof(g_fs_block)+g_fs_block.fs_block.content_len);
             free(malloc_buf);
+
+            // PRINTF2("write6 seek=%d\n", g_fs_header.fs_header.curr_file_seek_addr[i]%4096);
             return len;
         }
     }

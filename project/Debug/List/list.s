@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:20
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:21
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\list.s
 //
@@ -65,34 +65,37 @@ list_head:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 list_copy:
-        LDR      R1,[R1, #+0]
-        STR      R1,[R0, #+0]
+        LDR      R2,[R1, #+0]
+        STR      R2,[R0, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 list_tail:
-        LDR      R1,[R0, #+0]
-        CMP      R1,#+0
+        MOVS     R1,R0
+        LDR      R0,[R1, #+0]
+        CMP      R0,#+0
         BNE.N    ??list_tail_0
         MOVS     R0,#+0
         B.N      ??list_tail_1
 ??list_tail_0:
-        LDR      R0,[R0, #+0]
+        LDR      R0,[R1, #+0]
+        MOVS     R2,R0
+??list_tail_2:
+        LDR      R0,[R2, #+0]
+        CMP      R0,#+0
+        BEQ.N    ??list_tail_3
+        LDR      R2,[R2, #+0]
         B.N      ??list_tail_2
 ??list_tail_3:
-        LDR      R0,[R0, #+0]
-??list_tail_2:
-        LDR      R1,[R0, #+0]
-        CMP      R1,#+0
-        BNE.N    ??list_tail_3
+        MOVS     R0,R2
 ??list_tail_1:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 list_add:
-        PUSH     {R3-R5,LR}
+        PUSH     {R4-R6,LR}
         MOVS     R4,R0
         MOVS     R5,R1
         MOVS     R1,R5
@@ -102,14 +105,15 @@ list_add:
         STR      R0,[R5, #+0]
         MOVS     R0,R4
         BL       list_tail
-        CMP      R0,#+0
+        MOVS     R6,R0
+        CMP      R6,#+0
         BNE.N    ??list_add_0
         STR      R5,[R4, #+0]
         B.N      ??list_add_1
 ??list_add_0:
-        STR      R5,[R0, #+0]
+        STR      R5,[R6, #+0]
 ??list_add_1:
-        POP      {R0,R4,R5,PC}    ;; return
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -128,115 +132,130 @@ list_push:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 list_chop:
-        LDR      R1,[R0, #+0]
-        CMP      R1,#+0
+        MOVS     R1,R0
+        LDR      R0,[R1, #+0]
+        CMP      R0,#+0
         BNE.N    ??list_chop_0
         MOVS     R0,#+0
         B.N      ??list_chop_1
 ??list_chop_0:
-        LDR      R1,[R0, #+0]
-        LDR      R1,[R1, #+0]
-        CMP      R1,#+0
-        BNE.N    ??list_chop_2
-        LDR      R1,[R0, #+0]
-        MOVS     R2,#+0
-        STR      R2,[R0, #+0]
-        MOVS     R0,R1
-        B.N      ??list_chop_1
-??list_chop_2:
-        LDR      R1,[R0, #+0]
-        B.N      ??list_chop_3
-??list_chop_4:
-        LDR      R1,[R1, #+0]
-??list_chop_3:
         LDR      R0,[R1, #+0]
         LDR      R0,[R0, #+0]
         CMP      R0,#+0
-        BNE.N    ??list_chop_4
+        BNE.N    ??list_chop_2
         LDR      R0,[R1, #+0]
-        MOVS     R2,#+0
-        STR      R2,[R1, #+0]
+        MOVS     R2,R0
+        MOVS     R0,#+0
+        STR      R0,[R1, #+0]
+        MOVS     R0,R2
+        B.N      ??list_chop_1
+??list_chop_2:
+        LDR      R0,[R1, #+0]
+        MOVS     R2,R0
+??list_chop_3:
+        LDR      R0,[R2, #+0]
+        LDR      R0,[R0, #+0]
+        CMP      R0,#+0
+        BEQ.N    ??list_chop_4
+        LDR      R2,[R2, #+0]
+        B.N      ??list_chop_3
+??list_chop_4:
+        LDR      R0,[R2, #+0]
+        MOVS     R3,R0
+        MOVS     R0,#+0
+        STR      R0,[R2, #+0]
+        MOVS     R0,R3
 ??list_chop_1:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 list_pop:
-        LDR      R1,[R0, #+0]
-        LDR      R2,[R0, #+0]
+        MOVS     R1,R0
+        LDR      R2,[R1, #+0]
+        MOVS     R0,R2
+        LDR      R2,[R1, #+0]
         CMP      R2,#+0
         BEQ.N    ??list_pop_0
-        LDR      R2,[R0, #+0]
+        LDR      R2,[R1, #+0]
         LDR      R2,[R2, #+0]
-        STR      R2,[R0, #+0]
+        STR      R2,[R1, #+0]
 ??list_pop_0:
-        MOVS     R0,R1
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 list_remove:
-        LDR      R2,[R0, #+0]
-        CMP      R2,#+0
+        PUSH     {R4}
+        LDR      R4,[R0, #+0]
+        CMP      R4,#+0
         BEQ.N    ??list_remove_0
 ??list_remove_1:
-        MOVS     R3,#+0
-        LDR      R2,[R0, #+0]
-        B.N      ??list_remove_2
-??list_remove_3:
-        MOVS     R3,R2
-        LDR      R2,[R2, #+0]
+        MOVS     R4,#+0
+        MOVS     R3,R4
+        LDR      R4,[R0, #+0]
+        MOVS     R2,R4
 ??list_remove_2:
         CMP      R2,#+0
-        BEQ.N    ??list_remove_4
+        BEQ.N    ??list_remove_3
         CMP      R2,R1
-        BNE.N    ??list_remove_3
+        BNE.N    ??list_remove_4
         CMP      R3,#+0
         BNE.N    ??list_remove_5
-        LDR      R1,[R2, #+0]
-        STR      R1,[R0, #+0]
+        LDR      R4,[R2, #+0]
+        STR      R4,[R0, #+0]
         B.N      ??list_remove_6
 ??list_remove_5:
-        LDR      R0,[R2, #+0]
-        STR      R0,[R3, #+0]
+        LDR      R4,[R2, #+0]
+        STR      R4,[R3, #+0]
 ??list_remove_6:
-        MOVS     R0,#+0
-        STR      R0,[R2, #+0]
+        MOVS     R4,#+0
+        STR      R4,[R2, #+0]
         B.N      ??list_remove_0
 ??list_remove_4:
+        MOVS     R3,R2
+        LDR      R2,[R2, #+0]
+        B.N      ??list_remove_2
+??list_remove_3:
 ??list_remove_0:
+        POP      {R4}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 list_length:
-        MOVS     R1,#+0
-        LDR      R0,[R0, #+0]
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        LDR      R3,[R1, #+0]
+        MOVS     R2,R3
+??list_length_0:
+        CMP      R2,#+0
+        BEQ.N    ??list_length_1
+        ADDS     R0,R0,#+1
+        LDR      R2,[R2, #+0]
         B.N      ??list_length_0
 ??list_length_1:
-        ADDS     R1,R1,#+1
-        LDR      R0,[R0, #+0]
-??list_length_0:
-        CMP      R0,#+0
-        BNE.N    ??list_length_1
-        MOVS     R0,R1
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 list_insert:
-        PUSH     {R7,LR}
-        CMP      R1,#+0
+        PUSH     {R4-R6,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        MOVS     R6,R2
+        CMP      R5,#+0
         BNE.N    ??list_insert_0
-        MOVS     R1,R2
+        MOVS     R1,R6
+        MOVS     R0,R4
         BL       list_push
         B.N      ??list_insert_1
 ??list_insert_0:
-        LDR      R0,[R1, #+0]
-        STR      R0,[R2, #+0]
-        STR      R2,[R1, #+0]
+        LDR      R0,[R5, #+0]
+        STR      R0,[R6, #+0]
+        STR      R6,[R5, #+0]
 ??list_insert_1:
-        POP      {R0,PC}          ;; return
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -257,9 +276,9 @@ list_item_next:
 
         END
 // 
-// 264 bytes in section .text
+// 302 bytes in section .text
 // 
-// 264 bytes of CODE memory
+// 302 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

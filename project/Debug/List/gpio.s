@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:21
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:22
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -27,7 +27,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\gpio.s
 //
@@ -62,89 +62,99 @@ gpiocfg:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 gpio_set_as_output:
-        PUSH     {R7,LR}
-        MOVS     R2,#+0
-        CMP      R0,#+22
+        PUSH     {R3-R5,LR}
+        MOVS     R4,R0
+        MOVS     R5,#+0
+        CMP      R4,#+22
         BCS.N    ??gpio_set_as_output_0
-        LDR.N    R1,??DataTable3
-        ADDS     R2,R1,R0, LSL #+3
-        LDR      R0,[R2, #+4]
+        LDR.N    R0,??DataTable3
+        ADDS     R0,R0,R4, LSL #+3
+        MOVS     R5,R0
+        LDR      R0,[R5, #+4]
         STRH     R0,[SP, #+0]
         MOVS     R0,#+16
         STRB     R0,[SP, #+3]
         MOVS     R0,#+2
         STRB     R0,[SP, #+2]
         ADD      R1,SP,#+0
-        LDR      R0,[R2, #+0]
+        LDR      R0,[R5, #+0]
         BL       GPIO_Init
 ??gpio_set_as_output_0:
-        POP      {R0,PC}          ;; return
+        POP      {R0,R4,R5,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 gpio_set_as_input:
-        PUSH     {R7,LR}
-        MOVS     R2,#+0
-        CMP      R0,#+22
+        PUSH     {R3-R5,LR}
+        MOVS     R4,R0
+        MOVS     R5,#+0
+        CMP      R4,#+22
         BCS.N    ??gpio_set_as_input_0
-        LDR.N    R1,??DataTable3
-        ADDS     R2,R1,R0, LSL #+3
-        LDR      R0,[R2, #+4]
+        LDR.N    R0,??DataTable3
+        ADDS     R0,R0,R4, LSL #+3
+        MOVS     R5,R0
+        LDR      R0,[R5, #+4]
         STRH     R0,[SP, #+0]
         MOVS     R0,#+4
         STRB     R0,[SP, #+3]
         MOVS     R0,#+2
         STRB     R0,[SP, #+2]
         ADD      R1,SP,#+0
-        LDR      R0,[R2, #+0]
+        LDR      R0,[R5, #+0]
         BL       GPIO_Init
 ??gpio_set_as_input_0:
-        POP      {R0,PC}          ;; return
+        POP      {R0,R4,R5,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 gpio_set_pin:
-        PUSH     {R7,LR}
-        MOVS     R3,#+0
-        CMP      R0,#+22
+        PUSH     {R4-R6,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        MOVS     R6,#+0
+        CMP      R4,#+22
         BCS.N    ??gpio_set_pin_0
-        LDR.N    R2,??DataTable3
-        ADDS     R3,R2,R0, LSL #+3
-        CMP      R1,#+1
+        LDR.N    R0,??DataTable3
+        ADDS     R0,R0,R4, LSL #+3
+        MOVS     R6,R0
+        CMP      R5,#+1
         BNE.N    ??gpio_set_pin_1
         MOVS     R2,#+1
-        LDR      R1,[R3, #+4]
+        LDR      R1,[R6, #+4]
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        LDR      R0,[R3, #+0]
+        LDR      R0,[R6, #+0]
         BL       GPIO_WriteBit
         B.N      ??gpio_set_pin_0
 ??gpio_set_pin_1:
         MOVS     R2,#+0
-        LDR      R1,[R3, #+4]
+        LDR      R1,[R6, #+4]
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        LDR      R0,[R3, #+0]
+        LDR      R0,[R6, #+0]
         BL       GPIO_WriteBit
 ??gpio_set_pin_0:
-        POP      {R0,PC}          ;; return
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 gpio_get_pin:
-        PUSH     {R7,LR}
-        MOVS     R1,R0
-        MOVS     R0,#+0
-        MOVS     R2,#+0
-        CMP      R1,#+22
+        PUSH     {R4-R6,LR}
+        MOVS     R4,R0
+        MOVS     R5,#+0
+        MOVS     R6,#+0
+        CMP      R4,#+22
         BCS.N    ??gpio_get_pin_0
         LDR.N    R0,??DataTable3
-        ADDS     R2,R0,R1, LSL #+3
-        LDR      R1,[R2, #+4]
+        ADDS     R0,R0,R4, LSL #+3
+        MOVS     R6,R0
+        LDR      R1,[R6, #+4]
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        LDR      R0,[R2, #+0]
+        LDR      R0,[R6, #+0]
         BL       GPIO_ReadInputDataBit
+        MOVS     R5,R0
 ??gpio_get_pin_0:
+        MOVS     R0,R5
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R1,PC}          ;; return
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -181,9 +191,9 @@ gpio_init:
         END
 // 
 // 176 bytes in section .data
-// 196 bytes in section .text
+// 216 bytes in section .text
 // 
-// 196 bytes of CODE memory
+// 216 bytes of CODE memory
 // 176 bytes of DATA memory
 //
 //Errors: none

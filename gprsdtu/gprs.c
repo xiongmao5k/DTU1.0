@@ -6,7 +6,7 @@
 #include "process.h"
 #include "logger.h"
 
-#define GPRS_LOG_ENABLE 1
+#define GPRS_LOG_ENABLE 0
 
 #define DEBUG 1
 #if DEBUG

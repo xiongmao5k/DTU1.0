@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:26
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:29
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_sdio.s
@@ -105,8 +105,9 @@ SDIO_DeInit:
         THUMB
 SDIO_Init:
         MOVS     R1,#+0
-        LDR.N    R1,??DataTable26_1  ;; 0x40018004
-        LDR      R1,[R1, #+0]
+        LDR.N    R2,??DataTable26_1  ;; 0x40018004
+        LDR      R2,[R2, #+0]
+        MOVS     R1,R2
         LDR.N    R2,??DataTable26_10  ;; 0xffff8100
         ANDS     R1,R2,R1
         LDRB     R2,[R0, #+20]
@@ -118,11 +119,11 @@ SDIO_Init:
         ORRS     R2,R3,R2
         LDR      R3,[R0, #+0]
         ORRS     R2,R3,R2
-        LDR      R0,[R0, #+16]
-        ORRS     R0,R0,R2
-        ORRS     R1,R0,R1
-        LDR.N    R0,??DataTable26_1  ;; 0x40018004
-        STR      R1,[R0, #+0]
+        LDR      R3,[R0, #+16]
+        ORRS     R2,R3,R2
+        ORRS     R1,R2,R1
+        LDR.N    R2,??DataTable26_1  ;; 0x40018004
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -161,9 +162,9 @@ SDIO_SetPowerState:
         STR      R1,[R2, #+0]
         LDR.N    R1,??DataTable26  ;; 0x40018000
         LDR      R1,[R1, #+0]
-        ORRS     R0,R0,R1
-        LDR.N    R1,??DataTable26  ;; 0x40018000
-        STR      R0,[R1, #+0]
+        ORRS     R1,R0,R1
+        LDR.N    R2,??DataTable26  ;; 0x40018000
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -180,18 +181,18 @@ SDIO_ITConfig:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??SDIO_ITConfig_0
-        LDR.N    R1,??DataTable26_9  ;; 0x4001803c
-        LDR      R1,[R1, #+0]
-        ORRS     R0,R0,R1
-        LDR.N    R1,??DataTable26_9  ;; 0x4001803c
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable26_9  ;; 0x4001803c
+        LDR      R2,[R2, #+0]
+        ORRS     R2,R0,R2
+        LDR.N    R3,??DataTable26_9  ;; 0x4001803c
+        STR      R2,[R3, #+0]
         B.N      ??SDIO_ITConfig_1
 ??SDIO_ITConfig_0:
-        LDR.N    R1,??DataTable26_9  ;; 0x4001803c
-        LDR      R1,[R1, #+0]
-        BICS     R0,R1,R0
-        LDR.N    R1,??DataTable26_9  ;; 0x4001803c
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable26_9  ;; 0x4001803c
+        LDR      R2,[R2, #+0]
+        BICS     R2,R2,R0
+        LDR.N    R3,??DataTable26_9  ;; 0x4001803c
+        STR      R2,[R3, #+0]
 ??SDIO_ITConfig_1:
         BX       LR               ;; return
 
@@ -207,11 +208,12 @@ SDIO_DMACmd:
         THUMB
 SDIO_SendCommand:
         MOVS     R1,#+0
-        LDR      R1,[R0, #+0]
-        LDR.N    R2,??DataTable26_2  ;; 0x40018008
-        STR      R1,[R2, #+0]
-        LDR.N    R1,??DataTable26_3  ;; 0x4001800c
-        LDR      R1,[R1, #+0]
+        LDR      R2,[R0, #+0]
+        LDR.N    R3,??DataTable26_2  ;; 0x40018008
+        STR      R2,[R3, #+0]
+        LDR.N    R2,??DataTable26_3  ;; 0x4001800c
+        LDR      R2,[R2, #+0]
+        MOVS     R1,R2
         LSRS     R1,R1,#+11
         LSLS     R1,R1,#+11
         LDR      R2,[R0, #+4]
@@ -219,11 +221,11 @@ SDIO_SendCommand:
         ORRS     R2,R3,R2
         LDR      R3,[R0, #+12]
         ORRS     R2,R3,R2
-        LDR      R0,[R0, #+16]
-        ORRS     R0,R0,R2
-        ORRS     R1,R0,R1
-        LDR.N    R0,??DataTable26_3  ;; 0x4001800c
-        STR      R1,[R0, #+0]
+        LDR      R3,[R0, #+16]
+        ORRS     R2,R3,R2
+        ORRS     R1,R2,R1
+        LDR.N    R2,??DataTable26_3  ;; 0x4001800c
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -253,10 +255,11 @@ SDIO_GetCommandResponse:
         THUMB
 SDIO_GetResponse:
         SUB      SP,SP,#+4
-        MOVS     R1,#+0
-        STR      R1,[SP, #+0]
-        LDR.N    R1,??DataTable26_14  ;; 0x40018014
-        ADDS     R0,R1,R0
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        STR      R0,[SP, #+0]
+        LDR.N    R0,??DataTable26_14  ;; 0x40018014
+        ADDS     R0,R0,R1
         STR      R0,[SP, #+0]
         LDR      R0,[SP, #+0]
         LDR      R0,[R0, #+0]
@@ -267,25 +270,26 @@ SDIO_GetResponse:
         THUMB
 SDIO_DataConfig:
         MOVS     R1,#+0
-        LDR      R1,[R0, #+0]
-        LDR.N    R2,??DataTable26_4  ;; 0x40018024
-        STR      R1,[R2, #+0]
-        LDR      R1,[R0, #+4]
-        LDR.N    R2,??DataTable26_5  ;; 0x40018028
-        STR      R1,[R2, #+0]
-        LDR.N    R1,??DataTable26_6  ;; 0x4001802c
-        LDR      R1,[R1, #+0]
+        LDR      R2,[R0, #+0]
+        LDR.N    R3,??DataTable26_4  ;; 0x40018024
+        STR      R2,[R3, #+0]
+        LDR      R2,[R0, #+4]
+        LDR.N    R3,??DataTable26_5  ;; 0x40018028
+        STR      R2,[R3, #+0]
+        LDR.N    R2,??DataTable26_6  ;; 0x4001802c
+        LDR      R2,[R2, #+0]
+        MOVS     R1,R2
         BICS     R1,R1,#0xF7
         LDR      R2,[R0, #+8]
         LDR      R3,[R0, #+12]
         ORRS     R2,R3,R2
         LDR      R3,[R0, #+16]
         ORRS     R2,R3,R2
-        LDR      R0,[R0, #+20]
-        ORRS     R0,R0,R2
-        ORRS     R1,R0,R1
-        LDR.N    R0,??DataTable26_6  ;; 0x4001802c
-        STR      R1,[R0, #+0]
+        LDR      R3,[R0, #+20]
+        ORRS     R2,R3,R2
+        ORRS     R1,R2,R1
+        LDR.N    R2,??DataTable26_6  ;; 0x4001802c
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -384,10 +388,10 @@ SDIO_CommandCompletionCmd:
         THUMB
 SDIO_CEATAITCmd:
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        MVNS     R0,R0
-        ANDS     R0,R0,#0x1
-        LDR.N    R1,??DataTable26_24  ;; 0x423001b4
-        STR      R0,[R1, #+0]
+        MVNS     R1,R0
+        ANDS     R1,R1,#0x1
+        LDR.N    R2,??DataTable26_24  ;; 0x423001b4
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -401,17 +405,19 @@ SDIO_SendCEATACmd:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 SDIO_GetFlagStatus:
-        MOVS     R1,#+0
-        LDR.N    R1,??DataTable26_26  ;; 0x40018034
-        LDR      R1,[R1, #+0]
-        TST      R1,R0
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        LDR.N    R2,??DataTable26_26  ;; 0x40018034
+        LDR      R2,[R2, #+0]
+        TST      R2,R1
         BEQ.N    ??SDIO_GetFlagStatus_0
-        MOVS     R1,#+1
+        MOVS     R2,#+1
+        MOVS     R0,R2
         B.N      ??SDIO_GetFlagStatus_1
 ??SDIO_GetFlagStatus_0:
-        MOVS     R1,#+0
+        MOVS     R2,#+0
+        MOVS     R0,R2
 ??SDIO_GetFlagStatus_1:
-        MOVS     R0,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -425,17 +431,19 @@ SDIO_ClearFlag:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 SDIO_GetITStatus:
-        MOVS     R1,#+0
-        LDR.N    R1,??DataTable26_26  ;; 0x40018034
-        LDR      R1,[R1, #+0]
-        TST      R1,R0
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        LDR.N    R2,??DataTable26_26  ;; 0x40018034
+        LDR      R2,[R2, #+0]
+        TST      R2,R1
         BEQ.N    ??SDIO_GetITStatus_0
-        MOVS     R1,#+1
+        MOVS     R2,#+1
+        MOVS     R0,R2
         B.N      ??SDIO_GetITStatus_1
 ??SDIO_GetITStatus_0:
-        MOVS     R1,#+0
+        MOVS     R2,#+0
+        MOVS     R0,R2
 ??SDIO_GetITStatus_1:
-        MOVS     R0,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -621,9 +629,9 @@ SDIO_ClearITPendingBit:
 
         END
 // 
-// 620 bytes in section .text
+// 634 bytes in section .text
 // 
-// 620 bytes of CODE memory
+// 634 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

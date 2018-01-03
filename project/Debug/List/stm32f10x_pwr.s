@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:26
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:28
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_pwr.s
@@ -82,12 +82,13 @@ PWR_PVDCmd:
         THUMB
 PWR_PVDLevelConfig:
         MOVS     R1,#+0
-        LDR.N    R1,??DataTable7_2  ;; 0x40007000
-        LDR      R1,[R1, #+0]
+        LDR.N    R2,??DataTable7_2  ;; 0x40007000
+        LDR      R2,[R2, #+0]
+        MOVS     R1,R2
         BICS     R1,R1,#0xE0
         ORRS     R1,R0,R1
-        LDR.N    R0,??DataTable7_2  ;; 0x40007000
-        STR      R1,[R0, #+0]
+        LDR.N    R2,??DataTable7_2  ;; 0x40007000
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -101,19 +102,21 @@ PWR_WakeUpPinCmd:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 PWR_EnterSTOPMode:
+        PUSH     {R4}
         MOVS     R2,#+0
-        LDR.N    R2,??DataTable7_2  ;; 0x40007000
-        LDR      R2,[R2, #+0]
+        LDR.N    R3,??DataTable7_2  ;; 0x40007000
+        LDR      R3,[R3, #+0]
+        MOVS     R2,R3
         LSRS     R2,R2,#+2
         LSLS     R2,R2,#+2
         ORRS     R2,R0,R2
-        LDR.N    R0,??DataTable7_2  ;; 0x40007000
-        STR      R2,[R0, #+0]
-        LDR.N    R0,??DataTable7_4  ;; 0xe000ed10
-        LDR      R0,[R0, #+0]
-        ORRS     R0,R0,#0x4
-        LDR.N    R2,??DataTable7_4  ;; 0xe000ed10
-        STR      R0,[R2, #+0]
+        LDR.N    R3,??DataTable7_2  ;; 0x40007000
+        STR      R2,[R3, #+0]
+        LDR.N    R3,??DataTable7_4  ;; 0xe000ed10
+        LDR      R3,[R3, #+0]
+        ORRS     R3,R3,#0x4
+        LDR.N    R4,??DataTable7_4  ;; 0xe000ed10
+        STR      R3,[R4, #+0]
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+1
         BNE.N    ??PWR_EnterSTOPMode_0
@@ -122,11 +125,12 @@ PWR_EnterSTOPMode:
 ??PWR_EnterSTOPMode_0:
         WFE      
 ??PWR_EnterSTOPMode_1:
-        LDR.N    R0,??DataTable7_4  ;; 0xe000ed10
-        LDR      R0,[R0, #+0]
-        BICS     R0,R0,#0x4
-        LDR.N    R1,??DataTable7_4  ;; 0xe000ed10
-        STR      R0,[R1, #+0]
+        LDR.N    R3,??DataTable7_4  ;; 0xe000ed10
+        LDR      R3,[R3, #+0]
+        BICS     R3,R3,#0x4
+        LDR.N    R4,??DataTable7_4  ;; 0xe000ed10
+        STR      R3,[R4, #+0]
+        POP      {R4}
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -153,17 +157,19 @@ PWR_EnterSTANDBYMode:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 PWR_GetFlagStatus:
-        MOVS     R1,#+0
-        LDR.N    R1,??DataTable7_5  ;; 0x40007004
-        LDR      R1,[R1, #+0]
-        TST      R1,R0
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        LDR.N    R2,??DataTable7_5  ;; 0x40007004
+        LDR      R2,[R2, #+0]
+        TST      R2,R1
         BEQ.N    ??PWR_GetFlagStatus_0
-        MOVS     R1,#+1
+        MOVS     R2,#+1
+        MOVS     R0,R2
         B.N      ??PWR_GetFlagStatus_1
 ??PWR_GetFlagStatus_0:
-        MOVS     R1,#+0
+        MOVS     R2,#+0
+        MOVS     R0,R2
 ??PWR_GetFlagStatus_1:
-        MOVS     R0,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -172,9 +178,9 @@ PWR_GetFlagStatus:
 PWR_ClearFlag:
         LDR.N    R1,??DataTable7_2  ;; 0x40007000
         LDR      R1,[R1, #+0]
-        ORRS     R0,R1,R0, LSL #+2
-        LDR.N    R1,??DataTable7_2  ;; 0x40007000
-        STR      R0,[R1, #+0]
+        ORRS     R1,R1,R0, LSL #+2
+        LDR.N    R2,??DataTable7_2  ;; 0x40007000
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
@@ -226,9 +232,9 @@ PWR_ClearFlag:
 
         END
 // 
-// 220 bytes in section .text
+// 232 bytes in section .text
 // 
-// 220 bytes of CODE memory
+// 232 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       18/Dec/2017  10:50:25
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:27
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -28,7 +28,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\senproto\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\tools\ -I
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\spiffs\src\ -I
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -Ol --vla
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\stm32f10x_flash.s
@@ -71,12 +71,13 @@
         THUMB
 FLASH_SetLatency:
         MOVS     R1,#+0
-        LDR.W    R1,??DataTable25  ;; 0x40022000
-        LDR      R1,[R1, #+0]
+        LDR.W    R2,??DataTable25  ;; 0x40022000
+        LDR      R2,[R2, #+0]
+        MOVS     R1,R2
         ANDS     R1,R1,#0x38
         ORRS     R1,R0,R1
-        LDR.W    R0,??DataTable25  ;; 0x40022000
-        STR      R1,[R0, #+0]
+        LDR.W    R2,??DataTable25  ;; 0x40022000
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -89,9 +90,9 @@ FLASH_HalfCycleAccessCmd:
         STR      R1,[R2, #+0]
         LDR.W    R1,??DataTable25  ;; 0x40022000
         LDR      R1,[R1, #+0]
-        ORRS     R0,R0,R1
-        LDR.W    R1,??DataTable25  ;; 0x40022000
-        STR      R0,[R1, #+0]
+        ORRS     R1,R0,R1
+        LDR.W    R2,??DataTable25  ;; 0x40022000
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -104,9 +105,9 @@ FLASH_PrefetchBufferCmd:
         STR      R1,[R2, #+0]
         LDR.W    R1,??DataTable25  ;; 0x40022000
         LDR      R1,[R1, #+0]
-        ORRS     R0,R0,R1
-        LDR.W    R1,??DataTable25  ;; 0x40022000
-        STR      R0,[R1, #+0]
+        ORRS     R1,R0,R1
+        LDR.W    R2,??DataTable25  ;; 0x40022000
+        STR      R1,[R2, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -154,13 +155,14 @@ FLASH_LockBank1:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FLASH_ErasePage:
-        PUSH     {R4,LR}
+        PUSH     {R3-R5,LR}
         MOVS     R4,R0
-        MOVS     R0,#+4
+        MOVS     R5,#+4
         MOVS     R0,#+720896
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        MOVS     R5,R0
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        CMP      R5,#+4
         BNE.N    ??FLASH_ErasePage_0
         LDR.W    R0,??DataTable25_4  ;; 0x40022010
         LDR      R0,[R0, #+0]
@@ -176,25 +178,28 @@ FLASH_ErasePage:
         STR      R0,[R1, #+0]
         MOVS     R0,#+720896
         BL       FLASH_WaitForLastOperation
+        MOVS     R5,R0
+        LDR.W    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8189
+        ANDS     R0,R1,R0
         LDR.W    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8189
-        ANDS     R1,R2,R1
-        LDR.W    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
+        STR      R0,[R1, #+0]
 ??FLASH_ErasePage_0:
+        MOVS     R0,R5
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R4,PC}          ;; return
+        POP      {R1,R4,R5,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FLASH_EraseAllPages:
-        PUSH     {R7,LR}
-        MOVS     R0,#+4
+        PUSH     {R4,LR}
+        MOVS     R4,#+4
         MOVS     R0,#+720896
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        MOVS     R4,R0
+        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+        CMP      R4,#+4
         BNE.N    ??FLASH_EraseAllPages_0
         LDR.W    R0,??DataTable25_4  ;; 0x40022010
         LDR      R0,[R0, #+0]
@@ -208,25 +213,28 @@ FLASH_EraseAllPages:
         STR      R0,[R1, #+0]
         MOVS     R0,#+720896
         BL       FLASH_WaitForLastOperation
+        MOVS     R4,R0
+        LDR.W    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8187
+        ANDS     R0,R1,R0
         LDR.W    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8187
-        ANDS     R1,R2,R1
-        LDR.W    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
+        STR      R0,[R1, #+0]
 ??FLASH_EraseAllPages_0:
+        MOVS     R0,R4
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R1,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FLASH_EraseAllBank1Pages:
-        PUSH     {R7,LR}
-        MOVS     R0,#+4
+        PUSH     {R4,LR}
+        MOVS     R4,#+4
         MOVS     R0,#+720896
         BL       FLASH_WaitForLastBank1Operation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        MOVS     R4,R0
+        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+        CMP      R4,#+4
         BNE.N    ??FLASH_EraseAllBank1Pages_0
         LDR.W    R0,??DataTable25_4  ;; 0x40022010
         LDR      R0,[R0, #+0]
@@ -240,31 +248,35 @@ FLASH_EraseAllBank1Pages:
         STR      R0,[R1, #+0]
         MOVS     R0,#+720896
         BL       FLASH_WaitForLastBank1Operation
+        MOVS     R4,R0
+        LDR.W    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8187
+        ANDS     R0,R1,R0
         LDR.W    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8187
-        ANDS     R1,R2,R1
-        LDR.W    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
+        STR      R0,[R1, #+0]
 ??FLASH_EraseAllBank1Pages_0:
+        MOVS     R0,R4
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R1,PC}          ;; return
+        POP      {R4,PC}          ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FLASH_EraseOptionBytes:
-        PUSH     {R4,LR}
+        PUSH     {R3-R5,LR}
         MOVS     R4,#+165
-        MOVS     R0,#+4
+        MOVS     R5,#+4
         BL       FLASH_GetReadOutProtectionStatus
         CMP      R0,#+0
         BEQ.N    ??FLASH_EraseOptionBytes_0
-        MOVS     R4,#+0
+        MOVS     R0,#+0
+        MOVS     R4,R0
 ??FLASH_EraseOptionBytes_0:
         MOVS     R0,#+720896
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        MOVS     R5,R0
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        CMP      R5,#+4
         BNE.N    ??FLASH_EraseOptionBytes_1
         LDR.W    R0,??DataTable25_1  ;; 0x45670123
         LDR.W    R1,??DataTable25_6  ;; 0x40022008
@@ -284,8 +296,9 @@ FLASH_EraseOptionBytes:
         STR      R0,[R1, #+0]
         MOVS     R0,#+720896
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        MOVS     R5,R0
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        CMP      R5,#+4
         BNE.N    ??FLASH_EraseOptionBytes_2
         LDR.W    R0,??DataTable25_4  ;; 0x40022010
         LDR      R0,[R0, #+0]
@@ -302,91 +315,99 @@ FLASH_EraseOptionBytes:
         STRH     R4,[R0, #+0]
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+5
+        MOVS     R5,R0
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        CMP      R5,#+5
         BEQ.N    ??FLASH_EraseOptionBytes_1
+        LDR.W    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8175
+        ANDS     R0,R1,R0
         LDR.W    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8175
-        ANDS     R1,R2,R1
-        LDR.W    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
+        STR      R0,[R1, #+0]
         B.N      ??FLASH_EraseOptionBytes_1
 ??FLASH_EraseOptionBytes_2:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+5
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        CMP      R5,#+5
         BEQ.N    ??FLASH_EraseOptionBytes_1
+        LDR.W    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8175
+        ANDS     R0,R1,R0
         LDR.W    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8175
-        ANDS     R1,R2,R1
-        LDR.W    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
+        STR      R0,[R1, #+0]
 ??FLASH_EraseOptionBytes_1:
+        MOVS     R0,R5
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R4,PC}          ;; return
+        POP      {R1,R4,R5,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FLASH_ProgramWord:
-        PUSH     {R3-R5,LR}
-        MOVS     R5,R0
-        MOVS     R4,R1
-        MOVS     R0,#+4
+        PUSH     {R4-R6,LR}
+        SUB      SP,SP,#+8
+        MOVS     R4,R0
+        MOVS     R5,R1
+        MOVS     R6,#+4
         MOVS     R0,#+0
         STR      R0,[SP, #+0]
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        MOVS     R6,R0
+        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        CMP      R6,#+4
         BNE.N    ??FLASH_ProgramWord_0
         LDR.W    R0,??DataTable25_4  ;; 0x40022010
         LDR      R0,[R0, #+0]
         ORRS     R0,R0,#0x1
         LDR.W    R1,??DataTable25_4  ;; 0x40022010
         STR      R0,[R1, #+0]
-        STRH     R4,[R5, #+0]
+        STRH     R5,[R4, #+0]
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        MOVS     R6,R0
+        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        CMP      R6,#+4
         BNE.N    ??FLASH_ProgramWord_1
-        ADDS     R0,R5,#+2
+        ADDS     R0,R4,#+2
         STR      R0,[SP, #+0]
-        LSRS     R0,R4,#+16
+        LSRS     R0,R5,#+16
         LDR      R1,[SP, #+0]
         STRH     R0,[R1, #+0]
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
+        MOVS     R6,R0
+        LDR.W    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8190
+        ANDS     R0,R1,R0
         LDR.W    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8190
-        ANDS     R1,R2,R1
-        LDR.W    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
+        STR      R0,[R1, #+0]
         B.N      ??FLASH_ProgramWord_0
 ??FLASH_ProgramWord_1:
+        LDR.W    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8190
+        ANDS     R0,R1,R0
         LDR.W    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8190
-        ANDS     R1,R2,R1
-        LDR.W    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
+        STR      R0,[R1, #+0]
 ??FLASH_ProgramWord_0:
+        MOVS     R0,R6
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R1,R4,R5,PC}    ;; return
+        POP      {R1,R2,R4-R6,PC}  ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FLASH_ProgramHalfWord:
-        PUSH     {R3-R5,LR}
+        PUSH     {R4-R6,LR}
         MOVS     R4,R0
         MOVS     R5,R1
-        MOVS     R0,#+4
+        MOVS     R6,#+4
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        MOVS     R6,R0
+        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        CMP      R6,#+4
         BNE.N    ??FLASH_ProgramHalfWord_0
         LDR.W    R0,??DataTable25_4  ;; 0x40022010
         LDR      R0,[R0, #+0]
@@ -396,28 +417,87 @@ FLASH_ProgramHalfWord:
         STRH     R5,[R4, #+0]
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
+        MOVS     R6,R0
+        LDR.W    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8190
+        ANDS     R0,R1,R0
         LDR.W    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8190
-        ANDS     R1,R2,R1
-        LDR.W    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
+        STR      R0,[R1, #+0]
 ??FLASH_ProgramHalfWord_0:
+        MOVS     R0,R6
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R1,R4,R5,PC}    ;; return
+        POP      {R4-R6,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FLASH_ProgramOptionByteData:
-        PUSH     {R3-R5,LR}
+        PUSH     {R4-R6,LR}
         MOVS     R4,R0
         MOVS     R5,R1
-        MOVS     R0,#+4
+        MOVS     R6,#+4
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        MOVS     R6,R0
+        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        CMP      R6,#+4
         BNE.N    ??FLASH_ProgramOptionByteData_0
+        LDR.W    R0,??DataTable25_1  ;; 0x45670123
+        LDR.W    R1,??DataTable25_6  ;; 0x40022008
+        STR      R0,[R1, #+0]
+        LDR.W    R0,??DataTable25_3  ;; 0xcdef89ab
+        LDR.W    R1,??DataTable25_6  ;; 0x40022008
+        STR      R0,[R1, #+0]
+        LDR.W    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        ORRS     R0,R0,#0x10
+        LDR.W    R1,??DataTable25_4  ;; 0x40022010
+        STR      R0,[R1, #+0]
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        STRH     R5,[R4, #+0]
+        MOV      R0,#+8192
+        BL       FLASH_WaitForLastOperation
+        MOVS     R6,R0
+        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        CMP      R6,#+5
+        BEQ.N    ??FLASH_ProgramOptionByteData_0
+        LDR.W    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8175
+        ANDS     R0,R1,R0
+        LDR.W    R1,??DataTable25_4  ;; 0x40022010
+        STR      R0,[R1, #+0]
+??FLASH_ProgramOptionByteData_0:
+        MOVS     R0,R6
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        POP      {R4-R6,PC}       ;; return
+
+        SECTION `.text`:CODE:NOROOT(1)
+        THUMB
+FLASH_EnableWriteProtection:
+        PUSH     {R3-R9,LR}
+        MOV      R9,R0
+        MOVW     R4,#+65535
+        MOVW     R5,#+65535
+        MOVW     R6,#+65535
+        MOVW     R7,#+65535
+        MOVS     R8,#+4
+        MVNS     R9,R9
+        ANDS     R0,R9,#0xFF
+        MOVS     R4,R0
+        UBFX     R0,R9,#+8,#+8
+        MOVS     R5,R0
+        LSRS     R0,R9,#+16
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        MOVS     R6,R0
+        LSRS     R0,R9,#+24
+        MOVS     R7,R0
+        MOV      R0,#+8192
+        BL       FLASH_WaitForLastOperation
+        MOV      R8,R0
+        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
+        CMP      R8,#+4
+        BNE.N    ??FLASH_EnableWriteProtection_0
         LDR.N    R0,??DataTable25_1  ;; 0x45670123
         LDR.N    R1,??DataTable25_6  ;; 0x40022008
         STR      R0,[R1, #+0]
@@ -429,55 +509,6 @@ FLASH_ProgramOptionByteData:
         ORRS     R0,R0,#0x10
         LDR.N    R1,??DataTable25_4  ;; 0x40022010
         STR      R0,[R1, #+0]
-        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
-        STRH     R5,[R4, #+0]
-        MOV      R0,#+8192
-        BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+5
-        BEQ.N    ??FLASH_ProgramOptionByteData_0
-        LDR.N    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8175
-        ANDS     R1,R2,R1
-        LDR.N    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
-??FLASH_ProgramOptionByteData_0:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R1,R4,R5,PC}    ;; return
-
-        SECTION `.text`:CODE:NOROOT(1)
-        THUMB
-FLASH_EnableWriteProtection:
-        PUSH     {R3-R7,LR}
-        MOVS     R1,R0
-        MOVW     R4,#+65535
-        MOVW     R5,#+65535
-        MOVW     R6,#+65535
-        MOVW     R7,#+65535
-        MOVS     R0,#+4
-        MVNS     R1,R1
-        ANDS     R4,R1,#0xFF
-        UBFX     R5,R1,#+8,#+8
-        LSRS     R0,R1,#+16
-        UXTB     R6,R0            ;; ZeroExt  R6,R0,#+24,#+24
-        LSRS     R7,R1,#+24
-        MOV      R0,#+8192
-        BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
-        BNE.N    ??FLASH_EnableWriteProtection_0
-        LDR.N    R1,??DataTable25_1  ;; 0x45670123
-        LDR.N    R2,??DataTable25_6  ;; 0x40022008
-        STR      R1,[R2, #+0]
-        LDR.N    R1,??DataTable25_3  ;; 0xcdef89ab
-        LDR.N    R2,??DataTable25_6  ;; 0x40022008
-        STR      R1,[R2, #+0]
-        LDR.N    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        ORRS     R1,R1,#0x10
-        LDR.N    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
         UXTH     R4,R4            ;; ZeroExt  R4,R4,#+16,#+16
         CMP      R4,#+255
         BEQ.N    ??FLASH_EnableWriteProtection_1
@@ -485,9 +516,10 @@ FLASH_EnableWriteProtection:
         STRH     R4,[R0, #+0]
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
+        MOV      R8,R0
 ??FLASH_EnableWriteProtection_1:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
+        CMP      R8,#+4
         BNE.N    ??FLASH_EnableWriteProtection_2
         UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
         CMP      R5,#+255
@@ -496,9 +528,10 @@ FLASH_EnableWriteProtection:
         STRH     R5,[R0, #+0]
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
+        MOV      R8,R0
 ??FLASH_EnableWriteProtection_2:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
+        CMP      R8,#+4
         BNE.N    ??FLASH_EnableWriteProtection_3
         UXTH     R6,R6            ;; ZeroExt  R6,R6,#+16,#+16
         CMP      R6,#+255
@@ -507,9 +540,10 @@ FLASH_EnableWriteProtection:
         STRH     R6,[R0, #+0]
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
+        MOV      R8,R0
 ??FLASH_EnableWriteProtection_3:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
+        CMP      R8,#+4
         BNE.N    ??FLASH_EnableWriteProtection_4
         UXTH     R7,R7            ;; ZeroExt  R7,R7,#+16,#+16
         CMP      R7,#+255
@@ -518,30 +552,33 @@ FLASH_EnableWriteProtection:
         STRH     R7,[R0, #+0]
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
+        MOV      R8,R0
 ??FLASH_EnableWriteProtection_4:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+5
+        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
+        CMP      R8,#+5
         BEQ.N    ??FLASH_EnableWriteProtection_0
+        LDR.N    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8175
+        ANDS     R0,R1,R0
         LDR.N    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8175
-        ANDS     R1,R2,R1
-        LDR.N    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
+        STR      R0,[R1, #+0]
 ??FLASH_EnableWriteProtection_0:
+        MOV      R0,R8
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R1,R4-R7,PC}    ;; return
+        POP      {R1,R4-R9,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FLASH_ReadOutProtection:
-        PUSH     {R4,LR}
+        PUSH     {R3-R5,LR}
         MOVS     R4,R0
-        MOVS     R0,#+4
+        MOVS     R5,#+4
         MOVS     R0,#+720896
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        MOVS     R5,R0
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        CMP      R5,#+4
         BNE.N    ??FLASH_ReadOutProtection_0
         LDR.N    R0,??DataTable25_1  ;; 0x45670123
         LDR.N    R1,??DataTable25_6  ;; 0x40022008
@@ -561,8 +598,9 @@ FLASH_ReadOutProtection:
         STR      R0,[R1, #+0]
         MOVS     R0,#+720896
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        MOVS     R5,R0
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        CMP      R5,#+4
         BNE.N    ??FLASH_ReadOutProtection_1
         LDR.N    R0,??DataTable25_4  ;; 0x40022010
         LDR      R0,[R0, #+0]
@@ -589,38 +627,40 @@ FLASH_ReadOutProtection:
 ??FLASH_ReadOutProtection_3:
         MOVS     R0,#+720896
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+5
+        MOVS     R5,R0
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        CMP      R5,#+5
         BEQ.N    ??FLASH_ReadOutProtection_0
+        LDR.N    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8175
+        ANDS     R0,R1,R0
         LDR.N    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8175
-        ANDS     R1,R2,R1
-        LDR.N    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
+        STR      R0,[R1, #+0]
         B.N      ??FLASH_ReadOutProtection_0
 ??FLASH_ReadOutProtection_1:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+5
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        CMP      R5,#+5
         BEQ.N    ??FLASH_ReadOutProtection_0
+        LDR.N    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8159
+        ANDS     R0,R1,R0
         LDR.N    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8159
-        ANDS     R1,R2,R1
-        LDR.N    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
+        STR      R0,[R1, #+0]
 ??FLASH_ReadOutProtection_0:
+        MOVS     R0,R5
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R4,PC}          ;; return
+        POP      {R1,R4,R5,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FLASH_UserOptionByteConfig:
-        PUSH     {R4-R6,LR}
+        PUSH     {R3-R7,LR}
         MOVS     R4,R0
         MOVS     R5,R1
         MOVS     R6,R2
-        MOVS     R0,#+4
+        MOVS     R7,#+4
         LDR.N    R0,??DataTable25_1  ;; 0x45670123
         LDR.N    R1,??DataTable25_6  ;; 0x40022008
         STR      R0,[R1, #+0]
@@ -629,8 +669,9 @@ FLASH_UserOptionByteConfig:
         STR      R0,[R1, #+0]
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+4
+        MOVS     R7,R0
+        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
+        CMP      R7,#+4
         BNE.N    ??FLASH_UserOptionByteConfig_0
         LDR.N    R0,??DataTable25_4  ;; 0x40022010
         LDR      R0,[R0, #+0]
@@ -644,18 +685,20 @@ FLASH_UserOptionByteConfig:
         STRH     R0,[R1, #+0]
         MOV      R0,#+8192
         BL       FLASH_WaitForLastOperation
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+5
+        MOVS     R7,R0
+        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
+        CMP      R7,#+5
         BEQ.N    ??FLASH_UserOptionByteConfig_0
+        LDR.N    R0,??DataTable25_4  ;; 0x40022010
+        LDR      R0,[R0, #+0]
+        MOVW     R1,#+8175
+        ANDS     R0,R1,R0
         LDR.N    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        MOVW     R2,#+8175
-        ANDS     R1,R2,R1
-        LDR.N    R2,??DataTable25_4  ;; 0x40022010
-        STR      R1,[R2, #+0]
+        STR      R0,[R1, #+0]
 ??FLASH_UserOptionByteConfig_0:
+        MOVS     R0,R7
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R4-R6,PC}       ;; return
+        POP      {R1,R4-R7,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -676,14 +719,16 @@ FLASH_GetWriteProtectionOptionByte:
         THUMB
 FLASH_GetReadOutProtectionStatus:
         MOVS     R0,#+0
-        LDR.N    R0,??DataTable25_13  ;; 0x4002201c
-        LDR      R0,[R0, #+0]
-        LSLS     R0,R0,#+30
+        LDR.N    R1,??DataTable25_13  ;; 0x4002201c
+        LDR      R1,[R1, #+0]
+        LSLS     R1,R1,#+30
         BPL.N    ??FLASH_GetReadOutProtectionStatus_0
-        MOVS     R0,#+1
+        MOVS     R1,#+1
+        MOVS     R0,R1
         B.N      ??FLASH_GetReadOutProtectionStatus_1
 ??FLASH_GetReadOutProtectionStatus_0:
-        MOVS     R0,#+0
+        MOVS     R1,#+0
+        MOVS     R0,R1
 ??FLASH_GetReadOutProtectionStatus_1:
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
@@ -692,14 +737,16 @@ FLASH_GetReadOutProtectionStatus:
         THUMB
 FLASH_GetPrefetchBufferStatus:
         MOVS     R0,#+0
-        LDR.N    R0,??DataTable25  ;; 0x40022000
-        LDR      R0,[R0, #+0]
-        LSLS     R0,R0,#+26
+        LDR.N    R1,??DataTable25  ;; 0x40022000
+        LDR      R1,[R1, #+0]
+        LSLS     R1,R1,#+26
         BPL.N    ??FLASH_GetPrefetchBufferStatus_0
-        MOVS     R0,#+1
+        MOVS     R1,#+1
+        MOVS     R0,R1
         B.N      ??FLASH_GetPrefetchBufferStatus_1
 ??FLASH_GetPrefetchBufferStatus_0:
-        MOVS     R0,#+0
+        MOVS     R1,#+0
+        MOVS     R0,R1
 ??FLASH_GetPrefetchBufferStatus_1:
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
@@ -710,47 +757,51 @@ FLASH_ITConfig:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??FLASH_ITConfig_0
-        LDR.N    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        ORRS     R0,R0,R1
-        LDR.N    R1,??DataTable25_4  ;; 0x40022010
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable25_4  ;; 0x40022010
+        LDR      R2,[R2, #+0]
+        ORRS     R2,R0,R2
+        LDR.N    R3,??DataTable25_4  ;; 0x40022010
+        STR      R2,[R3, #+0]
         B.N      ??FLASH_ITConfig_1
 ??FLASH_ITConfig_0:
-        LDR.N    R1,??DataTable25_4  ;; 0x40022010
-        LDR      R1,[R1, #+0]
-        BICS     R0,R1,R0
-        LDR.N    R1,??DataTable25_4  ;; 0x40022010
-        STR      R0,[R1, #+0]
+        LDR.N    R2,??DataTable25_4  ;; 0x40022010
+        LDR      R2,[R2, #+0]
+        BICS     R2,R2,R0
+        LDR.N    R3,??DataTable25_4  ;; 0x40022010
+        STR      R2,[R3, #+0]
 ??FLASH_ITConfig_1:
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FLASH_GetFlagStatus:
-        MOVS     R1,#+0
-        CMP      R0,#+1
+        MOVS     R1,R0
+        MOVS     R0,#+0
+        CMP      R1,#+1
         BNE.N    ??FLASH_GetFlagStatus_0
-        LDR.N    R0,??DataTable25_13  ;; 0x4002201c
-        LDR      R0,[R0, #+0]
-        LSLS     R0,R0,#+31
+        LDR.N    R2,??DataTable25_13  ;; 0x4002201c
+        LDR      R2,[R2, #+0]
+        LSLS     R2,R2,#+31
         BPL.N    ??FLASH_GetFlagStatus_1
-        MOVS     R1,#+1
+        MOVS     R2,#+1
+        MOVS     R0,R2
         B.N      ??FLASH_GetFlagStatus_2
 ??FLASH_GetFlagStatus_1:
-        MOVS     R1,#+0
+        MOVS     R2,#+0
+        MOVS     R0,R2
         B.N      ??FLASH_GetFlagStatus_2
 ??FLASH_GetFlagStatus_0:
-        LDR.N    R1,??DataTable25_15  ;; 0x4002200c
-        LDR      R1,[R1, #+0]
-        TST      R1,R0
+        LDR.N    R2,??DataTable25_15  ;; 0x4002200c
+        LDR      R2,[R2, #+0]
+        TST      R2,R1
         BEQ.N    ??FLASH_GetFlagStatus_3
-        MOVS     R1,#+1
+        MOVS     R2,#+1
+        MOVS     R0,R2
         B.N      ??FLASH_GetFlagStatus_2
 ??FLASH_GetFlagStatus_3:
-        MOVS     R1,#+0
+        MOVS     R2,#+0
+        MOVS     R0,R2
 ??FLASH_GetFlagStatus_2:
-        MOVS     R0,R1
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
 
@@ -765,28 +816,32 @@ FLASH_ClearFlag:
         THUMB
 FLASH_GetStatus:
         MOVS     R0,#+4
-        LDR.N    R0,??DataTable25_15  ;; 0x4002200c
-        LDR      R0,[R0, #+0]
-        LSLS     R0,R0,#+31
+        LDR.N    R1,??DataTable25_15  ;; 0x4002200c
+        LDR      R1,[R1, #+0]
+        LSLS     R1,R1,#+31
         BPL.N    ??FLASH_GetStatus_0
-        MOVS     R0,#+1
+        MOVS     R1,#+1
+        MOVS     R0,R1
         B.N      ??FLASH_GetStatus_1
 ??FLASH_GetStatus_0:
-        LDR.N    R0,??DataTable25_15  ;; 0x4002200c
-        LDR      R0,[R0, #+0]
-        LSLS     R0,R0,#+29
+        LDR.N    R1,??DataTable25_15  ;; 0x4002200c
+        LDR      R1,[R1, #+0]
+        LSLS     R1,R1,#+29
         BPL.N    ??FLASH_GetStatus_2
-        MOVS     R0,#+2
+        MOVS     R1,#+2
+        MOVS     R0,R1
         B.N      ??FLASH_GetStatus_1
 ??FLASH_GetStatus_2:
-        LDR.N    R0,??DataTable25_15  ;; 0x4002200c
-        LDR      R0,[R0, #+0]
-        LSLS     R0,R0,#+27
+        LDR.N    R1,??DataTable25_15  ;; 0x4002200c
+        LDR      R1,[R1, #+0]
+        LSLS     R1,R1,#+27
         BPL.N    ??FLASH_GetStatus_3
-        MOVS     R0,#+3
+        MOVS     R1,#+3
+        MOVS     R0,R1
         B.N      ??FLASH_GetStatus_1
 ??FLASH_GetStatus_3:
-        MOVS     R0,#+4
+        MOVS     R1,#+4
+        MOVS     R0,R1
 ??FLASH_GetStatus_1:
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
@@ -795,28 +850,32 @@ FLASH_GetStatus:
         THUMB
 FLASH_GetBank1Status:
         MOVS     R0,#+4
-        LDR.N    R0,??DataTable25_15  ;; 0x4002200c
-        LDR      R0,[R0, #+0]
-        LSLS     R0,R0,#+31
+        LDR.N    R1,??DataTable25_15  ;; 0x4002200c
+        LDR      R1,[R1, #+0]
+        LSLS     R1,R1,#+31
         BPL.N    ??FLASH_GetBank1Status_0
-        MOVS     R0,#+1
+        MOVS     R1,#+1
+        MOVS     R0,R1
         B.N      ??FLASH_GetBank1Status_1
 ??FLASH_GetBank1Status_0:
-        LDR.N    R0,??DataTable25_15  ;; 0x4002200c
-        LDR      R0,[R0, #+0]
-        LSLS     R0,R0,#+29
+        LDR.N    R1,??DataTable25_15  ;; 0x4002200c
+        LDR      R1,[R1, #+0]
+        LSLS     R1,R1,#+29
         BPL.N    ??FLASH_GetBank1Status_2
-        MOVS     R0,#+2
+        MOVS     R1,#+2
+        MOVS     R0,R1
         B.N      ??FLASH_GetBank1Status_1
 ??FLASH_GetBank1Status_2:
-        LDR.N    R0,??DataTable25_15  ;; 0x4002200c
-        LDR      R0,[R0, #+0]
-        LSLS     R0,R0,#+27
+        LDR.N    R1,??DataTable25_15  ;; 0x4002200c
+        LDR      R1,[R1, #+0]
+        LSLS     R1,R1,#+27
         BPL.N    ??FLASH_GetBank1Status_3
-        MOVS     R0,#+3
+        MOVS     R1,#+3
+        MOVS     R0,R1
         B.N      ??FLASH_GetBank1Status_1
 ??FLASH_GetBank1Status_3:
-        MOVS     R0,#+4
+        MOVS     R1,#+4
+        MOVS     R0,R1
 ??FLASH_GetBank1Status_1:
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         BX       LR               ;; return
@@ -920,52 +979,58 @@ FLASH_GetBank1Status:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FLASH_WaitForLastOperation:
-        PUSH     {R4,LR}
+        PUSH     {R3-R5,LR}
         MOVS     R4,R0
-        MOVS     R0,#+4
+        MOVS     R5,#+4
         BL       FLASH_GetBank1Status
+        MOVS     R5,R0
+??FLASH_WaitForLastOperation_0:
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        CMP      R5,#+1
+        BNE.N    ??FLASH_WaitForLastOperation_1
+        CMP      R4,#+0
+        BEQ.N    ??FLASH_WaitForLastOperation_1
+        BL       FLASH_GetBank1Status
+        MOVS     R5,R0
+        SUBS     R4,R4,#+1
         B.N      ??FLASH_WaitForLastOperation_0
 ??FLASH_WaitForLastOperation_1:
-        BL       FLASH_GetBank1Status
-        SUBS     R4,R4,#+1
-??FLASH_WaitForLastOperation_0:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+1
+        CMP      R4,#+0
         BNE.N    ??FLASH_WaitForLastOperation_2
-        CMP      R4,#+0
-        BNE.N    ??FLASH_WaitForLastOperation_1
-??FLASH_WaitForLastOperation_2:
-        CMP      R4,#+0
-        BNE.N    ??FLASH_WaitForLastOperation_3
         MOVS     R0,#+5
-??FLASH_WaitForLastOperation_3:
+        MOVS     R5,R0
+??FLASH_WaitForLastOperation_2:
+        MOVS     R0,R5
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R4,PC}          ;; return
+        POP      {R1,R4,R5,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 FLASH_WaitForLastBank1Operation:
-        PUSH     {R4,LR}
+        PUSH     {R3-R5,LR}
         MOVS     R4,R0
-        MOVS     R0,#+4
+        MOVS     R5,#+4
         BL       FLASH_GetBank1Status
+        MOVS     R5,R0
+??FLASH_WaitForLastBank1Operation_0:
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        CMP      R5,#+1
+        BNE.N    ??FLASH_WaitForLastBank1Operation_1
+        CMP      R4,#+0
+        BEQ.N    ??FLASH_WaitForLastBank1Operation_1
+        BL       FLASH_GetBank1Status
+        MOVS     R5,R0
+        SUBS     R4,R4,#+1
         B.N      ??FLASH_WaitForLastBank1Operation_0
 ??FLASH_WaitForLastBank1Operation_1:
-        BL       FLASH_GetBank1Status
-        SUBS     R4,R4,#+1
-??FLASH_WaitForLastBank1Operation_0:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+1
+        CMP      R4,#+0
         BNE.N    ??FLASH_WaitForLastBank1Operation_2
-        CMP      R4,#+0
-        BNE.N    ??FLASH_WaitForLastBank1Operation_1
-??FLASH_WaitForLastBank1Operation_2:
-        CMP      R4,#+0
-        BNE.N    ??FLASH_WaitForLastBank1Operation_3
         MOVS     R0,#+5
-??FLASH_WaitForLastBank1Operation_3:
+        MOVS     R5,R0
+??FLASH_WaitForLastBank1Operation_2:
+        MOVS     R0,R5
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        POP      {R4,PC}          ;; return
+        POP      {R1,R4,R5,PC}    ;; return
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -980,9 +1045,9 @@ FLASH_WaitForLastBank1Operation:
 
         END
 // 
-// 1 696 bytes in section .text
+// 1 876 bytes in section .text
 // 
-// 1 696 bytes of CODE memory
+// 1 876 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none
