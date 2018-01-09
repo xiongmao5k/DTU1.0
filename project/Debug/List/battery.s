@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:20
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       09/Jan/2018  13:27:40
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -64,6 +64,7 @@
         PUBLIC battery_check_power
         PUBLIC battery_init
         PUBLIC battery_read
+        PUBLIC max_data
 
 
         SECTION `.text`:CODE:NOROOT(1)
@@ -161,26 +162,77 @@ simple_delay:
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
+max_data:
+        PUSH     {R0-R8,LR}
+        MOVS     R0,#+0
+        MOV      R8,R0
+??max_data_0:
+        CMP      R8,#+4
+        BCS.N    ??max_data_1
+        BL       simple_delay
+        BL       adc_read
+        ADD      R1,SP,#+0
+        STR      R0,[R1, R8, LSL #+2]
+        ADDS     R8,R8,#+1
+        B.N      ??max_data_0
+??max_data_1:
+        LDR      R0,[SP, #+0]
+        MOVS     R5,R0
+        MOVS     R4,R5
+        MOVS     R0,#+0
+        MOV      R8,R0
+??max_data_2:
+        CMP      R8,#+4
+        BCS.N    ??max_data_3
+        ADD      R0,SP,#+0
+        LDR      R0,[R0, R8, LSL #+2]
+        CMP      R4,R0
+        BCS.N    ??max_data_4
+        ADD      R0,SP,#+0
+        LDR      R0,[R0, R8, LSL #+2]
+        MOVS     R4,R0
+??max_data_4:
+        ADD      R0,SP,#+0
+        LDR      R0,[R0, R8, LSL #+2]
+        CMP      R0,R5
+        BCS.N    ??max_data_5
+        ADD      R0,SP,#+0
+        LDR      R0,[R0, R8, LSL #+2]
+        MOVS     R5,R0
+??max_data_5:
+        ADD      R0,SP,#+0
+        LDR      R0,[R0, R8, LSL #+2]
+        ADDS     R6,R0,R6
+        ADDS     R8,R8,#+1
+        B.N      ??max_data_2
+??max_data_3:
+        SUBS     R0,R6,R4
+        SUBS     R0,R0,R5
+        LSRS     R0,R0,#+1
+        MOVS     R7,R0
+        MOVS     R0,R7
+        ADD      SP,SP,#+16
+        POP      {R4-R8,PC}       ;; return
+
+        SECTION `.text`:CODE:NOROOT(1)
+        THUMB
 battery_check_power:
         PUSH     {R4-R6,LR}
         MOVS     R0,#+0
         BL       senif_power_open
-        BL       simple_delay
-        BL       adc_read
+        BL       max_data
         MOVS     R4,R0
         MOVS     R0,#+0
         BL       senif_power_close
         MOVS     R0,#+2
         BL       senif_power_open
-        BL       simple_delay
-        BL       adc_read
+        BL       max_data
         MOVS     R5,R0
         MOVS     R0,#+2
         BL       senif_power_close
         MOVS     R0,#+4
         BL       senif_power_open
-        BL       simple_delay
-        BL       adc_read
+        BL       max_data
         MOVS     R6,R0
         MOVS     R0,#+4
         BL       senif_power_close
@@ -370,9 +422,9 @@ battery_init:
         END
 // 
 //  36 bytes in section .rodata
-// 608 bytes in section .text
+// 712 bytes in section .text
 // 
-// 608 bytes of CODE  memory
+// 712 bytes of CODE  memory
 //  36 bytes of CONST memory
 //
 //Errors: none

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:23
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       09/Jan/2018  13:27:42
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -56,6 +56,7 @@
         EXTERN RTC_WaitForLastTask
         EXTERN RTC_WaitForSynchro
         EXTERN gpio_set_pin
+        EXTERN log_out
 
         PUBLIC RTCAlarm_IRQHandler
         PUBLIC rtc_get_time
@@ -167,6 +168,8 @@ rtc_wakeup_after_second:
         MOVS     R1,#+1
         MOVS     R0,#+4
         BL       BKP_WriteBackupRegister
+        ADR.N    R0,??DataTable1  ;; 0x34, 0x0A, 0x00, 0x00
+        BL       log_out
         BL       PWR_EnterSTANDBYMode
         POP      {R4,PC}          ;; return
 
@@ -188,6 +191,8 @@ rtc_wakeup_at_second:
         ADDS     R0,R5,#+3
         CMP      R4,R0
         BCS.N    ??rtc_wakeup_at_second_1
+        ADR.N    R0,??DataTable1_1  ;; 0x35, 0x0A, 0x00, 0x00
+        BL       log_out
         ADDS     R0,R5,#+300
         MOVS     R4,R0
 ??rtc_wakeup_at_second_1:
@@ -199,6 +204,18 @@ rtc_wakeup_at_second:
         BL       BKP_WriteBackupRegister
         BL       PWR_EnterSTANDBYMode
         POP      {R0,R4,R5,PC}    ;; return
+
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable1:
+        DC8      0x34, 0x0A, 0x00, 0x00
+
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable1_1:
+        DC8      0x35, 0x0A, 0x00, 0x00
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -219,11 +236,23 @@ RTCAlarm_IRQHandler:
         SECTION __DLIB_PERTHREAD_init:DATA:REORDER:NOROOT(0)
         SECTION_TYPE SHT_PROGBITS, 0
 
+        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
+        DATA
+        DC8 "4\012"
+        DC8 0
+
+        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
+        DATA
+        DC8 "5\012"
+        DC8 0
+
         END
 // 
-// 296 bytes in section .text
+//   8 bytes in section .rodata
+// 316 bytes in section .text
 // 
-// 296 bytes of CODE memory
+// 316 bytes of CODE  memory
+//   8 bytes of CONST memory
 //
 //Errors: none
 //Warnings: none

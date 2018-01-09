@@ -1,7 +1,7 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#define LOG_OUT_ENABLE 0
+#define LOG_OUT_ENABLE 1
 
 #if LOG_OUT_ENABLE
 #define LOG_OUT(l, msg...) if (l) log_out(msg)

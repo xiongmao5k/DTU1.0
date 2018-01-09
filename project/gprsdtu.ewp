@@ -2124,9 +2124,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\gprsdtu\logger.c</name>
-      <excluded>
-        <configuration>Debug</configuration>
-      </excluded>
     </file>
     <file>
       <name>$PROJ_DIR$\..\gprsdtu\main.c</name>

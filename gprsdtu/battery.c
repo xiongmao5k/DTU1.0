@@ -61,21 +61,42 @@ static void simple_delay()
     while (cnt--);
 }
 
+uint32_t max_data()
+{
+    uint32_t i, max, min, sum, temp;
+    uint32_t test[4];
+    for (i = 0; i < 4; i++){
+        simple_delay();
+        test[i] = adc_read();
+    }
+    max = min = test[0];
+    for (i = 0; i < 4; i++){
+        if(max < test[i])
+            max = test[i];
+        if(min > test[i])
+            min = test[i];
+        sum += test[i];
+    }
+    temp = (sum - max - min) / 2;
+    return temp;
+}
+
 int battery_check_power(void)
 {
     uint32_t btval1, btval2, btval3;
+
     senif_power_open(SENIF1);
-    simple_delay();
-    btval1 = adc_read();
+    btval1 = max_data();
     senif_power_close(SENIF1);
+
     senif_power_open(SENIF3);
-    simple_delay();
-    btval2 = adc_read();
+    btval2 = max_data();
     senif_power_close(SENIF3);
+
     senif_power_open(SENIF5);
-    simple_delay();
-    btval3 = adc_read();
+    btval3 = max_data();
     senif_power_close(SENIF5);
+
     if (btval1 < 700 && btval3 < 700) {
         if (btval2 < BATTERY_POWER_THRESHOLD) {
             return BATTERY_POWER_LOW;

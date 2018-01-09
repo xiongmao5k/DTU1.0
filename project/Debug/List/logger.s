@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       25/Dec/2017  17:13:04
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       09/Jan/2018  13:27:41
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -68,22 +68,22 @@ log_out:
         BL       __iar_vla_alloc2
         MOVS     R6,R0
         MOVS     R0,#+0
-        MOVS     R7,R0
+        MOV      R8,R0
         ADD      R0,SP,#+28
         MOVS     R5,R0
         MOVS     R2,R5
         MOVS     R1,R4
         MOVS     R0,R6
         BL       sprintf
-        MOV      R8,R0
+        MOVS     R7,R0
         MOVS     R3,#+0
         MOVS     R2,#+20
         LDR.N    R1,??DataTable1
         LDR.N    R0,??DataTable1_1
         BL       dl_SPIFFS_open
-        MOVS     R7,R0
-        SXTH     R7,R7            ;; SignExt  R7,R7,#+16,#+16
-        CMP      R7,#+0
+        MOV      R8,R0
+        SXTH     R8,R8            ;; SignExt  R8,R8,#+16,#+16
+        CMP      R8,#+0
         BPL.N    ??log_out_0
         MOVS     R0,R6
         BL       __iar_vla_dealloc2
@@ -91,31 +91,30 @@ log_out:
 ??log_out_0:
         MOVS     R3,#+2
         MOVS     R2,#+0
-        SXTH     R7,R7            ;; SignExt  R7,R7,#+16,#+16
-        MOVS     R1,R7
+        SXTH     R8,R8            ;; SignExt  R8,R8,#+16,#+16
+        MOV      R1,R8
         LDR.N    R0,??DataTable1_1
         BL       dl_SPIFFS_lseek
-        MOV      R3,R8
+        MOVS     R3,R7
         MOVS     R2,R6
-        SXTH     R7,R7            ;; SignExt  R7,R7,#+16,#+16
-        MOVS     R1,R7
+        SXTH     R8,R8            ;; SignExt  R8,R8,#+16,#+16
+        MOV      R1,R8
         LDR.N    R0,??DataTable1_1
         BL       dl_SPIFFS_write
-        CMP      R0,R8
+        CMP      R0,R7
         BEQ.N    ??log_out_2
-        SXTH     R7,R7            ;; SignExt  R7,R7,#+16,#+16
-        MOVS     R1,R7
+        SXTH     R8,R8            ;; SignExt  R8,R8,#+16,#+16
+        MOV      R1,R8
         LDR.N    R0,??DataTable1_1
         BL       dl_SPIFFS_close
         MOVS     R0,R6
         BL       __iar_vla_dealloc2
         B.N      ??log_out_1
 ??log_out_2:
-        SXTH     R7,R7            ;; SignExt  R7,R7,#+16,#+16
-        MOVS     R1,R7
+        SXTH     R8,R8            ;; SignExt  R8,R8,#+16,#+16
+        MOV      R1,R8
         LDR.N    R0,??DataTable1_1
         BL       dl_SPIFFS_close
-        BL       log_print
         MOVS     R0,R6
         BL       __iar_vla_dealloc2
 ??log_out_1:
@@ -200,9 +199,9 @@ log_print:
         END
 // 
 //  12 bytes in section .rodata
-// 252 bytes in section .text
+// 260 bytes in section .text
 // 
-// 252 bytes of CODE  memory
+// 260 bytes of CODE  memory
 //  12 bytes of CONST memory
 //
 //Errors: none

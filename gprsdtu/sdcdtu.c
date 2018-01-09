@@ -25,7 +25,7 @@
 #define PRINTF(...)
 #endif
 
-#define SDCDTU_LOG_ENABLE 0
+#define SDCDTU_LOG_ENABLE 1
 
 FRAMEBUFF(gprs_send_buffer, 512);
 
@@ -625,7 +625,9 @@ STARTUP:
                     PROCESS_PAUSE();
                     struct sccb_struct *sccb = NULL;
                     if ((sccb = list_pop(sendat_commit_list)) != NULL) {
-                        backup_push(sccb->sendat, strlen(sccb->sendat));
+                        if (backup_push(sccb->sendat, strlen(sccb->sendat)) == 1){
+                            LOG_OUT(SDCDTU_LOG_ENABLE, "A\n");
+                        }
                         free(sccb->sendat);
                         memb_free(&sccb_memb, sccb);
                     }

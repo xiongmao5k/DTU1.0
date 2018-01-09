@@ -45,9 +45,12 @@ int main()
     //SPI_FLASH_ChipErase();
     dl_fs_init();
     senifs_init();
-	rtc_init();
+    rtc_init();
     battery_init();
     backup_init();
+    //log_print();
+    //while(1);
+    //spiffs_test();
     process_init();
     process_start(&etimer_process, NULL);
     gprs_init(NULL, NULL);
@@ -74,12 +77,21 @@ size_t __write(int handle, const unsigned char *buffer, size_t size)
 
 
 static void spiffs_test(void) {
-    spiffs_file fd;
-    static uint8_t ucBigBuffer[5 * 1024];
-    uint32_t ulCnt = sizeof(ucBigBuffer);
-    
-    uint8_t ucBuffer[32];
-    memset(ucBuffer, 0x00, sizeof(ucBuffer));
-    backup_push("helloworlddddd", 20);
-    backup_pop(ucBuffer, 20);
+  static uint8_t test_data[40] = {0};
+  int i = 0, res = 0;
+  for(i; i<3000; i++){
+    res = backup_push(test_data, 36); 
+    if (res != 0){
+        printf("test");
+        return;
+    }
+  }
+  for (i = 0; i < 1000 ; i++) {
+    static char t[600] = {0};
+    if(backup_pop(t, 512) == 1){
+        printf("test2");
+        return ;
+    }
+  }
+  backup_clean();
 }

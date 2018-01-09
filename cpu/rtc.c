@@ -4,7 +4,7 @@
 #include "gpio.h"
 #include "logger.h"
 
-#define RTC_LOG_ENABLE 0
+#define RTC_LOG_ENABLE 1
 void rtc_init(void)
 {
     uint16_t sleepFlag = 0;

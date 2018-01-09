@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:21
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       09/Jan/2018  13:27:41
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -36,6 +36,7 @@
         #define SHT_PROGBITS 0x1
 
         EXTERN etimer_set
+        EXTERN log_out
         EXTERN printf
         EXTERN process_alloc_event
         EXTERN process_current
@@ -515,7 +516,7 @@ process_thread_gprs_communication_process:
         LDR      R0,[R0, #+0]
         BL       sim800_cmd_cipstart
         MOVW     R1,#+30000
-        LDR.N    R0,??DataTable6_1
+        LDR.W    R0,??DataTable6_1
         BL       etimer_set
         MOVS     R1,#+0
         MOVS     R0,#+69
@@ -546,8 +547,10 @@ process_thread_gprs_communication_process:
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+81
         BNE.N    ??process_thread_gprs_communication_process_66
-        LDR.N    R0,??DataTable6_21
+        LDR.W    R0,??DataTable6_21
         BL       printf
+        ADR.N    R0,??DataTable1  ;; 0x37, 0x0A, 0x00, 0x00
+        BL       log_out
         B.N      ??process_thread_gprs_communication_process_30
 ??process_thread_gprs_communication_process_66:
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
@@ -555,6 +558,8 @@ process_thread_gprs_communication_process:
         BNE.N    ??process_thread_gprs_communication_process_67
         LDR.N    R0,??DataTable6_22
         BL       printf
+        ADR.N    R0,??DataTable1_1  ;; 0x38, 0x0A, 0x00, 0x00
+        BL       log_out
         B.N      ??process_thread_gprs_communication_process_30
 ??process_thread_gprs_communication_process_67:
         MOVW     R1,#+30000
@@ -851,6 +856,18 @@ process_thread_gprs_process:
 ??process_thread_gprs_process_7:
         POP      {R4-R6,PC}       ;; return
 
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable1:
+        DC8      0x37, 0x0A, 0x00, 0x00
+
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable1_1:
+        DC8      0x38, 0x0A, 0x00, 0x00
+
         SECTION `.bss`:DATA:REORDER:NOROOT(2)
 ??et:
         DS8 16
@@ -1081,13 +1098,13 @@ gprs_close:
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable6_22:
-        DC32     ?_20
+        DC32     ?_21
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable6_23:
-        DC32     ?_21
+        DC32     ?_23
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -1135,7 +1152,7 @@ gprs_close:
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable6_31:
-        DC32     ?_22
+        DC32     ?_24
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -1290,18 +1307,28 @@ gprs_close:
         DC8 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_20:
         DATA
-        DC8 "GPRS: cipstart timeouted.\012"
+        DC8 "7\012"
         DC8 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
 ?_21:
         DATA
+        DC8 "GPRS: cipstart timeouted.\012"
+        DC8 0
+
+        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
+        DATA
+        DC8 "8\012"
+        DC8 0
+
+        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
+?_23:
+        DATA
         DC8 "GPRS: connect success.\012"
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_22:
+?_24:
         DATA
         DC8 "GPRS: TCP connect timeout.\012"
 
@@ -1309,11 +1336,11 @@ gprs_close:
 // 
 //    57 bytes in section .bss
 //    32 bytes in section .data
-//   528 bytes in section .rodata
-// 1 782 bytes in section .text
+//   536 bytes in section .rodata
+// 1 806 bytes in section .text
 // 
-// 1 782 bytes of CODE  memory
-//   528 bytes of CONST memory
+// 1 806 bytes of CODE  memory
+//   536 bytes of CONST memory
 //    89 bytes of DATA  memory
 //
 //Errors: none

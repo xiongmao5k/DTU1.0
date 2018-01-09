@@ -29,7 +29,6 @@ void log_out(const char *fmg, ...) {
     }
 
     dl_SPIFFS_close(SPIFFS_DISK, fd);
-	log_print();
 }
 
 void log_print(void) {

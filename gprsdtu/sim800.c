@@ -81,7 +81,7 @@
 #include "usart_stream.h"
 #include "logger.h"
 
-#define SIMCOM_LOG_ENABLE 0
+#define SIMCOM_LOG_ENABLE 1
 
 int yylex(void);
 int yyerror(char const *str);

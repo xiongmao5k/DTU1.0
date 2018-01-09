@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:11:25
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       09/Jan/2018  13:27:45
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -46,6 +46,7 @@
         EXTERN gpio_set_as_input
         EXTERN gpio_set_as_output
         EXTERN gpio_set_pin
+        EXTERN log_out
         EXTERN malloc
         EXTERN memb_alloc
         EXTERN memb_init
@@ -201,73 +202,78 @@ recv_data_ptr:
         DC8 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_11:
+        DATA
+        DC8 "6\012"
+        DC8 0
+
+        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
+?_12:
         DATA
         DC8 "AT+CPIN?\012"
         DC8 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_12:
+?_13:
         DATA
         DC8 "AT+CSQ?\012"
         DC8 0, 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_13:
+?_14:
         DATA
         DC8 "AT+CREG?\012"
         DC8 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_14:
+?_15:
         DATA
         DC8 "AT+CGATT?\012"
         DC8 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_15:
+?_16:
         DATA
         DC8 "AT+CSTT=\"%s\"\012"
         DC8 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_16:
+?_17:
         DATA
         DC8 "AT+CIICR\012"
         DC8 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_17:
+?_18:
         DATA
         DC8 "AT+CIFSR\012"
         DC8 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_18:
+?_19:
         DATA
         DC8 "AT+CIPHEAD=1\012"
         DC8 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_19:
+?_20:
         DATA
         DC8 "ATE0\012"
         DC8 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_20:
+?_21:
         DATA
         DC8 "AT+CIPSTART=\"TCP\",\"%s\",\"%s\"\012"
         DC8 0, 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_21:
+?_22:
         DATA
         DC8 "AT+CIPMODE=\"%s\"\012"
         DC8 0, 0, 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
-?_22:
+?_23:
         DATA
         DC8 "AT+CIPSEND=%d\012"
         DC8 0
@@ -2776,7 +2782,11 @@ process_thread_sim800_power_ctrl_process:
         MOVS     R1,#+128
         LDR.W    R0,??DataTable22_7  ;; 0x40010800
         BL       GPIO_SetBits
+        B.N      ??process_thread_sim800_power_ctrl_process_15
 ??process_thread_sim800_power_ctrl_process_12:
+        ADR.N    R0,??DataTable17  ;; 0x36, 0x0A, 0x00, 0x00
+        BL       log_out
+??process_thread_sim800_power_ctrl_process_15:
         LDR.W    R0,??DataTable22_5
         LDR      R0,[R0, #+0]
         CMP      R0,#+0
@@ -3139,6 +3149,12 @@ sim800_cmd_cifsr:
         ADD      SP,SP,#+36
         POP      {PC}             ;; return
 
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable17:
+        DC8      0x36, 0x0A, 0x00, 0x00
+
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 sim800_cmd_ciphead:
@@ -3319,67 +3335,67 @@ sim800_send:
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable22_13:
-        DC32     ?_11
-
-        SECTION `.text`:CODE:NOROOT(2)
-        SECTION_TYPE SHT_PROGBITS, 0
-        DATA
-??DataTable22_14:
         DC32     ?_12
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable22_15:
+??DataTable22_14:
         DC32     ?_13
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable22_16:
+??DataTable22_15:
         DC32     ?_14
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable22_17:
+??DataTable22_16:
         DC32     ?_15
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable22_18:
+??DataTable22_17:
         DC32     ?_16
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable22_19:
+??DataTable22_18:
         DC32     ?_17
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable22_20:
+??DataTable22_19:
         DC32     ?_18
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable22_21:
+??DataTable22_20:
         DC32     ?_19
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable22_22:
+??DataTable22_21:
         DC32     ?_20
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable22_23:
+??DataTable22_22:
         DC32     ?_21
+
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable22_23:
+        DC32     ?_22
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -3397,7 +3413,7 @@ sim800_send:
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable22_26:
-        DC32     ?_22
+        DC32     ?_23
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -3414,11 +3430,11 @@ sim800_send:
 // 
 // 1 412 bytes in section .bss
 //    60 bytes in section .data
-// 1 080 bytes in section .rodata
-// 5 968 bytes in section .text
+// 1 084 bytes in section .rodata
+// 5 980 bytes in section .text
 // 
-// 5 968 bytes of CODE  memory
-// 1 080 bytes of CONST memory
+// 5 980 bytes of CODE  memory
+// 1 084 bytes of CONST memory
 // 1 472 bytes of DATA  memory
 //
 //Errors: none

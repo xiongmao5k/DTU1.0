@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       29/Dec/2017  09:17:13
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       09/Jan/2018  13:27:43
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -74,6 +74,7 @@
         EXTERN list_length
         EXTERN list_pop
         EXTERN list_remove
+        EXTERN log_out
         EXTERN malloc
         EXTERN memb_alloc
         EXTERN memb_free
@@ -731,6 +732,8 @@ process_thread_sendat_collect_process:
         BL       list_add
         B.N      ??process_thread_sendat_collect_process_16
 ??process_thread_sendat_collect_process_15:
+        ADR.N    R0,??DataTable3  ;; 0x39, 0x0A, 0x00, 0x00
+        BL       log_out
         LDR.W    R0,??DataTable7_4
         LDR      R1,[R0, #+0]
         LDR.W    R0,??DataTable6_7
@@ -1001,6 +1004,12 @@ process_thread_sendat_commit_process:
 ??process_thread_sendat_commit_process_11:
         POP      {R1,R4-R9,PC}    ;; return
 
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable3:
+        DC8      0x39, 0x0A, 0x00, 0x00
+
         SECTION `.bss`:DATA:REORDER:NOROOT(2)
 ??parent_3:
         DS8 4
@@ -1141,12 +1150,12 @@ process_thread_configure_update_process:
         B.N      ??process_thread_configure_update_process_9
 ??process_thread_configure_update_process_13:
         LDRH     R0,[R7, #+9]
-        LDR.W    R1,??DataTable10
+        LDR.W    R1,??DataTable10_1
         STR      R0,[R1, #+0]
         LDR      R0,[R7, #+5]
         LDR.W    R1,??DataTable9_9
         STR      R0,[R1, #+0]
-        LDR.W    R0,??DataTable10
+        LDR.W    R0,??DataTable10_1
         LDR      R1,[R0, #+0]
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         LDR.W    R0,??DataTable9_9
@@ -1174,7 +1183,7 @@ process_thread_configure_update_process:
         MOVS     R0,#+1
         B.N      ??process_thread_configure_update_process_9
 ??process_thread_configure_update_process_16:
-        LDR.W    R0,??DataTable10
+        LDR.W    R0,??DataTable10_1
         LDR      R0,[R0, #+0]
         LDR.W    R1,??DataTable9_10
         LDR      R1,[R1, #+0]
@@ -1186,7 +1195,7 @@ process_thread_configure_update_process:
         STR      R0,[R1, #+0]
         B.N      ??process_thread_configure_update_process_18
 ??process_thread_configure_update_process_17:
-        LDR.W    R0,??DataTable10
+        LDR.W    R0,??DataTable10_1
         LDR      R0,[R0, #+0]
         LDR.W    R1,??DataTable9_10
         LDR      R1,[R1, #+0]
@@ -1287,7 +1296,7 @@ process_thread_configure_update_process:
         STR      R0,[R1, #+0]
         LDR.W    R0,??DataTable9_10
         LDR      R0,[R0, #+0]
-        LDR.W    R1,??DataTable10
+        LDR.W    R1,??DataTable10_1
         LDR      R1,[R1, #+0]
         CMP      R0,R1
         BNE.W    ??process_thread_configure_update_process_14
@@ -1347,31 +1356,31 @@ process_thread_configure_update_process:
 sdcdtu_frameware_update_require_version_prepare:
         PUSH     {R4,LR}
         MOVS     R4,R0
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_clean
         MOVS     R1,#+126
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u8
         MOVS     R1,#+0
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u8
         MOVS     R1,#+9
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u16
         MOVS     R1,#+0
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u32
         MOVS     R1,#+5
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u8
         MOVS     R1,R4
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u32
         MOVS     R1,#+0
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u32
         MOVS     R1,#+10
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u8
         POP      {R4,PC}          ;; return
 
@@ -1456,39 +1465,39 @@ sdcdtu_frameware_update_data_require_prepare:
         MOVS     R4,R0
         MOVS     R5,R1
         MOVS     R6,R2
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_clean
         MOVS     R1,#+126
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u8
         MOVS     R1,#+0
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u8
         MOVS     R1,#+13
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u16
         MOVS     R1,#+0
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u32
         MOVS     R1,#+6
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u8
         MOVS     R1,R4
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u32
         MOVS     R1,R5
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u16
         MOVS     R1,R6
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u16
         MOVS     R1,#+0
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u32
         MOVS     R1,#+10
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_push_u8
         POP      {R4-R6,PC}       ;; return
 
@@ -1653,11 +1662,11 @@ process_thread_hardware_update_process:
         CMP      R5,#+129
         BNE.N    ??process_thread_hardware_update_process_6
         MOVS     R7,R6
-        LDR.W    R0,??DataTable11_1
+        LDR.W    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       gprs_set_parent_process
         MOVS     R0,#+0
-        LDR.W    R1,??DataTable11_2
+        LDR.W    R1,??DataTable11_4
         STR      R0,[R1, #+0]
 ??process_thread_hardware_update_process_6:
         BL       gprs_connect
@@ -1665,7 +1674,7 @@ process_thread_hardware_update_process:
         BNE.N    ??process_thread_hardware_update_process_7
         MOVS     R2,#+0
         MOVS     R1,#+133
-        LDR.W    R0,??DataTable11_1
+        LDR.W    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       process_post
         MOVS     R1,#+0
@@ -1684,18 +1693,18 @@ process_thread_hardware_update_process:
 ??process_thread_hardware_update_process_9:
         B.N      ??process_thread_hardware_update_process_6
 ??process_thread_hardware_update_process_7:
-        LDR.W    R0,??DataTable11_2
+        LDR.W    R0,??DataTable11_4
         LDR      R0,[R0, #+0]
         BL       sdcdtu_frameware_update_require_version_prepare
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_length
         MOV      R8,R0
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_datptr
         MOV      R1,R8
         BL       gprs_send
         MOVW     R1,#+30000
-        LDR.W    R0,??DataTable11_3
+        LDR.W    R0,??DataTable11_5
         BL       etimer_set
         MOVS     R1,#+0
         MOVW     R0,#+461
@@ -1704,7 +1713,7 @@ process_thread_hardware_update_process:
         UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
         CMP      R1,#+0
         BEQ.N    ??process_thread_hardware_update_process_11
-        LDR.W    R0,??DataTable11_4
+        LDR.W    R0,??DataTable11_6
         LDRB     R0,[R0, #+0]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,R0
@@ -1724,13 +1733,13 @@ process_thread_hardware_update_process:
         MOVS     R0,#+2
         B.N      ??process_thread_hardware_update_process_10
 ??process_thread_hardware_update_process_13:
-        LDR.W    R0,??DataTable11_4
+        LDR.W    R0,??DataTable11_6
         LDRB     R0,[R0, #+0]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,R0
         BNE.W    ??process_thread_hardware_update_process_14
-        LDR.W    R2,??DataTable11_5
-        LDR.W    R1,??DataTable11_6
+        LDR.W    R2,??DataTable11_7
+        LDR.W    R1,??DataTable11_8
         MOVS     R0,R6
         BL       sdcdtu_frameware_update_reply_version_process
         CMP      R0,#+0
@@ -1740,9 +1749,9 @@ process_thread_hardware_update_process:
         MOVS     R0,#+2
         B.N      ??process_thread_hardware_update_process_10
 ??process_thread_hardware_update_process_15:
-        LDR.W    R0,??DataTable11_2
+        LDR.W    R0,??DataTable11_4
         LDR      R0,[R0, #+0]
-        LDR.W    R1,??DataTable11_6
+        LDR.W    R1,??DataTable11_8
         LDR      R1,[R1, #+0]
         CMP      R0,R1
         BNE.N    ??process_thread_hardware_update_process_16
@@ -1753,7 +1762,7 @@ process_thread_hardware_update_process:
 ??process_thread_hardware_update_process_16:
         MOVS     R2,#+0
         MOVS     R1,#+133
-        LDR.W    R0,??DataTable11_1
+        LDR.W    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       process_post
         MOVS     R1,#+0
@@ -1770,42 +1779,42 @@ process_thread_hardware_update_process:
         MOVS     R0,#+1
         B.N      ??process_thread_hardware_update_process_10
 ??process_thread_hardware_update_process_18:
-        LDR.W    R0,??DataTable11_5
+        LDR.W    R0,??DataTable11_7
         LDR      R0,[R0, #+0]
-        LDR.W    R1,??DataTable11_7
+        LDR.W    R1,??DataTable11_9
         LDR      R1,[R1, #+0]
         SUBS     R0,R0,R1
         CMP      R0,#+512
         BLS.N    ??process_thread_hardware_update_process_19
         MOV      R0,#+512
-        LDR.W    R1,??DataTable11_8
+        LDR.W    R1,??DataTable11_10
         STR      R0,[R1, #+0]
         B.N      ??process_thread_hardware_update_process_20
 ??process_thread_hardware_update_process_19:
-        LDR.W    R0,??DataTable11_5
+        LDR.W    R0,??DataTable11_7
         LDR      R0,[R0, #+0]
-        LDR.W    R1,??DataTable11_7
+        LDR.W    R1,??DataTable11_9
         LDR      R1,[R1, #+0]
         SUBS     R0,R0,R1
-        LDR.W    R1,??DataTable11_8
+        LDR.W    R1,??DataTable11_10
         STR      R0,[R1, #+0]
 ??process_thread_hardware_update_process_20:
-        LDR.W    R0,??DataTable11_8
+        LDR.W    R0,??DataTable11_10
         LDR      R2,[R0, #+0]
-        LDR.W    R0,??DataTable11_7
+        LDR.W    R0,??DataTable11_9
         LDR      R1,[R0, #+0]
-        LDR.W    R0,??DataTable11_6
+        LDR.W    R0,??DataTable11_8
         LDR      R0,[R0, #+0]
         BL       sdcdtu_frameware_update_data_require_prepare
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_length
         MOV      R8,R0
-        LDR.W    R0,??DataTable11
+        LDR.W    R0,??DataTable11_1
         BL       framebuff_datptr
         MOV      R1,R8
         BL       gprs_send
         MOVW     R1,#+30000
-        LDR.W    R0,??DataTable11_3
+        LDR.W    R0,??DataTable11_5
         BL       etimer_set
         MOVS     R1,#+0
         MOV      R0,#+482
@@ -1817,7 +1826,7 @@ process_thread_hardware_update_process:
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+136
         BEQ.N    ??process_thread_hardware_update_process_22
-        LDR.W    R0,??DataTable11_4
+        LDR.W    R0,??DataTable11_6
         LDRB     R0,[R0, #+0]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,R0
@@ -1834,12 +1843,12 @@ process_thread_hardware_update_process:
         MOVS     R0,#+2
         B.N      ??process_thread_hardware_update_process_10
 ??process_thread_hardware_update_process_23:
-        LDR.W    R0,??DataTable11_4
+        LDR.W    R0,??DataTable11_6
         LDRB     R0,[R0, #+0]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,R0
         BNE.N    ??process_thread_hardware_update_process_24
-        LDR.W    R0,??DataTable11_8
+        LDR.W    R0,??DataTable11_10
         LDR      R8,[R0, #+0]
         MOVS     R0,R6
         BL       sdcdtu_frameware_update_data_reply_process
@@ -1850,16 +1859,16 @@ process_thread_hardware_update_process:
         MOVS     R0,#+2
         B.N      ??process_thread_hardware_update_process_10
 ??process_thread_hardware_update_process_24:
-        LDR.W    R0,??DataTable11_7
+        LDR.W    R0,??DataTable11_9
         LDR      R0,[R0, #+0]
-        LDR.W    R1,??DataTable11_8
+        LDR.W    R1,??DataTable11_10
         LDR      R1,[R1, #+0]
         ADDS     R0,R1,R0
-        LDR.W    R1,??DataTable11_7
+        LDR.W    R1,??DataTable11_9
         STR      R0,[R1, #+0]
-        LDR.W    R0,??DataTable11_7
+        LDR.W    R0,??DataTable11_9
         LDR      R0,[R0, #+0]
-        LDR.W    R1,??DataTable11_5
+        LDR.W    R1,??DataTable11_7
         LDR      R1,[R1, #+0]
         CMP      R0,R1
         BNE.W    ??process_thread_hardware_update_process_16
@@ -1975,19 +1984,19 @@ process_thread_dtudata_commit_process:
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+129
         BNE.N    ??process_thread_dtudata_commit_process_3
-        LDR.W    R0,??DataTable11_1
+        LDR.W    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       gprs_set_parent_process
 ??process_thread_dtudata_commit_process_3:
         MOVS     R8,#+128
         MOVS     R9,#+0
-        LDR.W    R10,??DataTable11_9
+        LDR.W    R10,??DataTable11_11
         MOV      R2,R9
         MOV      R1,R8
         MOV      R0,R10
         BL       __aeabi_memset
         MOVS     R1,#+128
-        LDR.W    R0,??DataTable11_9
+        LDR.W    R0,??DataTable11_11
         BL       battery_read
         STR      R0,[SP, #+0]
         BL       gprs_connect
@@ -2002,10 +2011,10 @@ process_thread_dtudata_commit_process:
         MOVS     R1,#+2
         LDR.N    R0,??DataTable9_4
         BL       framebuff_push_u8
-        LDR.W    R0,??DataTable11_9
+        LDR.W    R0,??DataTable11_11
         BL       strlen
         MOVS     R2,R0
-        LDR.W    R1,??DataTable11_9
+        LDR.W    R1,??DataTable11_11
         LDR.N    R0,??DataTable9_4
         BL       framebuff_push
         LDR.N    R0,??DataTable9_4
@@ -2019,7 +2028,7 @@ process_thread_dtudata_commit_process:
         LDR      R1,[SP, #+0]
         BL       gprs_send
         MOVW     R1,#+30000
-        LDR.W    R0,??DataTable11_10
+        LDR.W    R0,??DataTable11_12
         BL       etimer_set
         MOVS     R7,#+0
         MOVW     R0,#+525
@@ -2028,7 +2037,7 @@ process_thread_dtudata_commit_process:
         UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
         CMP      R7,#+0
         BEQ.N    ??process_thread_dtudata_commit_process_5
-        LDR.W    R0,??DataTable11_4
+        LDR.W    R0,??DataTable11_6
         LDRB     R0,[R0, #+0]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,R0
@@ -2043,17 +2052,17 @@ process_thread_dtudata_commit_process:
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+136
         BNE.N    ??process_thread_dtudata_commit_process_8
-        LDR.W    R0,??DataTable11_9
+        LDR.W    R0,??DataTable11_11
         BL       strlen
         MOVS     R1,R0
-        LDR.W    R0,??DataTable11_9
+        LDR.W    R0,??DataTable11_11
         BL       backup_push
         MOVS     R0,#+0
         STRH     R0,[R4, #+0]
         MOVS     R0,#+2
         B.N      ??process_thread_dtudata_commit_process_7
 ??process_thread_dtudata_commit_process_8:
-        LDR.W    R0,??DataTable11_4
+        LDR.W    R0,??DataTable11_6
         LDRB     R0,[R0, #+0]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,R0
@@ -2079,20 +2088,20 @@ process_thread_dtudata_commit_process:
         CMP      R0,#+0
         BEQ.N    ??process_thread_dtudata_commit_process_9
 ??process_thread_dtudata_commit_process_10:
-        LDR.W    R0,??DataTable11_9
+        LDR.W    R0,??DataTable11_11
         BL       strlen
         MOVS     R1,R0
-        LDR.W    R0,??DataTable11_9
+        LDR.W    R0,??DataTable11_11
         BL       backup_push
         MOVS     R0,#+0
         STRH     R0,[R4, #+0]
         MOVS     R0,#+2
         B.N      ??process_thread_dtudata_commit_process_7
 ??process_thread_dtudata_commit_process_4:
-        LDR.W    R0,??DataTable11_9
+        LDR.W    R0,??DataTable11_11
         BL       strlen
         MOVS     R1,R0
-        LDR.W    R0,??DataTable11_9
+        LDR.W    R0,??DataTable11_11
         BL       backup_push
 ??process_thread_dtudata_commit_process_9:
 ??process_thread_dtudata_commit_process_2:
@@ -2138,7 +2147,7 @@ process_thread_backup_commit_process:
         MOVS     R4,R0
         MOVS     R5,R1
         MOVS     R6,R2
-        LDR.W    R0,??DataTable11_11
+        LDR.W    R0,??DataTable11_13
         BL       framebuff_datptr
         MOVS     R7,R0
         MOVS     R8,#+0
@@ -2154,7 +2163,7 @@ process_thread_backup_commit_process:
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+129
         BNE.N    ??process_thread_backup_commit_process_3
-        LDR.W    R0,??DataTable11_1
+        LDR.W    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       gprs_set_parent_process
 ??process_thread_backup_commit_process_3:
@@ -2196,7 +2205,7 @@ process_thread_backup_commit_process:
         LDR      R1,[SP, #+4]
         BL       gprs_send
         MOVW     R1,#+30000
-        LDR.W    R0,??DataTable11_12
+        LDR.W    R0,??DataTable11_14
         BL       etimer_set
         MOVS     R11,#+0
         MOVW     R0,#+571
@@ -2208,7 +2217,7 @@ process_thread_backup_commit_process:
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+136
         BEQ.N    ??process_thread_backup_commit_process_8
-        LDR.W    R0,??DataTable11_4
+        LDR.W    R0,??DataTable11_6
         LDRB     R0,[R0, #+0]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,R0
@@ -2230,7 +2239,7 @@ process_thread_backup_commit_process:
         MOVS     R0,#+2
         B.N      ??process_thread_backup_commit_process_9
 ??process_thread_backup_commit_process_10:
-        LDR.W    R0,??DataTable11_4
+        LDR.W    R0,??DataTable11_6
         LDRB     R0,[R0, #+0]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,R0
@@ -2369,7 +2378,7 @@ sdcdtu_process:
         DC32 0H, ?_8, process_thread_sdcdtu_process
         DC8 0, 0, 0, 0
 
-        SECTION `.text`:CODE:NOROOT(1)
+        SECTION `.text`:CODE:NOROOT(2)
         THUMB
 process_thread_sdcdtu_process:
         PUSH     {R4-R8,LR}
@@ -2387,7 +2396,7 @@ process_thread_sdcdtu_process:
         BEQ.N    ??process_thread_sdcdtu_process_2
         SUBS     R0,R0,#+5
         BEQ.W    ??process_thread_sdcdtu_process_3
-        SUBS     R0,R0,#+19
+        SUBS     R0,R0,#+21
         BEQ.W    ??process_thread_sdcdtu_process_4
         SUBS     R0,R0,#+4
         BEQ.W    ??process_thread_sdcdtu_process_5
@@ -2405,29 +2414,31 @@ process_thread_sdcdtu_process:
 ??process_thread_sdcdtu_process_0:
 ??process_thread_sdcdtu_process_12:
         BL       rtc_get_time
-        LDR.W    R1,??DataTable11_13
+        LDR.W    R1,??DataTable11_15
         STR      R0,[R1, #+0]
         BL       battery_check_power
         CMP      R0,#+0
         BNE.N    ??process_thread_sdcdtu_process_13
+        ADR.N    R0,??process_thread_sdcdtu_process_14  ;; 0x31, 0x0A, 0x00, 0x00
+        BL       log_out
         MOVS     R0,#+6
         BL       rtc_wakeup_after_second
 ??process_thread_sdcdtu_process_13:
-        LDR.W    R0,??DataTable11_14
+        LDR.W    R0,??DataTable11_16
         LDR      R0,[R0, #+0]
         BL       configure_read
         CMP      R0,#+1
-        BNE.W    ??process_thread_sdcdtu_process_14
-        LDR.W    R0,??DataTable11_1
+        BNE.W    ??process_thread_sdcdtu_process_15
+        LDR.W    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       gprs_set_parent_process
-        LDR.W    R1,??DataTable11_15  ;; 0x1d4c0
-        LDR.W    R0,??DataTable11_16
+        LDR.W    R1,??DataTable11_17  ;; 0x1d4c0
+        LDR.W    R0,??DataTable11_18
         BL       etimer_set
-        LDR.W    R0,??DataTable11_14
+        LDR.W    R0,??DataTable11_16
         LDR      R0,[R0, #+0]
         ADDS     R1,R0,#+42
-        LDR.W    R0,??DataTable11_14
+        LDR.W    R0,??DataTable11_16
         LDR      R0,[R0, #+0]
         ADDS     R0,R0,#+10
         BL       gprs_open
@@ -2437,23 +2448,23 @@ process_thread_sdcdtu_process:
 ??process_thread_sdcdtu_process_1:
         UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
         CMP      R7,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_15
+        BEQ.N    ??process_thread_sdcdtu_process_16
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+136
-        BEQ.N    ??process_thread_sdcdtu_process_16
-        LDR.W    R0,??DataTable11_17
+        BEQ.N    ??process_thread_sdcdtu_process_17
+        LDR.W    R0,??DataTable11_19
         LDRB     R0,[R0, #+0]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,R0
-        BEQ.N    ??process_thread_sdcdtu_process_16
-??process_thread_sdcdtu_process_15:
-        MOVS     R0,#+1
-        B.N      ??process_thread_sdcdtu_process_17
+        BEQ.N    ??process_thread_sdcdtu_process_17
 ??process_thread_sdcdtu_process_16:
+        MOVS     R0,#+1
+        B.N      ??process_thread_sdcdtu_process_18
+??process_thread_sdcdtu_process_17:
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+136
-        BNE.N    ??process_thread_sdcdtu_process_18
-        LDR.N    R0,??DataTable11_1
+        BNE.N    ??process_thread_sdcdtu_process_19
+        LDR.N    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       gprs_set_parent_process
         BL       gprs_close
@@ -2463,37 +2474,39 @@ process_thread_sdcdtu_process:
 ??process_thread_sdcdtu_process_2:
         UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
         CMP      R7,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_19
-        LDR.N    R0,??DataTable11_18
+        BEQ.N    ??process_thread_sdcdtu_process_20
+        LDR.W    R0,??DataTable11_20
         LDRB     R0,[R0, #+0]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,R0
-        BEQ.N    ??process_thread_sdcdtu_process_20
-??process_thread_sdcdtu_process_19:
-        MOVS     R0,#+1
-        B.N      ??process_thread_sdcdtu_process_17
+        BEQ.N    ??process_thread_sdcdtu_process_21
 ??process_thread_sdcdtu_process_20:
-        LDR.N    R0,??DataTable11_1
-        LDR      R1,[R0, #+0]
-        LDR.N    R0,??DataTable11_19
-        BL       process_start
-        LDR.N    R0,??DataTable11_1
-        LDR      R1,[R0, #+0]
-        LDR.N    R0,??DataTable11_20
-        BL       process_start
+        MOVS     R0,#+1
+        B.N      ??process_thread_sdcdtu_process_18
 ??process_thread_sdcdtu_process_21:
-        LDR.N    R0,??DataTable11_19
-        BL       process_is_running
-        CMP      R0,#+0
-        BNE.N    ??process_thread_sdcdtu_process_22
-        LDR.N    R0,??DataTable11_20
-        BL       process_is_running
-        CMP      R0,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_23
+        ADR.N    R0,??DataTable10  ;; 0x33, 0x0A, 0x00, 0x00
+        BL       log_out
+        LDR.N    R0,??DataTable11_3
+        LDR      R1,[R0, #+0]
+        LDR.N    R0,??DataTable11_21
+        BL       process_start
+        LDR.N    R0,??DataTable11_3
+        LDR      R1,[R0, #+0]
+        LDR.N    R0,??DataTable11_22
+        BL       process_start
 ??process_thread_sdcdtu_process_22:
+        LDR.N    R0,??DataTable11_21
+        BL       process_is_running
+        CMP      R0,#+0
+        BNE.N    ??process_thread_sdcdtu_process_23
+        LDR.N    R0,??DataTable11_22
+        BL       process_is_running
+        CMP      R0,#+0
+        BEQ.N    ??process_thread_sdcdtu_process_24
+??process_thread_sdcdtu_process_23:
         MOVS     R2,#+0
         MOVS     R1,#+133
-        LDR.N    R0,??DataTable11_1
+        LDR.N    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       process_post
         MOVS     R7,#+0
@@ -2502,306 +2515,325 @@ process_thread_sdcdtu_process:
 ??process_thread_sdcdtu_process_3:
         UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
         CMP      R7,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_24
+        BEQ.N    ??process_thread_sdcdtu_process_25
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+133
-        BEQ.N    ??process_thread_sdcdtu_process_25
-??process_thread_sdcdtu_process_24:
-        MOVS     R0,#+1
-        B.N      ??process_thread_sdcdtu_process_17
+        BEQ.N    ??process_thread_sdcdtu_process_26
 ??process_thread_sdcdtu_process_25:
+        MOVS     R0,#+1
+        B.N      ??process_thread_sdcdtu_process_18
+??process_thread_sdcdtu_process_26:
         MOVS     R8,#+0
-        LDR.N    R0,??DataTable11_21
+        LDR.N    R0,??DataTable11_23
         LDR      R0,[R0, #+0]
         BL       list_pop
         MOV      R8,R0
         CMP      R8,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_21
+        BEQ.N    ??process_thread_sdcdtu_process_22
         LDR      R0,[R8, #+12]
         BL       strlen
         MOVS     R1,R0
         LDR      R0,[R8, #+12]
         BL       backup_push
+        CMP      R0,#+1
+        BNE.N    ??process_thread_sdcdtu_process_27
+        ADR.N    R0,??DataTable11  ;; 0x41, 0x0A, 0x00, 0x00
+        BL       log_out
+??process_thread_sdcdtu_process_27:
         LDR      R0,[R8, #+12]
         BL       free
         MOV      R1,R8
-        LDR.N    R0,??DataTable11_22
+        LDR.N    R0,??DataTable11_24
         BL       memb_free
-        B.N      ??process_thread_sdcdtu_process_21
-??process_thread_sdcdtu_process_23:
-        LDR.N    R0,??DataTable11_13
+        B.N      ??process_thread_sdcdtu_process_22
+        Nop      
+        DATA
+??process_thread_sdcdtu_process_14:
+        DC8      0x31, 0x0A, 0x00, 0x00
+        THUMB
+??process_thread_sdcdtu_process_24:
+        LDR.N    R0,??DataTable11_15
         LDR      R0,[R0, #+0]
-        LDR.N    R1,??DataTable11_14
+        LDR.N    R1,??DataTable11_16
         LDR      R1,[R1, #+0]
         LDR      R1,[R1, #+54]
         ADDS     R0,R1,R0
-        LDR.N    R1,??DataTable11_13
+        LDR.N    R1,??DataTable11_15
         STR      R0,[R1, #+0]
         BL       rtc_get_time
-        LDR.N    R1,??DataTable11_13
+        LDR.N    R1,??DataTable11_15
         LDR      R1,[R1, #+0]
         CMP      R0,R1
-        BCS.N    ??process_thread_sdcdtu_process_26
-        LDR.N    R0,??DataTable11_13
+        BCS.N    ??process_thread_sdcdtu_process_28
+        LDR.N    R0,??DataTable11_15
         LDR      R0,[R0, #+0]
         BL       rtc_wakeup_at_second
-        B.N      ??process_thread_sdcdtu_process_18
-??process_thread_sdcdtu_process_26:
+        B.N      ??process_thread_sdcdtu_process_19
+??process_thread_sdcdtu_process_28:
         B.N      ??process_thread_sdcdtu_process_12
-??process_thread_sdcdtu_process_18:
-        LDR.N    R0,??DataTable11_17
+??process_thread_sdcdtu_process_19:
+        LDR.N    R0,??DataTable11_19
         LDRB     R0,[R0, #+0]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,R0
-        BNE.W    ??process_thread_sdcdtu_process_27
-        LDR.N    R0,??DataTable11_1
+        BNE.W    ??process_thread_sdcdtu_process_29
+        LDR.N    R0,??DataTable11_3
         LDR      R1,[R0, #+0]
-        LDR.N    R0,??DataTable11_23
+        LDR.N    R0,??DataTable11_25
         BL       process_start
-??process_thread_sdcdtu_process_28:
-        LDR.N    R0,??DataTable11_23
+??process_thread_sdcdtu_process_30:
+        LDR.N    R0,??DataTable11_25
         BL       process_is_running
         CMP      R0,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_29
+        BEQ.N    ??process_thread_sdcdtu_process_31
         MOVS     R2,#+0
         MOVS     R1,#+133
-        LDR.N    R0,??DataTable11_1
+        LDR.N    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       process_post
         MOVS     R7,#+0
-        MOV      R0,#+644
+        MOVW     R0,#+646
         STRH     R0,[R4, #+0]
 ??process_thread_sdcdtu_process_4:
         UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
         CMP      R7,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_30
+        BEQ.N    ??process_thread_sdcdtu_process_32
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+133
-        BEQ.N    ??process_thread_sdcdtu_process_31
-??process_thread_sdcdtu_process_30:
-        MOVS     R0,#+1
-        B.N      ??process_thread_sdcdtu_process_17
-??process_thread_sdcdtu_process_31:
-        B.N      ??process_thread_sdcdtu_process_28
-??process_thread_sdcdtu_process_29:
-        LDR.N    R0,??DataTable11_1
-        LDR      R1,[R0, #+0]
-        LDR.N    R0,??DataTable11_24
-        BL       process_start
+        BEQ.N    ??process_thread_sdcdtu_process_33
 ??process_thread_sdcdtu_process_32:
-        LDR.N    R0,??DataTable11_24
+        MOVS     R0,#+1
+        B.N      ??process_thread_sdcdtu_process_18
+??process_thread_sdcdtu_process_33:
+        B.N      ??process_thread_sdcdtu_process_30
+??process_thread_sdcdtu_process_31:
+        LDR.N    R0,??DataTable11_3
+        LDR      R1,[R0, #+0]
+        LDR.N    R0,??DataTable11_26
+        BL       process_start
+??process_thread_sdcdtu_process_34:
+        LDR.N    R0,??DataTable11_26
         BL       process_is_running
         CMP      R0,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_33
+        BEQ.N    ??process_thread_sdcdtu_process_35
         MOVS     R2,#+0
         MOVS     R1,#+133
-        LDR.N    R0,??DataTable11_1
+        LDR.N    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       process_post
         MOVS     R7,#+0
-        MOV      R0,#+648
+        MOVW     R0,#+650
         STRH     R0,[R4, #+0]
 ??process_thread_sdcdtu_process_5:
         UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
         CMP      R7,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_34
+        BEQ.N    ??process_thread_sdcdtu_process_36
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+133
-        BEQ.N    ??process_thread_sdcdtu_process_35
-??process_thread_sdcdtu_process_34:
-        MOVS     R0,#+1
-        B.N      ??process_thread_sdcdtu_process_17
-??process_thread_sdcdtu_process_35:
-        B.N      ??process_thread_sdcdtu_process_32
-??process_thread_sdcdtu_process_33:
-        LDR.N    R0,??DataTable11_1
-        LDR      R1,[R0, #+0]
-        LDR.N    R0,??DataTable11_19
-        BL       process_start
-        LDR.N    R0,??DataTable11_1
-        LDR      R1,[R0, #+0]
-        LDR.N    R0,??DataTable11_20
-        BL       process_start
-        LDR.N    R0,??DataTable11_1
-        LDR      R1,[R0, #+0]
-        LDR.N    R0,??DataTable11_25
-        BL       process_start
+        BEQ.N    ??process_thread_sdcdtu_process_37
 ??process_thread_sdcdtu_process_36:
-        LDR.N    R0,??DataTable11_19
-        BL       process_is_running
-        CMP      R0,#+0
-        BNE.N    ??process_thread_sdcdtu_process_37
-        LDR.N    R0,??DataTable11_25
-        BL       process_is_running
-        CMP      R0,#+0
-        BNE.N    ??process_thread_sdcdtu_process_37
-        LDR.N    R0,??DataTable11_20
-        BL       process_is_running
-        CMP      R0,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_38
+        MOVS     R0,#+1
+        B.N      ??process_thread_sdcdtu_process_18
 ??process_thread_sdcdtu_process_37:
+        B.N      ??process_thread_sdcdtu_process_34
+??process_thread_sdcdtu_process_35:
+        LDR.N    R0,??DataTable11_3
+        LDR      R1,[R0, #+0]
+        LDR.N    R0,??DataTable11_21
+        BL       process_start
+        LDR.N    R0,??DataTable11_3
+        LDR      R1,[R0, #+0]
+        LDR.N    R0,??DataTable11_22
+        BL       process_start
+        LDR.N    R0,??DataTable11_3
+        LDR      R1,[R0, #+0]
+        LDR.N    R0,??DataTable11_27
+        BL       process_start
+??process_thread_sdcdtu_process_38:
+        LDR.N    R0,??DataTable11_21
+        BL       process_is_running
+        CMP      R0,#+0
+        BNE.N    ??process_thread_sdcdtu_process_39
+        LDR.N    R0,??DataTable11_27
+        BL       process_is_running
+        CMP      R0,#+0
+        BNE.N    ??process_thread_sdcdtu_process_39
+        LDR.N    R0,??DataTable11_22
+        BL       process_is_running
+        CMP      R0,#+0
+        BEQ.N    ??process_thread_sdcdtu_process_40
+??process_thread_sdcdtu_process_39:
         MOVS     R2,#+0
         MOVS     R1,#+133
-        LDR.N    R0,??DataTable11_1
+        LDR.N    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       process_post
         MOVS     R7,#+0
-        MOVW     R0,#+655
+        MOVW     R0,#+657
         STRH     R0,[R4, #+0]
 ??process_thread_sdcdtu_process_6:
         UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
         CMP      R7,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_39
+        BEQ.N    ??process_thread_sdcdtu_process_41
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+133
-        BEQ.N    ??process_thread_sdcdtu_process_40
-??process_thread_sdcdtu_process_39:
-        MOVS     R0,#+1
-        B.N      ??process_thread_sdcdtu_process_17
-??process_thread_sdcdtu_process_40:
-        B.N      ??process_thread_sdcdtu_process_36
-??process_thread_sdcdtu_process_38:
-        LDR.N    R0,??DataTable11_1
-        LDR      R1,[R0, #+0]
-        LDR.N    R0,??DataTable11_26
-        BL       process_start
+        BEQ.N    ??process_thread_sdcdtu_process_42
 ??process_thread_sdcdtu_process_41:
-        LDR.N    R0,??DataTable11_26
+        MOVS     R0,#+1
+        B.N      ??process_thread_sdcdtu_process_18
+??process_thread_sdcdtu_process_42:
+        B.N      ??process_thread_sdcdtu_process_38
+??process_thread_sdcdtu_process_40:
+        LDR.N    R0,??DataTable11_3
+        LDR      R1,[R0, #+0]
+        LDR.N    R0,??DataTable11_28
+        BL       process_start
+??process_thread_sdcdtu_process_43:
+        LDR.N    R0,??DataTable11_28
         BL       process_is_running
         CMP      R0,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_42
+        BEQ.N    ??process_thread_sdcdtu_process_44
         MOVS     R2,#+0
         MOVS     R1,#+133
-        LDR.N    R0,??DataTable11_1
+        LDR.N    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       process_post
         MOVS     R7,#+0
-        MOVW     R0,#+659
+        MOVW     R0,#+661
         STRH     R0,[R4, #+0]
 ??process_thread_sdcdtu_process_7:
         UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
         CMP      R7,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_43
+        BEQ.N    ??process_thread_sdcdtu_process_45
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+133
-        BEQ.N    ??process_thread_sdcdtu_process_44
-??process_thread_sdcdtu_process_43:
-        MOVS     R0,#+1
-        B.N      ??process_thread_sdcdtu_process_17
-??process_thread_sdcdtu_process_44:
-        B.N      ??process_thread_sdcdtu_process_41
-??process_thread_sdcdtu_process_42:
-        LDR.N    R0,??DataTable11_1
-        LDR      R1,[R0, #+0]
-        LDR.N    R0,??DataTable11_27
-        BL       process_start
+        BEQ.N    ??process_thread_sdcdtu_process_46
 ??process_thread_sdcdtu_process_45:
-        LDR.N    R0,??DataTable11_27
+        MOVS     R0,#+1
+        B.N      ??process_thread_sdcdtu_process_18
+??process_thread_sdcdtu_process_46:
+        B.N      ??process_thread_sdcdtu_process_43
+??process_thread_sdcdtu_process_44:
+        LDR.N    R0,??DataTable11_3
+        LDR      R1,[R0, #+0]
+        LDR.N    R0,??DataTable11_29
+        BL       process_start
+??process_thread_sdcdtu_process_47:
+        LDR.N    R0,??DataTable11_29
         BL       process_is_running
         CMP      R0,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_46
+        BEQ.N    ??process_thread_sdcdtu_process_48
         MOVS     R2,#+0
         MOVS     R1,#+133
-        LDR.N    R0,??DataTable11_1
+        LDR.N    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       process_post
         MOVS     R7,#+0
-        MOVW     R0,#+663
+        MOVW     R0,#+665
         STRH     R0,[R4, #+0]
 ??process_thread_sdcdtu_process_8:
         UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
         CMP      R7,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_47
+        BEQ.N    ??process_thread_sdcdtu_process_49
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+133
-        BEQ.N    ??process_thread_sdcdtu_process_48
-??process_thread_sdcdtu_process_47:
+        BEQ.N    ??process_thread_sdcdtu_process_50
+??process_thread_sdcdtu_process_49:
         MOVS     R0,#+1
-        B.N      ??process_thread_sdcdtu_process_17
+        B.N      ??process_thread_sdcdtu_process_18
+??process_thread_sdcdtu_process_50:
+        B.N      ??process_thread_sdcdtu_process_47
 ??process_thread_sdcdtu_process_48:
-        B.N      ??process_thread_sdcdtu_process_45
-??process_thread_sdcdtu_process_46:
-        LDR.N    R0,??DataTable11_1
+        LDR.N    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       gprs_set_parent_process
         BL       gprs_close
         MOVS     R7,#+0
-        MOVW     R0,#+667
+        MOVW     R0,#+669
         STRH     R0,[R4, #+0]
 ??process_thread_sdcdtu_process_9:
         UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
         CMP      R7,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_49
-        LDR.N    R0,??DataTable11_18
+        BEQ.N    ??process_thread_sdcdtu_process_51
+        LDR.N    R0,??DataTable11_20
         LDRB     R0,[R0, #+0]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,R0
-        BEQ.N    ??process_thread_sdcdtu_process_50
-??process_thread_sdcdtu_process_49:
+        BEQ.N    ??process_thread_sdcdtu_process_52
+??process_thread_sdcdtu_process_51:
         MOVS     R0,#+1
-        B.N      ??process_thread_sdcdtu_process_17
-??process_thread_sdcdtu_process_50:
-        LDR.N    R0,??DataTable11_13
+        B.N      ??process_thread_sdcdtu_process_18
+??process_thread_sdcdtu_process_52:
+        LDR.N    R0,??DataTable11_15
         LDR      R0,[R0, #+0]
-        LDR.N    R1,??DataTable11_14
+        LDR.N    R1,??DataTable11_16
         LDR      R1,[R1, #+0]
         LDR      R1,[R1, #+54]
         ADDS     R0,R1,R0
-        LDR.N    R1,??DataTable11_13
+        LDR.N    R1,??DataTable11_15
         STR      R0,[R1, #+0]
         BL       rtc_get_time
-        LDR.N    R1,??DataTable11_13
+        LDR.N    R1,??DataTable11_15
         LDR      R1,[R1, #+0]
         CMP      R0,R1
-        BCS.N    ??process_thread_sdcdtu_process_51
-        LDR.N    R0,??DataTable11_13
+        BCS.N    ??process_thread_sdcdtu_process_53
+        LDR.N    R0,??DataTable11_15
         LDR      R0,[R0, #+0]
         BL       rtc_wakeup_at_second
-        B.N      ??process_thread_sdcdtu_process_27
-??process_thread_sdcdtu_process_51:
-        B.N      ??process_thread_sdcdtu_process_12
-??process_thread_sdcdtu_process_27:
-        B.N      ??process_thread_sdcdtu_process_52
-??process_thread_sdcdtu_process_14:
-        B.N      ??process_thread_sdcdtu_process_14
+        B.N      ??process_thread_sdcdtu_process_29
 ??process_thread_sdcdtu_process_53:
+        B.N      ??process_thread_sdcdtu_process_12
+??process_thread_sdcdtu_process_29:
+        B.N      ??process_thread_sdcdtu_process_54
+??process_thread_sdcdtu_process_15:
+        ADR.N    R0,??DataTable11_2  ;; "2.\n"
+        BL       log_out
+??process_thread_sdcdtu_process_55:
+        B.N      ??process_thread_sdcdtu_process_55
+??process_thread_sdcdtu_process_56:
         MOVS     R2,#+0
         MOVS     R1,#+133
-        LDR.N    R0,??DataTable11_1
+        LDR.N    R0,??DataTable11_3
         LDR      R0,[R0, #+0]
         BL       process_post
         MOVS     R7,#+0
-        MOV      R0,#+684
+        MOVW     R0,#+686
         STRH     R0,[R4, #+0]
 ??process_thread_sdcdtu_process_10:
         UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
         CMP      R7,#+0
-        BEQ.N    ??process_thread_sdcdtu_process_54
+        BEQ.N    ??process_thread_sdcdtu_process_57
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+133
-        BEQ.N    ??process_thread_sdcdtu_process_55
-??process_thread_sdcdtu_process_54:
+        BEQ.N    ??process_thread_sdcdtu_process_58
+??process_thread_sdcdtu_process_57:
         MOVS     R0,#+1
-        B.N      ??process_thread_sdcdtu_process_17
-??process_thread_sdcdtu_process_55:
-        LDR.N    R0,??DataTable11_28
+        B.N      ??process_thread_sdcdtu_process_18
+??process_thread_sdcdtu_process_58:
+        LDR.N    R0,??DataTable11_30
         BL       process_is_running
         CMP      R0,#+0
-        BNE.N    ??process_thread_sdcdtu_process_53
-??process_thread_sdcdtu_process_52:
+        BNE.N    ??process_thread_sdcdtu_process_56
+??process_thread_sdcdtu_process_54:
 ??process_thread_sdcdtu_process_11:
         MOVS     R0,#+0
         MOVS     R7,R0
         MOVS     R0,#+0
         STRH     R0,[R4, #+0]
         MOVS     R0,#+3
-??process_thread_sdcdtu_process_17:
+??process_thread_sdcdtu_process_18:
         POP      {R4-R8,PC}       ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable10:
+        DC8      0x33, 0x0A, 0x00, 0x00
+
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable10_1:
         DC32     ??new_configure_size
 
         SECTION `.bss`:DATA:REORDER:NOROOT(2)
@@ -2813,7 +2845,7 @@ process_thread_sdcdtu_process:
 sdcdtu_init:
         PUSH     {R7,LR}
         MOVS     R1,#+0
-        LDR.N    R0,??DataTable11_29
+        LDR.N    R0,??DataTable11_31
         BL       process_start
         POP      {R0,PC}          ;; return
 
@@ -2821,180 +2853,192 @@ sdcdtu_init:
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11:
-        DC32     gprs_send_buffer
+        DC8      0x41, 0x0A, 0x00, 0x00
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_1:
-        DC32     process_current
+        DC32     gprs_send_buffer
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_2:
-        DC32     ??oldversion
+        DC8      "2.\n"
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_3:
-        DC32     ??et_3
+        DC32     process_current
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_4:
-        DC32     gprs_event_recv
+        DC32     ??oldversion
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_5:
-        DC32     ??hardwaresize
+        DC32     ??et_3
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_6:
-        DC32     ??newversion
+        DC32     gprs_event_recv
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_7:
-        DC32     ??offset_1
+        DC32     ??hardwaresize
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_8:
-        DC32     ??recvsize_1
+        DC32     ??newversion
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_9:
-        DC32     ??dtuData
+        DC32     ??offset_1
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_10:
-        DC32     ??et_4
+        DC32     ??recvsize_1
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_11:
-        DC32     sensorDataStringBuffer
+        DC32     ??dtuData
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_12:
-        DC32     ??et_5
+        DC32     ??et_4
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_13:
-        DC32     next_wakeuptime
+        DC32     sensorDataStringBuffer
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_14:
-        DC32     dtuconfig
+        DC32     ??et_5
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_15:
-        DC32     0x1d4c0
+        DC32     next_wakeuptime
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_16:
-        DC32     ??et_6
+        DC32     dtuconfig
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_17:
-        DC32     gprs_event_connect
+        DC32     0x1d4c0
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_18:
-        DC32     gprs_event_closed
+        DC32     ??et_6
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_19:
-        DC32     sensor_prewarm_process
+        DC32     gprs_event_connect
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_20:
-        DC32     sendat_collect_process
+        DC32     gprs_event_closed
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_21:
-        DC32     sendat_commit_list
+        DC32     sensor_prewarm_process
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_22:
-        DC32     sccb_memb
+        DC32     sendat_collect_process
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_23:
-        DC32     timesync_process
+        DC32     sendat_commit_list
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_24:
-        DC32     backup_commit_process
+        DC32     sccb_memb
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_25:
-        DC32     sendat_commit_process
+        DC32     timesync_process
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_26:
-        DC32     dtudata_commit_process
+        DC32     backup_commit_process
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_27:
-        DC32     configure_update_process
+        DC32     sendat_commit_process
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_28:
-        DC32     hardware_update_process
+        DC32     dtudata_commit_process
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable11_29:
+        DC32     configure_update_process
+
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable11_30:
+        DC32     hardware_update_process
+
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable11_31:
         DC32     sdcdtu_process
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
@@ -3062,15 +3106,39 @@ sdcdtu_init:
         DC8 "sdcdtu process"
         DC8 0
 
+        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
+        DATA
+        DC8 "9\012"
+        DC8 0
+
+        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
+        DATA
+        DC8 "1\012"
+        DC8 0
+
+        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
+        DATA
+        DC8 "3\012"
+        DC8 0
+
+        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
+        DATA
+        DC8 "A\012"
+        DC8 0
+
+        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
+        DATA
+        DC8 "2.\012"
+
         END
 // 
 // 2 716 bytes in section .bss
 //   220 bytes in section .data
-//   212 bytes in section .rodata
-// 5 592 bytes in section .text
+//   232 bytes in section .rodata
+// 5 650 bytes in section .text
 // 
-// 5 592 bytes of CODE  memory
-//   212 bytes of CONST memory
+// 5 650 bytes of CODE  memory
+//   232 bytes of CONST memory
 // 2 936 bytes of DATA  memory
 //
 //Errors: none
