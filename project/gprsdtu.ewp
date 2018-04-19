@@ -2062,7 +2062,22 @@
     <group>
       <name>senproto</name>
       <file>
+        <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-cond.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-do.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-ph.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-rs3010K.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-S0504.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-S0601.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-t770.c</name>
@@ -2072,6 +2087,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-t830.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-turb.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-water.c</name>

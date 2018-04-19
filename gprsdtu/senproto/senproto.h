@@ -11,7 +11,13 @@
     __SENPROTO__(t770)    \
     __SENPROTO__(t830)    \
     __SENPROTO__(water)   \
-    __SENPROTO__(t800)
+    __SENPROTO__(t800)    \
+    __SENPROTO__(ph)      \
+    __SENPROTO__(cond)    \
+    __SENPROTO__(turb)    \
+    __SENPROTO__(Do)      \
+    __SENPROTO__(S0610)   \
+    __SENPROTO__(S0504)   
       
 enum {
 #define __SENPROTO__(name)  name,
