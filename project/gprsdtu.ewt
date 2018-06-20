@@ -2249,6 +2249,9 @@
         <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-S0601.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-soil.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\gprsdtu\senproto\senprote-t770.c</name>
       </file>
       <file>

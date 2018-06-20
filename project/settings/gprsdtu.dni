@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-1114333083
+Checksum=1842018684
 [CodeCoverage]
 Enabled=_ 0
 [Exceptions]
@@ -34,7 +34,7 @@ ShowSource=1
 Freq=10000000
 MultiCoreRunAll=1
 [stlink]
-stlinkserialNo=E43CDE91
+stlinkserialNo=2798FD0D
 stlinkfoundProbes=
 [SWOTraceHWSettings]
 OverrideDefaultClocks=0
@@ -123,12 +123,12 @@ ShowTiming=1
 [Disassemble mode]
 mode=0
 [Breakpoints2]
-Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\sdcdtu.c}.628.25" 0 0 1 "" 0 "" 0
-Bp1=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-cond.c}.20.5" 0 0 1 "" 0 "" 0
-Bp2=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-cond.c}.34.5" 0 0 1 "" 0 "" 0
-Bp3=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-S0601.c}.33.5" 0 0 1 "" 0 "" 0
-Bp4=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-S0504.c}.33.5" 0 0 1 "" 0 "" 0
-Bp5=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\senproto\senprote-rs3010K.c}.59.5" 0 0 1 "" 0 "" 0
+Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\sdcdtu.c}.615.13" 0 0 1 "" 0 "" 0
+Bp1=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\sdcdtu.c}.670.17" 0 0 1 "" 0 "" 0
+Bp2=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\sdcdtu.c}.286.13" 0 0 1 "" 0 "" 0
+Bp3=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\sdcdtu.c}.322.21" 0 0 1 "" 0 "" 0
+Bp4=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\sdcdtu.c}.291.17" 0 0 1 "" 0 "" 0
+Bp5=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\gprsdtu\sdcdtu.c}.298.17" 0 0 1 "" 0 "" 0
 Count=6
 [Aliases]
 Count=0

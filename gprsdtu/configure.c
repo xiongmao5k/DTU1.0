@@ -41,7 +41,7 @@ int configure_read(struct configure_struct *conf) {
 
 int configure_update_init(uint32_t version, uint16_t size) {
     spiffs_file fd = 0;
-    dl_SPIFFS_remove(SPIFFS_DISK, NEW_CONFIGURE_FILE_NAME);
+    dl_SPIFFS_remove(SPIFFS_DISK, NEW_CONFIGURE_FILE_NAME); 
     if (dl_SPIFFS_creat(SPIFFS_DISK, NEW_CONFIGURE_FILE_NAME, NULL) != SPIFFS_OK) {
         CONFIG_LOG("configure_update_init: open file %s fail.\r\n", NEW_CONFIGURE_FILE_NAME);
         return CONF_FAIL;
@@ -53,7 +53,7 @@ int configure_update_init(uint32_t version, uint16_t size) {
 int configure_update_push(void *data, uint32_t size)
 {
     spiffs_file fd = 0;
-    fd = dl_SPIFFS_open(SPIFFS_DISK, NEW_CONFIGURE_FILE_NAME, SPIFFS_WRONLY, 0);
+    fd = dl_SPIFFS_open(SPIFFS_DISK, NEW_CONFIGURE_FILE_NAME, SPIFFS_RDWR | SPIFFS_TRUNC, 0);
     if (fd < 0) {
         CONFIG_LOG("configure_update_push: open file %s fail.\r\n", NEW_CONFIGURE_FILE_NAME);
         return CONF_FAIL;

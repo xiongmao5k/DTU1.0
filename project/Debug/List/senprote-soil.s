@@ -1,14 +1,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       20/Apr/2018  14:09:44
+// IAR ANSI C/C++ Compiler V7.40.3.8902/W32 for ARM       20/Apr/2018  15:31:50
 // Copyright 1999-2015 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
 //    Endian       =  little
 //    Source file  =  
-//        D:\Ruhr\Xiongmao\github\DTU1.0\gprsdtu\senproto\senprote-S0504.c
+//        D:\Ruhr\Xiongmao\github\DTU1.0\gprsdtu\senproto\senprote-soil.c
 //    Command line =  
-//        D:\Ruhr\Xiongmao\github\DTU1.0\gprsdtu\senproto\senprote-S0504.c -D
+//        D:\Ruhr\Xiongmao\github\DTU1.0\gprsdtu\senproto\senprote-soil.c -D
 //        STM32F10X_MD -D USE_STDPERIPH_DRIVER -lb
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\ --diag_suppress
 //        Pa050 -o D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\Obj\ --no_cse
@@ -31,7 +31,7 @@
 //        D:\Ruhr\Xiongmao\github\DTU1.0\project\..\gprsdtu\dev\ -On --vla
 //        --use_c++_inline -I D:\software\IAR\arm\CMSIS\Include\
 //    List file    =  
-//        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\senprote-S0504.s
+//        D:\Ruhr\Xiongmao\github\DTU1.0\project\Debug\List\senprote-soil.s
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -45,16 +45,16 @@
         EXTERN sprintf
         EXTERN strlen
 
-        PUBLIC S0504_parse
-        PUBLIC S0504_prepare
-        PUBLIC S0504_senproto
+        PUBLIC soil_parse
+        PUBLIC soil_prepare
+        PUBLIC soil_senproto
 
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
 ?_0:
         DATA
-        DC8 "%d|%d|%d"
-        DC8 0, 0, 0
+        DC8 "%d|%d|%d|%d|%d"
+        DC8 0
 
         SECTION `.rodata`:CONST:REORDER:NOROOT(2)
 // static __absolute unsigned char const table_crc_hi[256]
@@ -141,7 +141,7 @@ address_backup:
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
-S0504_prepare:
+soil_prepare:
         PUSH     {R1-R5,LR}
         MOVS     R4,R0
         MOVS     R5,R1
@@ -156,16 +156,16 @@ S0504_prepare:
         MOVS     R1,#+3
         ADD      R0,SP,#+0
         BL       framebuff_push_u8
-        MOVS     R1,#+0
-        ADD      R0,SP,#+0
-        BL       framebuff_push_u8
-        MOVS     R1,#+0
-        ADD      R0,SP,#+0
-        BL       framebuff_push_u8
-        MOVS     R1,#+0
-        ADD      R0,SP,#+0
-        BL       framebuff_push_u8
         MOVS     R1,#+2
+        ADD      R0,SP,#+0
+        BL       framebuff_push_u8
+        MOVS     R1,#+88
+        ADD      R0,SP,#+0
+        BL       framebuff_push_u8
+        MOVS     R1,#+0
+        ADD      R0,SP,#+0
+        BL       framebuff_push_u8
+        MOVS     R1,#+4
         ADD      R0,SP,#+0
         BL       framebuff_push_u8
         MOVS     R1,#+6
@@ -183,45 +183,51 @@ S0504_prepare:
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
-S0504_parse:
+soil_parse:
         PUSH     {R4-R11,LR}
-        SUB      SP,SP,#+28
+        SUB      SP,SP,#+44
         MOVS     R4,R0
         MOVS     R5,R1
         MOVS     R6,R2
         MOVS     R7,R3
-        CMP      R7,#+9
-        BCS.N    ??S0504_parse_0
+        CMP      R7,#+13
+        BCS.N    ??soil_parse_0
         MOVS     R0,#+0
-        B.N      ??S0504_parse_1
-??S0504_parse_0:
+        B.N      ??soil_parse_1
+??soil_parse_0:
         MOV      R11,R6
         LDRB     R0,[R11, #+0]
-        STRB     R0,[SP, #+7]
+        STRB     R0,[SP, #+17]
         ADDS     R11,R11,#+1
         LDRB     R0,[R11, #+0]
-        STRB     R0,[SP, #+6]
+        STRB     R0,[SP, #+16]
         ADDS     R11,R11,#+1
         LDRB     R0,[R11, #+0]
-        STRB     R0,[SP, #+5]
+        STRB     R0,[SP, #+15]
         ADDS     R11,R11,#+1
-        LDRB     R0,[SP, #+5]
-        CMP      R0,#+4
-        BNE.N    ??S0504_parse_2
-        LDRB     R0,[SP, #+7]
+        LDRB     R0,[SP, #+15]
+        CMP      R0,#+8
+        BNE.N    ??soil_parse_2
+        LDRB     R0,[SP, #+17]
         LDR.N    R1,??DataTable2_2
         LDRB     R1,[R1, #+0]
         CMP      R0,R1
-        BNE.N    ??S0504_parse_2
-        LDRB     R0,[SP, #+6]
+        BNE.N    ??soil_parse_2
+        LDRB     R0,[SP, #+16]
         CMP      R0,#+3
-        BEQ.N    ??S0504_parse_3
-??S0504_parse_2:
+        BEQ.N    ??soil_parse_3
+??soil_parse_2:
         MOVS     R0,#+1
-        B.N      ??S0504_parse_1
-??S0504_parse_3:
+        B.N      ??soil_parse_1
+??soil_parse_3:
         LDRB     R0,[R11, #+0]
-        STRB     R0,[SP, #+4]
+        STRB     R0,[SP, #+14]
+        ADDS     R11,R11,#+1
+        LDRB     R0,[R11, #+0]
+        STRB     R0,[SP, #+13]
+        ADDS     R11,R11,#+1
+        LDRB     R0,[R11, #+0]
+        STRB     R0,[SP, #+12]
         ADDS     R11,R11,#+1
         LDRB     R0,[R11, #+0]
         MOV      R8,R0
@@ -232,49 +238,70 @@ S0504_parse:
         LDRB     R0,[R11, #+0]
         MOV      R10,R0
         ADDS     R11,R11,#+1
-        LDRB     R0,[SP, #+4]
-        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
-        LSLS     R1,R8,#+16
-        ORRS     R0,R1,R0, LSL #+24
-        UXTB     R9,R9            ;; ZeroExt  R9,R9,#+24,#+24
-        ORRS     R0,R0,R9, LSL #+8
-        UXTB     R10,R10          ;; ZeroExt  R10,R10,#+24,#+24
-        ORRS     R0,R10,R0
-        STR      R0,[SP, #+20]
-        LDRB     R0,[SP, #+7]
-        STRB     R0,[SP, #+12]
-        LDRB     R0,[SP, #+6]
-        STRB     R0,[SP, #+13]
-        LDRB     R0,[SP, #+5]
-        STRB     R0,[SP, #+14]
-        LDRB     R0,[SP, #+4]
-        STRB     R0,[SP, #+15]
-        STRB     R8,[SP, #+16]
-        STRB     R9,[SP, #+17]
-        STRB     R10,[SP, #+18]
         LDRB     R0,[R11, #+0]
-        STRB     R0,[SP, #+9]
+        STRB     R0,[SP, #+19]
         ADDS     R11,R11,#+1
         LDRB     R0,[R11, #+0]
-        STRB     R0,[SP, #+8]
+        STRB     R0,[SP, #+18]
         ADDS     R11,R11,#+1
-        LDRB     R0,[SP, #+8]
-        LDRB     R1,[SP, #+9]
+        LDRB     R0,[SP, #+14]
+        LDRB     R1,[SP, #+13]
         ORRS     R0,R1,R0, LSL #+8
-        STRH     R0,[SP, #+10]
-        LDRH     R0,[SP, #+10]
+        STRH     R0,[SP, #+26]
+        LDRB     R0,[SP, #+12]
+        UXTB     R8,R8            ;; ZeroExt  R8,R8,#+24,#+24
+        ORRS     R0,R8,R0, LSL #+8
+        STRH     R0,[SP, #+24]
+        UXTB     R9,R9            ;; ZeroExt  R9,R9,#+24,#+24
+        UXTB     R10,R10          ;; ZeroExt  R10,R10,#+24,#+24
+        ORRS     R0,R10,R9, LSL #+8
+        STRH     R0,[SP, #+22]
+        LDRB     R0,[SP, #+17]
+        STRB     R0,[SP, #+32]
+        LDRB     R0,[SP, #+16]
+        STRB     R0,[SP, #+33]
+        LDRB     R0,[SP, #+15]
+        STRB     R0,[SP, #+34]
+        LDRB     R0,[SP, #+14]
+        STRB     R0,[SP, #+35]
+        LDRB     R0,[SP, #+13]
+        STRB     R0,[SP, #+36]
+        LDRB     R0,[SP, #+12]
+        STRB     R0,[SP, #+37]
+        STRB     R8,[SP, #+38]
+        STRB     R9,[SP, #+39]
+        STRB     R10,[SP, #+40]
+        LDRB     R0,[SP, #+19]
+        STRB     R0,[SP, #+41]
+        LDRB     R0,[SP, #+18]
+        STRB     R0,[SP, #+42]
+        LDRB     R0,[R11, #+0]
+        STRB     R0,[SP, #+21]
+        ADDS     R11,R11,#+1
+        LDRB     R0,[R11, #+0]
+        STRB     R0,[SP, #+20]
+        ADDS     R11,R11,#+1
+        LDRB     R0,[SP, #+20]
+        LDRB     R1,[SP, #+21]
+        ORRS     R0,R1,R0, LSL #+8
+        STRH     R0,[SP, #+28]
+        LDRH     R0,[SP, #+28]
         STR      R0,[SP, #+0]
-        MOVS     R1,#+7
-        ADD      R0,SP,#+12
+        MOVS     R1,#+11
+        ADD      R0,SP,#+32
         BL       crc16
         LDR      R1,[SP, #+0]
         CMP      R1,R0
-        BEQ.N    ??S0504_parse_4
+        BEQ.N    ??soil_parse_4
         MOVS     R0,#+1
-        B.N      ??S0504_parse_1
-??S0504_parse_4:
+        B.N      ??soil_parse_1
+??soil_parse_4:
         BL       rtc_get_time
-        LDR      R1,[SP, #+20]
+        LDRH     R1,[SP, #+22]
+        STR      R1,[SP, #+8]
+        LDRH     R1,[SP, #+24]
+        STR      R1,[SP, #+4]
+        LDRH     R1,[SP, #+26]
         STR      R1,[SP, #+0]
         MOVS     R3,R0
         MOVS     R2,R4
@@ -283,8 +310,8 @@ S0504_parse:
         BL       sprintf
         MOVS     R0,R5
         BL       strlen
-??S0504_parse_1:
-        ADD      SP,SP,#+28
+??soil_parse_1:
+        ADD      SP,SP,#+44
         POP      {R4-R11,PC}      ;; return
 
         SECTION `.text`:CODE:NOROOT(2)
@@ -312,9 +339,9 @@ S0504_parse:
         DC32     ?_0
 
         SECTION `.data`:DATA:REORDER:NOROOT(2)
-S0504_senproto:
+soil_senproto:
         DATA
-        DC32 S0504_prepare, S0504_parse
+        DC32 soil_prepare, soil_parse
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -331,11 +358,11 @@ S0504_senproto:
 // 
 //   1 byte  in section .bss
 //   8 bytes in section .data
-// 524 bytes in section .rodata
-// 480 bytes in section .text
+// 528 bytes in section .rodata
+// 588 bytes in section .text
 // 
-// 480 bytes of CODE  memory
-// 524 bytes of CONST memory
+// 588 bytes of CODE  memory
+// 528 bytes of CONST memory
 //   9 bytes of DATA  memory
 //
 //Errors: none

@@ -17,7 +17,8 @@
     __SENPROTO__(turb)    \
     __SENPROTO__(Do)      \
     __SENPROTO__(S0610)   \
-    __SENPROTO__(S0504)   
+    __SENPROTO__(S0504)   \
+    __SENPROTO__(soil)
       
 enum {
 #define __SENPROTO__(name)  name,

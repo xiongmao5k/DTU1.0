@@ -16,6 +16,7 @@
 #include "battery.h"
 #include "deviceid.h"
 #include "logger.h"
+#include "stm32f10x.h"
 
 
 #define DEBUG 0
@@ -32,6 +33,7 @@ FRAMEBUFF(gprs_send_buffer, 512);
 static uint32_t next_wakeuptime;
 static uint8_t configure_data_buffer[sizeof(struct configure_struct) + sizeof(struct sensor_descript_struct) * 16];
 struct configure_struct *dtuconfig = (void *)configure_data_buffer;
+static uint32_t configure_update_status = 0;
 
 
 #define SDCDTU_TIMESYNC_TIMEOUT 30
@@ -339,6 +341,7 @@ PROCESS_THREAD(configure_update_process, ev, data)
                             // TODO: configure update success.
                             if (CONF_SUCCESS == configure_update_check()) {
                                 configure_update_apply();
+                                configure_update_status = 1;
                             }
                             PROCESS_EXIT();
                         }
@@ -663,6 +666,10 @@ STARTUP:
                 process_start(&configure_update_process, PROCESS_CURRENT());
                 while (process_is_running(&configure_update_process)) {
                     PROCESS_PAUSE();
+                }
+                if (configure_update_status == 1){
+                    configure_update_status = 0;
+                    goto STARTUP;
                 }
                 gprs_set_parent_process(PROCESS_CURRENT());
                 gprs_close();
